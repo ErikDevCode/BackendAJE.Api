@@ -1,0 +1,15 @@
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\bin\Debug\net8.0\BackEndAje.Api.Application.deps.json
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\bin\Debug\net8.0\BackEndAje.Api.Application.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\bin\Debug\net8.0\BackEndAje.Api.Application.pdb
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\bin\Debug\net8.0\BackEndAje.Api.Domain.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\bin\Debug\net8.0\BackEndAje.Api.Domain.pdb
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\BackEndAje.Api.Application.csproj.AssemblyReference.cache
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\BackEndAje.Api.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\BackEndAje.Api.Application.AssemblyInfoInputs.cache
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\BackEndAje.Api.Application.AssemblyInfo.cs
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\BackEndAje.Api.Application.csproj.CoreCompileInputs.cache
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\BackEndA.B96C285A.Up2Date
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\BackEndAje.Api.Application.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\refint\BackEndAje.Api.Application.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\BackEndAje.Api.Application.pdb
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\obj\Debug\net8.0\ref\BackEndAje.Api.Application.dll

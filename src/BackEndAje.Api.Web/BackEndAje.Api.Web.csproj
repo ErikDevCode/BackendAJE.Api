@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\BackEndAje.Api.Application\BackEndAje.Api.Application.csproj" />
+    <ProjectReference Include="..\BackEndAje.Api.Domain\BackEndAje.Api.Domain.csproj" />
+    <ProjectReference Include="..\BackEndAje.Api.Infrastructure\BackEndAje.Api.Infrastructure.csproj" />
+    <ProjectReference Include="..\BackEndAje.Api.Presentation\BackEndAje.Api.Presentation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\bin\Debug\net8.0\BackEndAje.Api.Presentation.deps.json
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\bin\Debug\net8.0\BackEndAje.Api.Presentation.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\bin\Debug\net8.0\BackEndAje.Api.Presentation.pdb
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\bin\Debug\net8.0\BackEndAje.Api.Application.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\bin\Debug\net8.0\BackEndAje.Api.Domain.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\bin\Debug\net8.0\BackEndAje.Api.Application.pdb
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\bin\Debug\net8.0\BackEndAje.Api.Domain.pdb
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndAje.Api.Presentation.csproj.AssemblyReference.cache
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndAje.Api.Presentation.GeneratedMSBuildEditorConfig.editorconfig
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndAje.Api.Presentation.AssemblyInfoInputs.cache
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndAje.Api.Presentation.AssemblyInfo.cs
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndAje.Api.Presentation.csproj.CoreCompileInputs.cache
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndA.0E2AEA62.Up2Date
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndAje.Api.Presentation.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\refint\BackEndAje.Api.Presentation.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndAje.Api.Presentation.pdb
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\ref\BackEndAje.Api.Presentation.dll

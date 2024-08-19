@@ -1,0 +1,386 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Web\\BackEndAje.Api.Web.csproj": {}
+  },
+  "projects": {
+    "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\BackEndAje.Api.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\BackEndAje.Api.Application.csproj",
+        "projectName": "BackEndAje.Api.Application",
+        "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\BackEndAje.Api.Application.csproj",
+        "packagesPath": "C:\\Users\\ERIK\\.nuget\\packages\\",
+        "outputPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\ERIK\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj": {
+                "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "FakeItEasy": {
+              "target": "Package",
+              "version": "[7.4.0, )"
+            },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "SonarAnalyzer.CSharp": {
+              "target": "Package",
+              "version": "[8.43.0.51858, )"
+            },
+            "StyleCop.Analyzers": {
+              "target": "Package",
+              "version": "[1.1.118, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj",
+        "projectName": "BackEndAje.Api.Domain",
+        "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj",
+        "packagesPath": "C:\\Users\\ERIK\\.nuget\\packages\\",
+        "outputPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\ERIK\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Infrastructure\\BackEndAje.Api.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Infrastructure\\BackEndAje.Api.Infrastructure.csproj",
+        "projectName": "BackEndAje.Api.Infrastructure",
+        "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Infrastructure\\BackEndAje.Api.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\ERIK\\.nuget\\packages\\",
+        "outputPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\ERIK\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\BackEndAje.Api.Application.csproj": {
+                "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\BackEndAje.Api.Application.csproj"
+              },
+              "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj": {
+                "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.2, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Presentation\\BackEndAje.Api.Presentation.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Presentation\\BackEndAje.Api.Presentation.csproj",
+        "projectName": "BackEndAje.Api.Presentation",
+        "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Presentation\\BackEndAje.Api.Presentation.csproj",
+        "packagesPath": "C:\\Users\\ERIK\\.nuget\\packages\\",
+        "outputPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Presentation\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\ERIK\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\BackEndAje.Api.Application.csproj": {
+                "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\BackEndAje.Api.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Web\\BackEndAje.Api.Web.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Web\\BackEndAje.Api.Web.csproj",
+        "projectName": "BackEndAje.Api.Web",
+        "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Web\\BackEndAje.Api.Web.csproj",
+        "packagesPath": "C:\\Users\\ERIK\\.nuget\\packages\\",
+        "outputPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Web\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\ERIK\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\BackEndAje.Api.Application.csproj": {
+                "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Application\\BackEndAje.Api.Application.csproj"
+              },
+              "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj": {
+                "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj"
+              },
+              "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Infrastructure\\BackEndAje.Api.Infrastructure.csproj": {
+                "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Infrastructure\\BackEndAje.Api.Infrastructure.csproj"
+              },
+              "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Presentation\\BackEndAje.Api.Presentation.csproj": {
+                "projectPath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Presentation\\BackEndAje.Api.Presentation.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.7.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

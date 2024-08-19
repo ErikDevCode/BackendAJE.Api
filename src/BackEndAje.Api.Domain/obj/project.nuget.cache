@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "sB1jS9gKEJz0ehcXZtSmSb4RlsnO4wkEoXHGQg2QkjT92g2DKrzVKxa2A7McsG2yG0a8p33YUXsHsItooZerOQ==",
+  "success": true,
+  "projectFilePath": "C:\\Erik\\Proyect\\BackendAje-Api\\src\\BackEndAje.Api.Domain\\BackEndAje.Api.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ERIK\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
