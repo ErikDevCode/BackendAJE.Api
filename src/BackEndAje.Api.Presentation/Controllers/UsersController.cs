@@ -1,7 +1,6 @@
 ﻿namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
-    using BackEndAje.Api.Application.Dtos.Users;
     using BackEndAje.Api.Application.Users.Commands.CreateUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUserPassword;
@@ -25,9 +24,8 @@
         [ProducesResponseType(typeof(CreateUserResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("create")]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserDto)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
-            var command = new CreateUserCommand(createUserDto.Username, createUserDto.Email, createUserDto.Password);
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -47,9 +45,8 @@
         [ProducesResponseType(typeof(CreateUserResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("update")]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto updateUserDto)
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
         {
-            var command = new UpdateUserCommand(updateUserDto.Username, updateUserDto.Email);
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -58,14 +55,8 @@
         [ProducesResponseType(typeof(CreateUserResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("update-password")]
-        public async Task<IActionResult> UpdateUserPasswordByEmail([FromBody] UpdateUserPasswordDto updateUserPasswordDto)
+        public async Task<IActionResult> UpdateUserPasswordByEmail([FromBody] UpdateUserPasswordByEmailCommand command)
         {
-            if (string.IsNullOrEmpty(updateUserPasswordDto.Email) || string.IsNullOrEmpty(updateUserPasswordDto.NewPassword))
-            {
-                return this.BadRequest("Email and Password cannot be empty.");
-            }
-
-            var command = new UpdateUserPasswordByEmailCommand(updateUserPasswordDto.Email, updateUserPasswordDto.NewPassword);
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }

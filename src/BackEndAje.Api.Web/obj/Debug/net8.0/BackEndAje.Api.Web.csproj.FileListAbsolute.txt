@@ -70,3 +70,4 @@ C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\refint\Ba
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.pdb
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.genruntimeconfig.cache
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\ref\BackEndAje.Api.Web.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.sourcelink.json

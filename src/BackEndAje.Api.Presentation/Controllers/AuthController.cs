@@ -1,5 +1,6 @@
 ﻿namespace BackEndAje.Api.Presentation.Controllers
 {
+    using System.Net;
     using BackEndAje.Api.Application.Users.Commands.LoginUser;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
@@ -16,8 +17,8 @@
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(LoginUserResult), 200)]
-        [ProducesResponseType(401)]
+        [ProducesResponseType(typeof(LoginUserResult),  (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {

@@ -15,3 +15,4 @@ C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\refint\BackEndAje.Api.Presentation.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndAje.Api.Presentation.pdb
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\ref\BackEndAje.Api.Presentation.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Presentation\obj\Debug\net8.0\BackEndAje.Api.Presentation.sourcelink.json
