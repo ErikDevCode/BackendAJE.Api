@@ -1,11 +1,13 @@
-namespace BackEndAje.Api.Application.Roles.Commands.CreateRole
+namespace BackEndAje.Api.Application.Roles.Commands.UpdateRole
 {
     using FluentValidation;
 
-    public class CreateRolesCommandValidator : AbstractValidator<CreateRolesCommand>
+    public class UpdateRolesCommandValidator : AbstractValidator<UpdateRolesCommand>
     {
-        public CreateRolesCommandValidator()
+        public UpdateRolesCommandValidator()
         {
+            this.RuleFor(x => x.RoleId)
+                .NotEmpty().WithMessage("Role name is required.");
             this.RuleFor(x => x.RoleName)
                 .NotEmpty().WithMessage("Role name is required.")
                 .MaximumLength(50).WithMessage("Role name must not exceed 50 characters.");

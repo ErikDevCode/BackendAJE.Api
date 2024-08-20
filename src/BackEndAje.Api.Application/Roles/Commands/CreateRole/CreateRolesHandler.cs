@@ -30,9 +30,7 @@ namespace BackEndAje.Api.Application.Roles.Commands.CreateRole
             };
 
             await this._roleRepository.AddRoleAsync(newRole);
-            await this._roleRepository.SaveChangesAsync();
             return Unit.Value;
-
         }
     }
 }

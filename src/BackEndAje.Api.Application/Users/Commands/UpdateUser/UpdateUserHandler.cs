@@ -34,8 +34,6 @@
             user.UpdatedAt = DateTime.UtcNow;
 
             await this._userRepository.UpdateUserAsync(user);
-            await this._userRepository.SaveChangesAsync();
-
             return new UpdateUserResult(user.UserId, user.Username, user.Email);
         }
     }

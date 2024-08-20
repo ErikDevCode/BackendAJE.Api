@@ -109,6 +109,7 @@
         public async Task UpdateUserAsync(User user)
         {
             this._context.Users.Update(user);
+            await this._context.SaveChangesAsync();
         }
 
         public async Task SaveChangesAsync()
