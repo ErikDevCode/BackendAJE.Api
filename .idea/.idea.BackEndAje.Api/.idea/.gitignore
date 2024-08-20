@@ -1,4 +1,4 @@
-ï»¿# Default ignored files
+# Default ignored files
 /shelf/
 /workspace.xml
 # Rider ignored files
@@ -11,9 +11,27 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+# Ignorar archivos de ensamblado y ejecutables
+*.dll
+*.exe
+*.pdb
+# Ignorar carpetas de salida de compilación
+bin/
+obj/
+# Ignorar archivos de Rider/JetBrains
+.idea/
+.idea_modules/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+# Ignorar archivos de configuración
+*.vs/
+.vscode/
+.vs/
 echo "src/" >> .gitignore
 git add .gitignore
-git commit -m "AÃ±adir .gitignore para excluir src/"
+git commit -m "Añadir .gitignore para excluir src/"
 echo ".idea/" >> .gitignore
 git rm --cached -r .idea/
 git add .gitignore

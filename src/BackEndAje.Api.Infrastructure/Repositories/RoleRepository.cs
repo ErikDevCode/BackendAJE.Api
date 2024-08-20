@@ -19,5 +19,26 @@
             return (await this._context.Roles
                 .FirstOrDefaultAsync(r => r.RoleName == roleName))!;
         }
+
+        public async Task<List<Role>> GetAllRolesAsync()
+        {
+            return await this._context.Roles.ToListAsync();
+        }
+
+        public async Task AddRoleAsync(Role role)
+        {
+            this._context.Roles.Add(role);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRoleAsync(Role role)
+        {
+            this._context.Roles.Update(role);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await this._context.SaveChangesAsync();
+        }
     }
 }

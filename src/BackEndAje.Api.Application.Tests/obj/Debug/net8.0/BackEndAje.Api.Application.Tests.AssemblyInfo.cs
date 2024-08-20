@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BackEndAje.Api.Application.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+22fb8b296ebf922dcc6d5bed7987cdeff10890b9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5b3421067189e3c186c08eaa7c026aa7dcfb0219")]
 [assembly: System.Reflection.AssemblyProductAttribute("BackEndAje.Api.Application.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BackEndAje.Api.Application.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
