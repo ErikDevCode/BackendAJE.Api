@@ -36,8 +36,6 @@
             };
 
             await this._userRepository.AddUserAsync(newUser);
-            await this._userRepository.SaveChangesAsync();
-
             return new CreateUserResult(newUser.UserId, newUser.Username, newUser.Email);
         }
     }

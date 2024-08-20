@@ -60,6 +60,13 @@
                 entity.Property(u => u.CreatedAt).IsRequired();
                 entity.Property(u => u.UpdatedAt).IsRequired();
             });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.HasKey(r => r.RoleId);
+                entity.Property(r => r.RoleName).IsRequired().HasMaxLength(50);
+                entity.Property(r => r.Description).IsRequired().HasMaxLength(255);
+            });
         }
     }
 }
