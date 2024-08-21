@@ -6,8 +6,8 @@ C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\BackEn
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\BackEndAje.Api.Domain.AssemblyInfoInputs.cache
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\BackEndAje.Api.Domain.AssemblyInfo.cs
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\BackEndAje.Api.Domain.csproj.CoreCompileInputs.cache
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\BackEndAje.Api.Domain.sourcelink.json
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\BackEndAje.Api.Domain.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\refint\BackEndAje.Api.Domain.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\BackEndAje.Api.Domain.pdb
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\ref\BackEndAje.Api.Domain.dll
-C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Domain\obj\Debug\net8.0\BackEndAje.Api.Domain.sourcelink.json

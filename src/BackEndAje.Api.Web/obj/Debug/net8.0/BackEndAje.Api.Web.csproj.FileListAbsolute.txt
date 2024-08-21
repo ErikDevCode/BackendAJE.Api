@@ -56,6 +56,7 @@ C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAj
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.csproj.CoreCompileInputs.cache
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.MvcApplicationPartsAssemblyInfo.cs
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.MvcApplicationPartsAssemblyInfo.cache
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.sourcelink.json
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\staticwebassets.build.json
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\staticwebassets.development.json
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\staticwebassets\msbuild.BackEndAje.Api.Web.Microsoft.AspNetCore.StaticWebAssets.props
@@ -70,4 +71,3 @@ C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\refint\Ba
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.pdb
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.genruntimeconfig.cache
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\ref\BackEndAje.Api.Web.dll
-C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\obj\Debug\net8.0\BackEndAje.Api.Web.sourcelink.json

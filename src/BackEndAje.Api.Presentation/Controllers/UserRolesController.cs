@@ -1,6 +1,7 @@
 ﻿namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
+    using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Users.Commands.AssignRolesToUser;
     using BackEndAje.Api.Application.Users.Queries.GetUserRolesById;
     using BackEndAje.Api.Application.Users.Queries.GetUsersWithRoles;
@@ -41,7 +42,7 @@
                 return this.NotFound($"No roles found for user with ID {userId}.");
             }
 
-            return this.Ok(roles);
+            return this.Ok(new Response { Result = roles });
         }
 
         [HttpGet]
@@ -52,7 +53,7 @@
             var query = new GetUsersWithRolesQuery();
             var usersWithRoles = await this._mediator.Send(query);
 
-            return this.Ok(usersWithRoles);
+            return this.Ok(new Response { Result = usersWithRoles });
         }
     }
 }
