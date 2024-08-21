@@ -1,6 +1,7 @@
 ﻿namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
+    using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Users.Commands.CreateUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUserPassword;
@@ -38,7 +39,7 @@
         {
             var query = new GetUserQuery(email);
             var result = await this._mediator.Send(query);
-            return this.Ok(result);
+            return this.Ok(new Response { Result = result });
         }
 
         [HttpPut]

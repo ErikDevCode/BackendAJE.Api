@@ -1,6 +1,7 @@
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
+    using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Roles.Commands.CreateRole;
     using BackEndAje.Api.Application.Roles.Commands.UpdateRole;
     using BackEndAje.Api.Application.Roles.Queries.GetAllRoles;
@@ -26,7 +27,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         {
             var query = new GetAllRolesQuery();
             var roles = await this._mediator.Send(query);
-            return this.Ok(roles);
+            return this.Ok(new Response { Result = roles });
         }
 
         [HttpPost]
