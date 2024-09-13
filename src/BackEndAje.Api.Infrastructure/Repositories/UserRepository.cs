@@ -14,9 +14,28 @@
             this._context = context;
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<User> GetUserByEmailOrRouteAsync(string codeRouteOrEmail)
         {
-            return (await this._context.Users.SingleOrDefaultAsync(u => u.Email == email)) !;
+            if (string.IsNullOrEmpty(codeRouteOrEmail))
+            {
+                return null!;
+            }
+
+            if (codeRouteOrEmail.Contains("@"))
+            {
+                return (await this._context.Users.SingleOrDefaultAsync(u => u.Email == codeRouteOrEmail))!;
+            }
+            else if (int.TryParse(codeRouteOrEmail, out var route))
+            {
+                return (await this._context.Users.SingleOrDefaultAsync(u => u.Route == route))!;
+            }
+
+            return null!;
+        }
+
+        public async Task<AppUser> GetAppUserByEmailAsync(string routeOrEmail)
+        {
+            return (await this._context.AppUsers.SingleOrDefaultAsync(u => u.RouteOrEmail == routeOrEmail)) !;
         }
 
         public async Task<IEnumerable<string>> GetRolesByUserIdAsync(int userId)
@@ -33,7 +52,20 @@
             return roles;
         }
 
-        public async Task<IEnumerable<string>> GetPermissionsByUserIdAsync(int userId)
+        public async Task<IEnumerable<Role>> GetRolesWithPermissionsByUserIdAsync(int userId)
+        {
+            var rolesWithPermissions = await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Include(ur => ur.Role)
+                .ThenInclude(r => r.RolePermissions)
+                .ThenInclude(rp => rp.Permission)
+                .Select(ur => ur.Role)
+                .ToListAsync();
+
+            return rolesWithPermissions;
+        }
+
+        public async Task<IEnumerable<Permission>> GetPermissionsByUserIdAsync(int userId)
         {
             var permissions = await this._context.UserRoles
                 .Where(ur => ur.UserId == userId)
@@ -46,7 +78,12 @@
                     this._context.Permissions,
                     rp => rp,
                     p => p.PermissionId,
-                    (rp, p) => p.PermissionName)
+                    (rp, p) => new Permission()
+                    {
+                        PermissionId = p.PermissionId,
+                        PermissionName = p.PermissionName,
+                        Action = p.Action,
+                    })
                 .ToListAsync();
 
             return permissions;
@@ -60,11 +97,11 @@
                 .FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
-        public async Task<List<string>> GetUserRolesAsync(int userId)
+        public async Task<List<int>> GetUserRolesAsync(int userId)
         {
             return await this._context.UserRoles
                 .Where(ur => ur.UserId == userId)
-                .Select(ur => ur.Role.RoleName)
+                .Select(ur => ur.Role.RoleId)
                 .ToListAsync();
         }
 
@@ -106,9 +143,21 @@
             await this._context.SaveChangesAsync();
         }
 
+        public async Task AddAppUserAsync(AppUser appUser)
+        {
+            this._context.AppUsers.Add(appUser);
+            await this._context.SaveChangesAsync();
+        }
+
         public async Task UpdateUserAsync(User user)
         {
             this._context.Users.Update(user);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAppUserAsync(AppUser appUser)
+        {
+            this._context.AppUsers.Update(appUser);
             await this._context.SaveChangesAsync();
         }
 

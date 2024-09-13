@@ -14,7 +14,7 @@
 
         public async Task<LoginUserResult> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            return await this._userLoginService.LoginAsync(request.Email, request.Password);
+            return await this._userLoginService.LoginAsync(request.RouteOrEmail, request.Password);
         }
     }
 }

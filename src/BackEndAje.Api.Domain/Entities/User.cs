@@ -4,28 +4,38 @@
     {
         public int UserId { get; set; }
         
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        public int RegionId { get; set; }
+        
+        public int? CediId { get; set; }
+        
+        public int? ZoneId { get; set; }
+        
+        public int? Route { get; set; }
+        
+        public int? Code { get; set; }
+        
+        public string PaternalSurName { get; set; }
+
+        public string MaternalSurName { get; set; }
+
+        public string Names { get; set; }
+        public string? Email { get; set; }
+
+        public string Phone { get; set; }
+        
+        public bool IsActive { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        
+
         public DateTime UpdatedAt { get; set; }
+        
+        public int CreatedBy { get; set; }
+        public int UpdatedBy { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
         
         public User()
         {
             UserRoles = new List<UserRole>();
-        }
-        
-        public void SetPassword(string password)
-        {
-            this.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
-        }
-        
-        public bool ValidatePassword(string password)
-        {
-            return BCrypt.Net.BCrypt.Verify(password, this.PasswordHash);
         }
     }
 }

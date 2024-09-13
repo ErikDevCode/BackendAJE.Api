@@ -4,7 +4,7 @@
 
     public class LoginUserCommand : ICommand<LoginUserResult>
     {
-        public string Email { get; set; }
+        public string RouteOrEmail { get; set; }
 
         public string Password { get; set; }
     }

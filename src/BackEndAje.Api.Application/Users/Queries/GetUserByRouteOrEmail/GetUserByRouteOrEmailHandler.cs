@@ -3,26 +3,26 @@
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 
-    public class GetUserByRouteIdOrEmailHandler : IRequestHandler<GetUserByRouteIdOrEmailQuery, GetUserByRouteIdOrEmailResult>
+    public class GetUserByRouteOrEmailHandler : IRequestHandler<GetUserByRouteOrEmailQuery, GetUserByRouteOrEmailResult>
     {
         private readonly IUserRepository _userRepository;
 
-        public GetUserByRouteIdOrEmailHandler(IUserRepository userRepository)
+        public GetUserByRouteOrEmailHandler(IUserRepository userRepository)
         {
             this._userRepository = userRepository;
         }
 
-        public async Task<GetUserByRouteIdOrEmailResult> Handle(GetUserByRouteIdOrEmailQuery request, CancellationToken cancellationToken)
+        public async Task<GetUserByRouteOrEmailResult> Handle(GetUserByRouteOrEmailQuery request, CancellationToken cancellationToken)
         {
-            var user = await this._userRepository.GetUserByEmailOrRouteAsync(request.RouteIdOrEmail);
+            var user = await this._userRepository.GetUserByEmailOrRouteAsync(request.RouteOrEmail);
 
             if (user == null)
             {
-                throw new KeyNotFoundException($"User with email '{request.RouteIdOrEmail}' not found.");
+                throw new KeyNotFoundException($"User with email '{request.RouteOrEmail}' not found.");
             }
 
             var userName = $"{user.PaternalSurName} {user.MaternalSurName} {user.Names}";
-            return new GetUserByRouteIdOrEmailResult(user.UserId, user.RegionId, user.CediId, user.ZoneId, user.Route, user.Code, user.PaternalSurName, user.MaternalSurName, user.Names, userName, user.Email!, user.Phone, user.IsActive, user.CreatedAt);
+            return new GetUserByRouteOrEmailResult(user.UserId, user.RegionId, user.CediId, user.ZoneId, user.Route, user.Code, user.PaternalSurName, user.MaternalSurName, user.Names, userName, user.Email!, user.Phone, user.IsActive, user.CreatedAt);
         }
     }
 }

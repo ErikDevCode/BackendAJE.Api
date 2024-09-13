@@ -17,17 +17,17 @@
 
         public async Task<bool> Handle(UpdateUserPasswordByEmailCommand request, CancellationToken cancellationToken)
         {
-            var user = await this._userRepository.GetUserByEmailAsync(request.Email);
+            var appUser = await this._userRepository.GetAppUserByEmailAsync(request.RouteOrEmail);
 
-            if (user == null)
+            if (appUser == null)
             {
-                throw new KeyNotFoundException($"User with email '{request.Email}' not found.");
+                throw new KeyNotFoundException($"User with Route or email '{request.RouteOrEmail}' not found.");
             }
 
-            user.PasswordHash = this._hashingService.HashPassword(request.NewPassword);
-            user.UpdatedAt = DateTime.UtcNow;
+            appUser.PasswordHash = this._hashingService.HashPassword(request.NewPassword);
+            appUser.UpdatedAt = DateTime.UtcNow;
 
-            await this._userRepository.UpdateUserAsync(user);
+            await this._userRepository.UpdateAppUserAsync(appUser);
             return true;
         }
     }

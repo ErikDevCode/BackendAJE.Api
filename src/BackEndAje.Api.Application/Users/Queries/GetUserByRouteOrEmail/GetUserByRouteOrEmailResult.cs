@@ -1,6 +1,6 @@
 ﻿namespace BackEndAje.Api.Application.Users.Queries.GetUserByRouteOrEmail
 {
-    public class GetUserByRouteIdOrEmailResult
+    public class GetUserByRouteOrEmailResult
     {
         public int UserId { get; }
 
@@ -10,7 +10,7 @@
 
         public int? ZoneId { get; }
 
-        public int? RouteId { get; }
+        public int? Route { get; }
 
         public int? Code { get; }
 
@@ -30,13 +30,13 @@
 
         public DateTime CreatedAt { get; }
 
-        public GetUserByRouteIdOrEmailResult(int userId, int regionId, int? cediId, int? zoneId, int? routeId, int? code, string paternalSurName, string maternalSurName, string names, string username, string email, string phone, bool isActive, DateTime createdAt)
+        public GetUserByRouteOrEmailResult(int userId, int regionId, int? cediId, int? zoneId, int? route, int? code, string paternalSurName, string maternalSurName, string names, string username, string email, string phone, bool isActive, DateTime createdAt)
         {
             this.UserId = userId;
             this.RegionId = regionId;
             this.CediId = cediId;
             this.ZoneId = zoneId;
-            this.RouteId = routeId;
+            this.Route = route;
             this.Code = code;
             this.PaternalSurName = paternalSurName;
             this.MaternalSurName = maternalSurName;

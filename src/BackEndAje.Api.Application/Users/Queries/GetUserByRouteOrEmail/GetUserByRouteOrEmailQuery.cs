@@ -2,5 +2,5 @@
 {
     using MediatR;
 
-    public record GetUserByRouteIdOrEmailQuery(string RouteIdOrEmail) : IRequest<GetUserByRouteIdOrEmailResult>;
+    public record GetUserByRouteOrEmailQuery(string RouteOrEmail) : IRequest<GetUserByRouteOrEmailResult>;
 }

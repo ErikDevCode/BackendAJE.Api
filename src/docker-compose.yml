@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: "12345"  # Configurar la contraseña para el usuario root
+    ports:
+      - "3307:3306"  # O el puerto que hayas elegido para evitar conflictos
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+    driver: local

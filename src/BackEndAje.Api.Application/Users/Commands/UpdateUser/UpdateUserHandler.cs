@@ -14,27 +14,53 @@
 
         public async Task<UpdateUserResult> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await this._userRepository.GetUserByEmailAsync(request.Email);
+             var user = await this._userRepository.GetUserByEmailOrRouteAsync(request.Email);
 
-            if (user == null)
-            {
-                throw new KeyNotFoundException($"User with Email '{request.Email}' not found.");
-            }
+             if (user == null)
+             {
+                 throw new KeyNotFoundException($"User with Email '{request.Email}' not found.");
+             }
 
-            if (!string.IsNullOrEmpty(request.Username))
-            {
-                user.Username = request.Username;
-            }
+             user.RegionId = request.RegionId > 0 ? request.RegionId : user.RegionId;
+             user.CediId = request.CediId;  // Puede ser null
+             user.ZoneId = request.ZoneId;  // Puede ser null
+             user.Route = request.Route;  // Puede ser null
+             user.Code = request.Code;  // Puede ser null
 
-            if (!string.IsNullOrEmpty(request.Email))
-            {
-                user.Email = request.Email;
-            }
+             if (!string.IsNullOrWhiteSpace(request.PaternalSurName))
+             {
+                 user.PaternalSurName = request.PaternalSurName;
+             }
 
-            user.UpdatedAt = DateTime.UtcNow;
+             if (!string.IsNullOrWhiteSpace(request.MaternalSurName))
+             {
+                 user.MaternalSurName = request.MaternalSurName;
+             }
 
-            await this._userRepository.UpdateUserAsync(user);
-            return new UpdateUserResult(user.UserId, user.Username, user.Email);
+             if (!string.IsNullOrWhiteSpace(request.Names))
+             {
+                 user.Names = request.Names;
+             }
+
+             if (!string.IsNullOrWhiteSpace(request.Phone))
+             {
+                 user.Phone = request.Phone;
+             }
+
+             user.IsActive = request.IsActive;
+             user.UpdatedBy = request.UpdatedBy > 0 ? request.UpdatedBy : user.UpdatedBy;
+             user.UpdatedAt = DateTime.UtcNow;
+
+             if (!string.IsNullOrEmpty(request.Email) && request.Email != user.Email)
+             {
+                 user.Email = request.Email;
+                 var appUser = await this._userRepository.GetAppUserByEmailAsync(user.Email);
+                 appUser.RouteOrEmail = request.Email;
+                 await this._userRepository.UpdateAppUserAsync(appUser);
+             }
+
+             await this._userRepository.UpdateUserAsync(user);
+             return new UpdateUserResult(user.UserId, $"{user.PaternalSurName} {user.MaternalSurName} {user.Names}", user.Email);
         }
     }
 }

@@ -12,6 +12,8 @@
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<AppUser> AppUsers { get; set; }
+
         public DbSet<UserRole> UserRoles { get; set; }
 
         public DbSet<Role> Roles { get; set; }
@@ -24,49 +26,17 @@
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<RolePermission>()
-                .HasKey(rp => new { rp.RoleId, rp.PermissionId });
+            modelBuilder.Entity<AppUser>().ToTable("appusers");
 
+            modelBuilder.Entity<RolePermission>().ToTable("rolepermissions");
 
-            modelBuilder.Entity<RolePermission>()
-                .HasOne(rp => rp.Role)
-                .WithMany(r => r.RolePermissions)
-                .HasForeignKey(rp => rp.RoleId);
+            modelBuilder.Entity<UserRole>().ToTable("userroles");
 
-            modelBuilder.Entity<RolePermission>()
-                .HasOne(rp => rp.Permission)
-                .WithMany(p => p.RolePermissions)
-                .HasForeignKey(rp => rp.PermissionId);
+            modelBuilder.Entity<Role>().ToTable("roles");
 
-            modelBuilder.Entity<UserRole>()
-                .HasKey(ur => new { ur.UserId, ur.RoleId });
+            modelBuilder.Entity<User>().ToTable("users");
 
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.User)
-                .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.UserId);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Role)
-                .WithMany(r => r.UserRoles)
-                .HasForeignKey(ur => ur.RoleId);
-
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.HasKey(u => u.UserId);
-                entity.Property(u => u.Username).IsRequired().HasMaxLength(50);
-                entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
-                entity.Property(u => u.PasswordHash).IsRequired();
-                entity.Property(u => u.CreatedAt).IsRequired();
-                entity.Property(u => u.UpdatedAt).IsRequired();
-            });
-
-            modelBuilder.Entity<Role>(entity =>
-            {
-                entity.HasKey(r => r.RoleId);
-                entity.Property(r => r.RoleName).IsRequired().HasMaxLength(50);
-                entity.Property(r => r.Description).IsRequired().HasMaxLength(255);
-            });
+            modelBuilder.Entity<Permission>().ToTable("permissions");
         }
     }
 }

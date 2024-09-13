@@ -2,5 +2,5 @@
 {
     using MediatR;
 
-    public record UpdateUserPasswordByEmailCommand(string Email, string NewPassword) : IRequest<bool>;
+    public record UpdateUserPasswordByEmailCommand(string RouteOrEmail, string NewPassword) : IRequest<bool>;
 }
