@@ -1721,7 +1721,8 @@
       },
       "BackEndAje.Api.Domain/1.0.0": {
         "dependencies": {
-          "BCrypt.Net-Next": "4.0.2"
+          "BCrypt.Net-Next": "4.0.2",
+          "MediatR.Contracts": "1.0.1"
         },
         "runtime": {
           "BackEndAje.Api.Domain.dll": {}

@@ -1,4 +1,6 @@
-﻿namespace BackEndAje.Api.Application.Services
+﻿using BackEndAje.Api.Domain.Entities;
+
+namespace BackEndAje.Api.Application.Services
 {
     using BackEndAje.Api.Application.Abstractions.Users;
     using BackEndAje.Api.Application.Interfaces;
@@ -18,23 +20,25 @@
             this._jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public async Task<LoginUserResult> LoginAsync(string email, string password)
+        public async Task<LoginUserResult> LoginAsync(string routeOrEmail, string password)
         {
-            var user = await this._userRepository.GetUserByEmailAsync(email);
+            var user = await this._userRepository.GetUserByEmailOrRouteAsync(routeOrEmail);
+
             if (user == null)
             {
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
 
-            var passwordValid = this._hashingService.VerifyPassword(password, user.PasswordHash);
+            var appUser = await this._userRepository.GetAppUserByEmailAsync(routeOrEmail);
+            var passwordValid = this._hashingService.VerifyPassword(password, appUser.PasswordHash);
             if (!passwordValid)
             {
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
 
             var roles = await this._userRepository.GetRolesByUserIdAsync(user.UserId);
-            var permissions = await this._userRepository.GetPermissionsByUserIdAsync(user.UserId);
-            var tokenDto = this._jwtTokenGenerator.GeneratorToken(user, roles, permissions);
+            var rolesWithPermissions = await this._userRepository.GetRolesWithPermissionsByUserIdAsync(user.UserId);
+            var tokenDto = this._jwtTokenGenerator.GeneratorToken(user, roles, rolesWithPermissions);
             return new LoginUserResult
             {
                 AccessToken = tokenDto.Token,

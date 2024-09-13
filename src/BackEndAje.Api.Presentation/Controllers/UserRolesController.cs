@@ -1,4 +1,6 @@
-﻿namespace BackEndAje.Api.Presentation.Controllers
+﻿using BackEndAje.Api.Application.Users.Commands.RemoveRoleToUser;
+
+namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
@@ -54,6 +56,17 @@
             var usersWithRoles = await this._mediator.Send(query);
 
             return this.Ok(new Response { Result = usersWithRoles });
+        }
+
+        [HttpDelete]
+        [Route("{userId}/roles/{roleId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> RemoveRoleFromUser(int userId, int roleId)
+        {
+            var command = new RemoveRolesToUserCommand(userId, roleId);
+            await this._mediator.Send(command);
+            return this.Ok();
         }
     }
 }

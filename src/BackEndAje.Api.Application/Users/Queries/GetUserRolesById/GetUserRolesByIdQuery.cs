@@ -2,5 +2,5 @@
 {
     using MediatR;
 
-    public record GetUserRolesByIdQuery(int UserId) : IRequest<List<string>>;
+    public record GetUserRolesByIdQuery(int UserId) : IRequest<List<GetUserRolesByIdResult>>;
 }

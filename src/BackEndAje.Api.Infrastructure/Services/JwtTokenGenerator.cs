@@ -8,6 +8,7 @@
     using BackEndAje.Api.Domain.Entities;
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
+    using Newtonsoft.Json;
 
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
@@ -18,16 +19,42 @@
             this._configuration = configuration;
         }
 
-        public ResponseToken GeneratorToken(User user, IEnumerable<string> roles, IEnumerable<string> permissions)
+        public ResponseToken GeneratorToken(User user, IEnumerable<string> roles, IEnumerable<Role> rolesWithPermissions)
         {
+            var email = user.Email ?? "N/A";
+            var route = user.Route?.ToString() ?? "N/A";
+
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim(JwtRegisteredClaimNames.Nickname, route),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
-            claims.AddRange(roles.Select(role => new Claim("role", role)));
-            claims.AddRange(permissions.Select(permission => new Claim("permission", permission)));
+
+            claims.AddRange(rolesWithPermissions.Select(role => new Claim("role", role.RoleName)));
+
+            var permissionsDict = new Dictionary<string, Dictionary<string, Dictionary<string, bool>>>();
+
+            foreach (var role in rolesWithPermissions)
+            {
+                var rolePermissions = new Dictionary<string, Dictionary<string, bool>>();
+
+                foreach (var rp in role.RolePermissions.Where(rp => rp.Status))
+                {
+                    if (!rolePermissions.ContainsKey(rp.Permission.PermissionName))
+                    {
+                        rolePermissions[rp.Permission.PermissionName] = new Dictionary<string, bool>();
+                    }
+
+                    rolePermissions[rp.Permission.PermissionName][rp.Permission.Action] = true;
+                }
+
+                permissionsDict[role.RoleName] = rolePermissions;
+            }
+
+            var permissionsJson = JsonConvert.SerializeObject(permissionsDict);
+            claims.Add(new Claim("permissions", permissionsJson));
 
             var expirationMinutes = int.Parse(this._configuration["JwtConfig:ExpirationInMinutes"]!);
             var expiration = DateTime.UtcNow.AddMinutes(expirationMinutes);

@@ -25,33 +25,18 @@
 
             var currentRoles = await this._userRepository.GetUserRolesAsync(user.UserId);
 
-            var rolesToAdd = request.Roles.Except(currentRoles, StringComparer.InvariantCultureIgnoreCase).ToList();
-
-            var rolesToRemove = currentRoles.Except(request.Roles, StringComparer.CurrentCultureIgnoreCase).ToList();
-
-            var assignedRoleIds = new List<int>();
-            var assignedRoleNames = new List<string>();
-
-            foreach (var role in rolesToAdd)
+            if (currentRoles.Any(roleId => roleId == request.RoleId))
             {
-                var roleEntity = await this._roleRepository.GetRoleByNameAsync(role);
-                await this._userRepository.AddUserRoleAsync(user.UserId, roleEntity.RoleId);
-                assignedRoleIds.Add(roleEntity.RoleId);
-                assignedRoleNames.Add(roleEntity.RoleName);
+                throw new InvalidOperationException($"Role with ID '{request.RoleId}' is already assigned to user with ID '{user.UserId}'.");
             }
 
-            foreach (var role in rolesToRemove)
-            {
-                var roleEntity = await this._roleRepository.GetRoleByNameAsync(role);
-                if (roleEntity != null)
-                {
-                    await this._userRepository.RemoveUserRoleAsync(user.UserId, roleEntity.RoleId);
-                }
-            }
+            var roleById = await this._roleRepository.GetRoleByIdAsync(request.RoleId);
+
+            await this._userRepository.AddUserRoleAsync(user.UserId, request.RoleId);
 
             await this._userRepository.SaveChangesAsync();
 
-            return new AssingRolesToUserResult(user.UserId, assignedRoleIds, assignedRoleNames);
+            return new AssingRolesToUserResult(user.UserId, request.RoleId, roleById!.RoleName);
         }
     }
 }

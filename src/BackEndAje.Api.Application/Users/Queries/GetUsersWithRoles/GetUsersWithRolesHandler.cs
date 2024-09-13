@@ -18,7 +18,7 @@
 
             return users.Select(user => new GetUsersWithRolesResult(
                 user.UserId,
-                user.Username,
+                $"{user.PaternalSurName} {user.MaternalSurName} {user.Names}".Trim(),
                 user.Email,
                 user.UserRoles.Select(ur => ur.Role.RoleName).ToList())).ToList();
         }

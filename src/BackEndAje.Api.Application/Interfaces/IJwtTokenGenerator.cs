@@ -5,6 +5,6 @@
 
     public interface IJwtTokenGenerator
     {
-        ResponseToken GeneratorToken(User user, IEnumerable<string> roles, IEnumerable<string> permissions);
+        ResponseToken GeneratorToken(User user, IEnumerable<string> roles, IEnumerable<Role> rolesWithPermissions);
     }
 }

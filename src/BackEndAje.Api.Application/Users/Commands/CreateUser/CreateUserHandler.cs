@@ -9,16 +9,18 @@
     {
         private readonly IUserRepository _userRepository;
         private readonly IHashingService _hashingService;
+        private readonly IRoleRepository _roleRepository;
 
-        public CreateUserHandler(IUserRepository userRepository, IHashingService hashingService)
+        public CreateUserHandler(IUserRepository userRepository, IHashingService hashingService, IRoleRepository roleRepository)
         {
             this._userRepository = userRepository;
             this._hashingService = hashingService;
+            this._roleRepository = roleRepository;
         }
 
         public async Task<CreateUserResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var existingUser = await this._userRepository.GetUserByEmailAsync(request.Email);
+            var existingUser = await this._userRepository.GetUserByEmailOrRouteAsync(request.Email!);
             if (existingUser != null)
             {
                 throw new ArgumentException("Email already in use.");
@@ -28,15 +30,43 @@
 
             var newUser = new User
             {
-                Username = request.Username,
+                RegionId = request.RegionId,
+                CediId = request.CediId > 0 ? request.CediId : null,
+                ZoneId = request.ZoneId > 0 ? request.ZoneId : null,
+                Route = request.Route > 0 ? request.Route : null,
+                Code = request.Code > 0 ? request.Code : null,
+                PaternalSurName = request.PaternalSurName,
+                MaternalSurName = request.MaternalSurName,
+                Names = request.Names,
                 Email = request.Email,
+                Phone = request.Phone,
+                IsActive = request.IsActive,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                CreatedBy = request.CreatedBy,
+                UpdatedBy = request.UpdatedBy,
+            };
+
+            await this._userRepository.AddUserAsync(newUser);
+            var newAppUser = new AppUser
+            {
+                UserId = newUser.UserId,
+                RouteOrEmail = (newUser.Route is null ? newUser.Email : newUser.Route.ToString())!,
                 PasswordHash = passwordHash,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
             };
 
-            await this._userRepository.AddUserAsync(newUser);
-            return new CreateUserResult(newUser.UserId, newUser.Username, newUser.Email);
+            await this._userRepository.AddAppUserAsync(newAppUser);
+
+            if (request.RoleId > 0)
+            {
+                await this._userRepository.AddUserRoleAsync(newUser.UserId, request.RoleId);
+            }
+
+            var role = await this._roleRepository.GetRoleByIdAsync(request.RoleId);
+
+            return new CreateUserResult(newUser.UserId,  $"{newUser.PaternalSurName} {newUser.MaternalSurName} {newUser.Names}", newUser.Email, request.RoleId, role!.RoleName);
         }
     }
 }
