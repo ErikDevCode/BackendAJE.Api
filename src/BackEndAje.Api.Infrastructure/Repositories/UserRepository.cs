@@ -33,7 +33,7 @@
             return null!;
         }
 
-        public async Task<AppUser> GetAppUserByEmailAsync(string routeOrEmail)
+        public async Task<AppUser> GetAppUserByRouteOrEmailAsync(string routeOrEmail)
         {
             return (await this._context.AppUsers.SingleOrDefaultAsync(u => u.RouteOrEmail == routeOrEmail)) !;
         }
@@ -54,7 +54,7 @@
 
         public async Task<IEnumerable<Role>> GetRolesWithPermissionsByUserIdAsync(int userId)
         {
-            var rolesWithPermissions = await _context.UserRoles
+            var rolesWithPermissions = await this._context.UserRoles
                 .Where(ur => ur.UserId == userId)
                 .Include(ur => ur.Role)
                 .ThenInclude(r => r.RolePermissions)
@@ -105,12 +105,16 @@
                 .ToListAsync();
         }
 
-        public async Task AddUserRoleAsync(int userId, int roleId)
+        public async Task AddUserRoleAsync(int userId, int roleId, int createdBy, int updatedBy)
         {
             var userRole = new UserRole
             {
                 UserId = userId,
                 RoleId = roleId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                CreatedBy = createdBy,
+                UpdatedBy = updatedBy,
             };
 
             this._context.UserRoles.Add(userRole);

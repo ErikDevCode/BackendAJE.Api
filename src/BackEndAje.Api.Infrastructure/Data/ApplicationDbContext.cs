@@ -22,6 +22,12 @@
 
         public DbSet<Permission> Permissions { get; set; }
 
+        public DbSet<Region> Regions { get; set; }
+
+        public DbSet<Cedi> Cedis { get; set; }
+
+        public DbSet<Zone> Zones { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -37,6 +43,12 @@
             modelBuilder.Entity<User>().ToTable("users");
 
             modelBuilder.Entity<Permission>().ToTable("permissions");
+
+            modelBuilder.Entity<Region>().ToTable("regions");
+
+            modelBuilder.Entity<Cedi>().ToTable("cedis");
+
+            modelBuilder.Entity<Zone>().ToTable("zones");
         }
     }
 }

@@ -3,8 +3,6 @@
     using BackEndAje.Api.Domain.Entities;
     public interface IRoleRepository
     {
-        Task<Role> GetRoleByNameAsync(string roleName);
-
         Task<List<Role>> GetAllRolesAsync();
 
         Task<Role?> GetRoleByIdAsync(int roleId);

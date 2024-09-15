@@ -6,11 +6,13 @@
     using BackEndAje.Api.Application.Users.Commands.UpdateUser;
     using BackEndAje.Api.Application.Users.Queries.GetUserByRouteOrEmail;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     /// <inheritdoc />
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -26,6 +28,9 @@
         [Route("create")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
+            var userId = this.GetUserId();
+            command.CreatedBy = userId;
+            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -47,8 +52,21 @@
         [Route("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
         {
+            var userId = this.GetUserId();
+            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
+        }
+
+        private int GetUserId()
+        {
+            var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
+            {
+                throw new UnauthorizedAccessException("User ID not found or invalid in token.");
+            }
+
+            return userId;
         }
     }
 }

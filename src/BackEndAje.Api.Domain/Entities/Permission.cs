@@ -1,6 +1,6 @@
 ﻿namespace BackEndAje.Api.Domain.Entities
 {
-    public class Permission
+    public class Permission : AuditableEntity
     {
         public int PermissionId { get; set; }
         public string PermissionName { get; set; }

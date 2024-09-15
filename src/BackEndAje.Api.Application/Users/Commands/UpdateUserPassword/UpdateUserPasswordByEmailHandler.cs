@@ -17,7 +17,7 @@
 
         public async Task<bool> Handle(UpdateUserPasswordByEmailCommand request, CancellationToken cancellationToken)
         {
-            var appUser = await this._userRepository.GetAppUserByEmailAsync(request.RouteOrEmail);
+            var appUser = await this._userRepository.GetAppUserByRouteOrEmailAsync(request.RouteOrEmail);
 
             if (appUser == null)
             {

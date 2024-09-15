@@ -14,12 +14,6 @@
             this._context = context;
         }
 
-        public async Task<Role> GetRoleByNameAsync(string roleName)
-        {
-            return (await this._context.Roles
-                .FirstOrDefaultAsync(r => r.RoleName == roleName))!;
-        }
-
         public async Task<List<Role>> GetAllRolesAsync()
         {
             return await this._context.Roles.ToListAsync();

@@ -32,7 +32,7 @@
 
             var roleById = await this._roleRepository.GetRoleByIdAsync(request.RoleId);
 
-            await this._userRepository.AddUserRoleAsync(user.UserId, request.RoleId);
+            await this._userRepository.AddUserRoleAsync(user.UserId, request.RoleId, request.CreatedBy, request.UpdatedBy);
 
             await this._userRepository.SaveChangesAsync();
 
