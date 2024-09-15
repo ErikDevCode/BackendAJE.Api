@@ -5,7 +5,7 @@
     public interface IUserRepository
     {
         Task<User> GetUserByEmailOrRouteAsync(string codeRouteOrEmail);
-        Task<AppUser> GetAppUserByEmailAsync(string routeOrEmail);
+        Task<AppUser> GetAppUserByRouteOrEmailAsync(string routeOrEmail);
 
         Task<IEnumerable<string>> GetRolesByUserIdAsync(int userId);
 
@@ -17,7 +17,7 @@
 
         Task<List<int>> GetUserRolesAsync(int userId);
         
-        Task AddUserRoleAsync(int userId, int roleId);
+        Task AddUserRoleAsync(int userId, int roleId, int createdBy, int updatedBy);
 
         Task RemoveUserRoleAsync(int userId, int roleId);
         

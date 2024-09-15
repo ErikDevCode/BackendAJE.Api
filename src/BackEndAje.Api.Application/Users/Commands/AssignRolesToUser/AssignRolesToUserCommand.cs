@@ -2,5 +2,14 @@
 {
     using MediatR;
 
-    public record AssignRolesToUserCommand(int UserId, int RoleId) : IRequest<AssingRolesToUserResult>;
+    public class AssignRolesToUserCommand() : IRequest<AssingRolesToUserResult>
+    {
+        public int UserId { get; set; }
+
+        public int RoleId { get; set; }
+
+        public int CreatedBy { get; set; }
+
+        public int UpdatedBy { get; set; }
+    }
 }

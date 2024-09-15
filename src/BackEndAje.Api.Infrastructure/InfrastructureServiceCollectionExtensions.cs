@@ -5,6 +5,8 @@
     using BackEndAje.Api.Infrastructure.Data;
     using BackEndAje.Api.Infrastructure.Repositories;
     using BackEndAje.Api.Infrastructure.Services;
+    using BackEndAje.Api.Infrastructure.Services.Security;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +24,13 @@
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IHashingService, HashingService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+            services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+            services.AddScoped<IRegionRepository, RegionRepository>();
+            services.AddScoped<ICediRepository, CediRepository>();
+            services.AddScoped<IZoneRepository, ZoneRepository>();
+            services.AddScoped<IClaimsTransformation, CustomClaimsTransformation>();
 
             return services;
         }

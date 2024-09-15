@@ -6,9 +6,15 @@
 
         public int? RegionId { get; }
 
+        public string RegionName { get; set; }
+
         public int? CediId { get; }
 
+        public string? CediName { get; set; }
+
         public int? ZoneId { get; }
+
+        public int? ZoneCode { get; set; }
 
         public int? Route { get; }
 
@@ -22,7 +28,7 @@
 
         public string Username { get; }
 
-        public string Email { get; }
+        public string? Email { get; }
 
         public string Phone { get; }
 
@@ -30,12 +36,18 @@
 
         public DateTime CreatedAt { get; }
 
-        public GetUserByRouteOrEmailResult(int userId, int regionId, int? cediId, int? zoneId, int? route, int? code, string paternalSurName, string maternalSurName, string names, string username, string email, string phone, bool isActive, DateTime createdAt)
+        public List<RoleResponse> Roles { get; set; } = new List<RoleResponse>();
+
+        public GetUserByRouteOrEmailResult(int userId, int regionId, string regionName, int? cediId, string? cediName, int? zoneId, int? zoneCode, int? route, int? code,
+            string paternalSurName, string maternalSurName, string names, string username, string? email, string phone, bool isActive, DateTime createdAt, List<RoleResponse> roles)
         {
             this.UserId = userId;
             this.RegionId = regionId;
+            this.RegionName = regionName;
             this.CediId = cediId;
+            this.CediName = cediName;
             this.ZoneId = zoneId;
+            this.ZoneCode = zoneCode;
             this.Route = route;
             this.Code = code;
             this.PaternalSurName = paternalSurName;
@@ -46,6 +58,7 @@
             this.Phone = phone;
             this.IsActive = isActive;
             this.CreatedAt = createdAt;
+            this.Roles = roles;
         }
     }
 }

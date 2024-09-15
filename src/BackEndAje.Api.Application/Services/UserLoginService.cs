@@ -29,7 +29,7 @@ namespace BackEndAje.Api.Application.Services
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
 
-            var appUser = await this._userRepository.GetAppUserByEmailAsync(routeOrEmail);
+            var appUser = await this._userRepository.GetAppUserByRouteOrEmailAsync(routeOrEmail);
             var passwordValid = this._hashingService.VerifyPassword(password, appUser.PasswordHash);
             if (!passwordValid)
             {

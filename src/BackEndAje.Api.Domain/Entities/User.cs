@@ -1,6 +1,6 @@
 ﻿namespace BackEndAje.Api.Domain.Entities
 {
-    public class User
+    public class User : AuditableEntity
     {
         public int UserId { get; set; }
         
@@ -24,13 +24,7 @@
         public string Phone { get; set; }
         
         public bool IsActive { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime UpdatedAt { get; set; }
         
-        public int CreatedBy { get; set; }
-        public int UpdatedBy { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
         
         public User()

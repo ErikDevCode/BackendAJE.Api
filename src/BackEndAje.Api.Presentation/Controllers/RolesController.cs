@@ -6,11 +6,12 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Roles.Commands.UpdateRole;
     using BackEndAje.Api.Application.Roles.Queries.GetAllRoles;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
     [Route("api/[controller]")]
-
+    [Authorize]
     public class RolesController : ControllerBase
     {
         private readonly IMediator _mediator;

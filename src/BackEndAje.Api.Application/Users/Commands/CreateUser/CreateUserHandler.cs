@@ -20,10 +20,13 @@
 
         public async Task<CreateUserResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var existingUser = await this._userRepository.GetUserByEmailOrRouteAsync(request.Email!);
+            var email = request.Email;
+            var route = request.Route;
+            var emailOrRoute = !string.IsNullOrWhiteSpace(email) ? email : route?.ToString();
+            var existingUser = await this._userRepository.GetUserByEmailOrRouteAsync(emailOrRoute!);
             if (existingUser != null)
             {
-                throw new ArgumentException("Email already in use.");
+                throw new ArgumentException("Email o Ruta already in use.");
             }
 
             var passwordHash = this._hashingService.HashPassword(request.Password);
@@ -41,8 +44,8 @@
                 Email = request.Email,
                 Phone = request.Phone,
                 IsActive = request.IsActive,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
                 CreatedBy = request.CreatedBy,
                 UpdatedBy = request.UpdatedBy,
             };
@@ -53,15 +56,16 @@
                 UserId = newUser.UserId,
                 RouteOrEmail = (newUser.Route is null ? newUser.Email : newUser.Route.ToString())!,
                 PasswordHash = passwordHash,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                CreatedBy = request.CreatedBy,
+                UpdatedBy = request.UpdatedBy,
             };
-
             await this._userRepository.AddAppUserAsync(newAppUser);
 
             if (request.RoleId > 0)
             {
-                await this._userRepository.AddUserRoleAsync(newUser.UserId, request.RoleId);
+                await this._userRepository.AddUserRoleAsync(newUser.UserId, request.RoleId, request.CreatedBy, request.UpdatedBy);
             }
 
             var role = await this._roleRepository.GetRoleByIdAsync(request.RoleId);
