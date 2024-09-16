@@ -1,5 +1,6 @@
 ﻿namespace BackEndAje.Api.Application.Users.Queries.GetUserByRouteOrEmail
 {
+    using AutoMapper;
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
@@ -14,8 +15,9 @@
         private readonly IRegionRepository _regionRepository;
         private readonly ICediRepository _cediRepository;
         private readonly IZoneRepository _zoneRepository;
+        private readonly IMapper _mapper;
 
-        public GetUserByRouteOrEmailHandler(IUserRepository userRepository, IRoleRepository roleRepository, IPermissionRepository permissionRepository, IUserRoleRepository userRoleRepository, IRolePermissionRepository rolePermissionRepository, IRegionRepository regionRepository, ICediRepository cediRepository, IZoneRepository zoneRepository)
+        public GetUserByRouteOrEmailHandler(IUserRepository userRepository, IRoleRepository roleRepository, IPermissionRepository permissionRepository, IUserRoleRepository userRoleRepository, IRolePermissionRepository rolePermissionRepository, IRegionRepository regionRepository, ICediRepository cediRepository, IZoneRepository zoneRepository, IMapper mapper)
         {
             this._userRepository = userRepository;
             this._roleRepository = roleRepository;
@@ -25,58 +27,22 @@
             this._regionRepository = regionRepository;
             this._cediRepository = cediRepository;
             this._zoneRepository = zoneRepository;
+            this._mapper = mapper;
         }
 
         public async Task<GetUserByRouteOrEmailResult> Handle(GetUserByRouteOrEmailQuery request, CancellationToken cancellationToken)
         {
             var user = await this.GetUserAsync(request.RouteOrEmail);
-            var userName = $"{user.PaternalSurName} {user.MaternalSurName} {user.Names}";
 
-            var userRoles = await this.GetUserRolesAsync(user.UserId);
-            var roleIds = userRoles.Select(ur => ur.RoleId).ToList();
+            var result = this._mapper.Map<GetUserByRouteOrEmailResult>(user);
 
-            var allRoles = await this._roleRepository.GetAllRolesAsync();
-            var allRolePermissions = await this._rolePermissionRepository.GetAllRolePermissionsAsync();
-            var allPermissions = await this._permissionRepository.GetAllPermissionsAsync();
 
-            var roles = this.GetRolesWithPermissions(roleIds, allRoles, allRolePermissions, allPermissions);
+            result.RegionName = (await this.GetRegionNameAsync(user.RegionId)) !;
+            result.CediName = await this.GetCediNameAsync(user.CediId);
+            result.ZoneCode = await this.GetZoneCodeAsync(user.ZoneId);
+            result.Roles = await this.GetRolesWithPermissionsAsync(user.UserId);
 
-            var regions = await this._regionRepository.GetAllPermissionsAsync();
-            var regionName = regions.FirstOrDefault(x => x.RegionId == user.RegionId)?.RegionName;
-
-            string? cediName = null;
-            if (user.CediId != null)
-            {
-                var cedi = await this._cediRepository.GetCediByCediIdAsync(user.CediId);
-                cediName = cedi.CediName;
-            }
-
-            int? zoneCode = null;
-            if (user.ZoneId != null)
-            {
-                var zone = await this._zoneRepository.GetZoneByZoneIdAsync(user.ZoneId);
-                zoneCode = zone.ZoneCode;
-            }
-
-            return new GetUserByRouteOrEmailResult(
-                user.UserId,
-                user.RegionId,
-                regionName!,
-                user.CediId,
-                cediName,
-                user.ZoneId,
-                zoneCode,
-                user.Route,
-                user.Code,
-                user.PaternalSurName,
-                user.MaternalSurName,
-                user.Names,
-                userName,
-                user.Email!,
-                user.Phone,
-                user.IsActive,
-                user.CreatedAt,
-                roles);
+            return result;
         }
 
         private async Task<User> GetUserAsync(string routeOrEmail)
@@ -90,17 +56,15 @@
             return user;
         }
 
-        private async Task<List<UserRole>> GetUserRolesAsync(int userId)
+        private async Task<List<RoleResponse>> GetRolesWithPermissionsAsync(int userId)
         {
-            return await this._userRoleRepository.GetUserRolesAsync(userId);
-        }
+            var userRoles = await this._userRoleRepository.GetUserRolesAsync(userId);
+            var roleIds = userRoles.Select(ur => ur.RoleId).ToList();
 
-        private List<RoleResponse> GetRolesWithPermissions(
-            List<int> roleIds,
-            List<Role> allRoles,
-            List<RolePermission> allRolePermissions,
-            List<Permission> allPermissions)
-        {
+            var allRoles = await this._roleRepository.GetAllRolesAsync();
+            var allRolePermissions = await this._rolePermissionRepository.GetAllRolePermissionsAsync();
+            var allPermissions = await this._permissionRepository.GetAllPermissionsAsync();
+
             return roleIds
                 .Select(roleId =>
                 {
@@ -120,7 +84,7 @@
                     };
                 })
                 .Where(r => r != null)
-                .ToList()!;
+                .ToList() !;
         }
 
         private List<PermissionResponse> GetPermissionsForRole(List<int> rolePermissions, List<Permission> allPermissions)
@@ -150,6 +114,39 @@
                     };
                 })
                 .ToList();
+        }
+
+        private async Task<string?> GetRegionNameAsync(int? regionId)
+        {
+            if (regionId == null)
+            {
+                return null;
+            }
+
+            var regions = await this._regionRepository.GetAllPermissionsAsync();
+            return regions.FirstOrDefault(x => x.RegionId == regionId)?.RegionName;
+        }
+
+        private async Task<string?> GetCediNameAsync(int? cediId)
+        {
+            if (cediId == null)
+            {
+                return null;
+            }
+
+            var cedi = await this._cediRepository.GetCediByCediIdAsync(cediId);
+            return cedi?.CediName;
+        }
+
+        private async Task<int?> GetZoneCodeAsync(int? zoneId)
+        {
+            if (zoneId == null)
+            {
+                return null;
+            }
+
+            var zone = await this._zoneRepository.GetZoneByZoneIdAsync(zoneId);
+            return zone?.ZoneCode;
         }
     }
 }

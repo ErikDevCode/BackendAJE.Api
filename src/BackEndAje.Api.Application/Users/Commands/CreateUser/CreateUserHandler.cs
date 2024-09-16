@@ -1,5 +1,6 @@
 ﻿namespace BackEndAje.Api.Application.Users.Commands.CreateUser
 {
+    using AutoMapper;
     using BackEndAje.Api.Application.Interfaces;
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
@@ -10,67 +11,65 @@
         private readonly IUserRepository _userRepository;
         private readonly IHashingService _hashingService;
         private readonly IRoleRepository _roleRepository;
+        private readonly IMapper _mapper;
 
-        public CreateUserHandler(IUserRepository userRepository, IHashingService hashingService, IRoleRepository roleRepository)
+        public CreateUserHandler(IUserRepository userRepository, IHashingService hashingService, IRoleRepository roleRepository, IMapper mapper)
         {
             this._userRepository = userRepository;
             this._hashingService = hashingService;
             this._roleRepository = roleRepository;
+            this._mapper = mapper;
         }
 
         public async Task<CreateUserResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var email = request.Email;
-            var route = request.Route;
+            await this.CheckIfUserExistsAsync(request.User.Email, request.User.Route);
+
+            var newUser = await this.CreateUserAsync(request);
+            await this.CreateAppUserAsync(request, newUser);
+            await this.AssignRoleToUserAsync(request, newUser);
+            var role = await this._roleRepository.GetRoleByIdAsync(request.User.RoleId);
+
+            return new CreateUserResult(
+                newUser.UserId,
+                $"{newUser.PaternalSurName} {newUser.MaternalSurName} {newUser.Names}",
+                newUser.Email!,
+                request.User.RoleId,
+                role!.RoleName);
+        }
+
+        private async Task CheckIfUserExistsAsync(string? email, int? route)
+        {
             var emailOrRoute = !string.IsNullOrWhiteSpace(email) ? email : route?.ToString();
             var existingUser = await this._userRepository.GetUserByEmailOrRouteAsync(emailOrRoute!);
             if (existingUser != null)
             {
                 throw new ArgumentException("Email o Ruta already in use.");
             }
+        }
 
-            var passwordHash = this._hashingService.HashPassword(request.Password);
-
-            var newUser = new User
-            {
-                RegionId = request.RegionId,
-                CediId = request.CediId > 0 ? request.CediId : null,
-                ZoneId = request.ZoneId > 0 ? request.ZoneId : null,
-                Route = request.Route > 0 ? request.Route : null,
-                Code = request.Code > 0 ? request.Code : null,
-                PaternalSurName = request.PaternalSurName,
-                MaternalSurName = request.MaternalSurName,
-                Names = request.Names,
-                Email = request.Email,
-                Phone = request.Phone,
-                IsActive = request.IsActive,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                CreatedBy = request.CreatedBy,
-                UpdatedBy = request.UpdatedBy,
-            };
-
+        private async Task<User> CreateUserAsync(CreateUserCommand request)
+        {
+            var newUser = this._mapper.Map<User>(request.User);
             await this._userRepository.AddUserAsync(newUser);
-            var newAppUser = new AppUser
-            {
-                UserId = newUser.UserId,
-                RouteOrEmail = (newUser.Route is null ? newUser.Email : newUser.Route.ToString())!,
-                PasswordHash = passwordHash,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                CreatedBy = request.CreatedBy,
-                UpdatedBy = request.UpdatedBy,
-            };
+            return newUser;
+        }
+
+        private async Task CreateAppUserAsync(CreateUserCommand request, User newUser)
+        {
+            var passwordHash = this._hashingService.HashPassword(request.User.Password);
+            var newAppUser = this._mapper.Map<AppUser>(request.User);
+            newAppUser.UserId = newUser.UserId;
+            newAppUser.PasswordHash = passwordHash;
             await this._userRepository.AddAppUserAsync(newAppUser);
+        }
 
-            if (request.RoleId > 0)
+        private async Task AssignRoleToUserAsync(CreateUserCommand request, User newUser)
+        {
+            if (request.User.RoleId > 0)
             {
-                await this._userRepository.AddUserRoleAsync(newUser.UserId, request.RoleId, request.CreatedBy, request.UpdatedBy);
+                await this._userRepository.AddUserRoleAsync(newUser.UserId, request.User.RoleId, request.User.CreatedBy, request.User.UpdatedBy);
             }
-
-            var role = await this._roleRepository.GetRoleByIdAsync(request.RoleId);
-
-            return new CreateUserResult(newUser.UserId,  $"{newUser.PaternalSurName} {newUser.MaternalSurName} {newUser.Names}", newUser.Email, request.RoleId, role!.RoleName);
         }
     }
 }

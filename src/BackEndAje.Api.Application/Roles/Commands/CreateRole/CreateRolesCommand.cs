@@ -1,11 +1,10 @@
 namespace BackEndAje.Api.Application.Roles.Commands.CreateRole
 {
+    using BackEndAje.Api.Application.Dtos.Roles;
     using MediatR;
 
     public class CreateRolesCommand : IRequest<Unit>
     {
-        public string RoleName { get; set; }
-
-        public string Description { get; set; }
+        public CreateRoleDto Role { get; set; }
     }
 }
