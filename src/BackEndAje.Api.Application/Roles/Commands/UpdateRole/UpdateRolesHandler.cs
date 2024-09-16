@@ -1,34 +1,30 @@
 namespace BackEndAje.Api.Application.Roles.Commands.UpdateRole
 {
-    using BackEndAje.Api.Domain.Entities;
+    using AutoMapper;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 
     public class UpdateRolesHandler : IRequestHandler<UpdateRolesCommand, Unit>
     {
         private readonly IRoleRepository _roleRepository;
+        private readonly IMapper _mapper;
 
-        public UpdateRolesHandler(IRoleRepository roleRepository)
+        public UpdateRolesHandler(IRoleRepository roleRepository, IMapper mapper)
         {
             this._roleRepository = roleRepository;
+            this._mapper = mapper;
         }
 
         public async Task<Unit> Handle(UpdateRolesCommand request, CancellationToken cancellationToken)
         {
-            var roleDto = await this._roleRepository.GetRoleByIdAsync(request.RoleId);
-            if (roleDto == null)
+            var existingRole = await this._roleRepository.GetRoleByIdAsync(request.Role.RoleId);
+            if (existingRole == null)
             {
-                throw new InvalidOperationException($"Role '{request.RoleName}' not exists.");
+                throw new InvalidOperationException($"Role '{request.Role.RoleName}' not exists.");
             }
 
-            var updateRole = new Role
-            {
-                RoleId = request.RoleId,
-                RoleName = request.RoleName,
-                Description = request.Description,
-            };
-
-            await this._roleRepository.UpdateRoleAsync(updateRole);
+            this._mapper.Map(request.Role, existingRole);
+            await this._roleRepository.UpdateRoleAsync(existingRole);
             return Unit.Value;
         }
     }

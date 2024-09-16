@@ -29,8 +29,8 @@
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
             var userId = this.GetUserId();
-            command.CreatedBy = userId;
-            command.UpdatedBy = userId;
+            command.User.CreatedBy = userId;
+            command.User.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -53,7 +53,7 @@
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
         {
             var userId = this.GetUserId();
-            command.UpdatedBy = userId;
+            command.User.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
