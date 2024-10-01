@@ -36,8 +36,6 @@
 
         public DateTime CreatedAt { get; set; }
 
-        public List<RoleResponse> Roles { get; set; } = new List<RoleResponse>();
-
         public GetUserByRouteOrEmailResult() { }
     }
 }

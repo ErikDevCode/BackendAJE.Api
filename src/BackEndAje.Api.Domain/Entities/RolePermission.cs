@@ -9,5 +9,7 @@
 
         public bool Status { get; set; }
         public Permission Permission { get; set; }
+        
+        public ICollection<RoleMenuAccess> RoleMenuAccess { get; set; } = new List<RoleMenuAccess>();
     }
 }

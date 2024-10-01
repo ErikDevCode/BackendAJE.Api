@@ -18,7 +18,8 @@
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     configuration.GetConnectionString("DefaultConnection"),
-                    new MySqlServerVersion(new Version(8, 0, 21))));
+                    new MySqlServerVersion(new Version(8, 0, 21)),
+                    options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
@@ -31,6 +32,7 @@
             services.AddScoped<ICediRepository, CediRepository>();
             services.AddScoped<IZoneRepository, ZoneRepository>();
             services.AddScoped<IClaimsTransformation, CustomClaimsTransformation>();
+            services.AddScoped<IActionRepository, ActionRepository>();
 
             return services;
         }

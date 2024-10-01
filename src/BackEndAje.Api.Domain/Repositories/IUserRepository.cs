@@ -30,5 +30,7 @@
 
         Task UpdateAppUserAsync(AppUser appUser);
         Task SaveChangesAsync();
+
+        Task<List<MenuGroup>> GetMenuForUserByIdAsync(int userId);
     }
 }

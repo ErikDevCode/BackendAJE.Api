@@ -2,8 +2,6 @@ namespace BackEndAje.Api.Application.Dtos.Users
 {
     public class UpdateUserDto
     {
-        public int RegionId { get; set; }
-
         public int? CediId { get; set; }
 
         public int? ZoneId { get; set; }

@@ -1,4 +1,6 @@
-﻿namespace BackEndAje.Api.Infrastructure.Repositories
+﻿using BackEndAje.Api.Application.Dtos.Users.Menu;
+
+namespace BackEndAje.Api.Infrastructure.Repositories
 {
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
@@ -82,7 +84,6 @@
                     {
                         PermissionId = p.PermissionId,
                         PermissionName = p.PermissionName,
-                        Action = p.Action,
                     })
                 .ToListAsync();
 
@@ -168,6 +169,61 @@
         public async Task SaveChangesAsync()
         {
             await this._context.SaveChangesAsync();
+        }
+
+        public async Task<List<MenuGroup>> GetMenuForUserByIdAsync(int userId)
+        {
+            var roleIds = await this._context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Select(ur => ur.RoleId)
+                .ToListAsync();
+
+            var menuGroups = await this._context.MenuGroups
+                .Include(mg => mg.MenuItems)
+                    .ThenInclude(mi => mi.MenuItemActions)
+                        .ThenInclude(mia => mia.Action)
+                .Include(mg => mg.MenuItems)
+                    .ThenInclude(mi => mi.MenuItemActions)
+                        .ThenInclude(mia => mia.RoleMenuAccesses)
+                            .ThenInclude(rma => rma.RolePermission)
+                                .ThenInclude(rma => rma.Permission)
+                .Where(mg => mg.MenuItems.Any(mi =>
+                    mi.MenuItemActions.Any(mia =>
+                        mia.RoleMenuAccesses.Any(rma => roleIds.Contains(rma.RolePermission.RoleId)))))
+                .Select(mg => new MenuGroup
+                {
+                    MenuGroupId = mg.MenuGroupId,
+                    GroupName = mg.GroupName,
+                    MenuItems = mg.MenuItems
+                        .Where(mi => mi.ParentMenuItemId == null)
+                        .Select(mi => new MenuItem
+                        {
+                            MenuItemId = mi.MenuItemId,
+                            Label = mi.Label,
+                            Icon = mi.Icon,
+                            Route = mi.Route,
+                            MenuItemActions = mi.MenuItemActions
+                                .Where(mia => mia.RoleMenuAccesses.Any(rma => roleIds.Contains(rma.RolePermission.RoleId)))
+                                .ToList(),
+                            ChildItems = mg.MenuItems
+                                .Where(child => child.ParentMenuItemId == mi.MenuItemId)
+                                .Select(child => new MenuItem
+                                {
+                                    MenuItemId = child.MenuItemId,
+                                    Label = child.Label,
+                                    Icon = child.Icon,
+                                    Route = child.Route,
+                                    MenuItemActions = child.MenuItemActions
+                                        .Where(mia => mia.RoleMenuAccesses.Any(rma => roleIds.Contains(rma.RolePermission.RoleId)))
+                                        .ToList(),
+                                }).ToList(),
+                        })
+                        .ToList(),
+                })
+                .AsNoTracking()
+                .ToListAsync();
+
+            return menuGroups;
         }
     }
 }

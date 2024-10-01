@@ -22,7 +22,6 @@ namespace BackEndAje.Api.Application.Mappers
 
             this.CreateMap<User, GetUserByRouteOrEmailResult>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-                .ForMember(dest => dest.RegionId, opt => opt.MapFrom(src => src.RegionId))
                 .ForMember(dest => dest.CediId, opt => opt.MapFrom(src => src.CediId))
                 .ForMember(dest => dest.ZoneId, opt => opt.MapFrom(src => src.ZoneId))
                 .ForMember(dest => dest.Route, opt => opt.MapFrom(src => src.Route))
@@ -37,8 +36,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(dest => dest.CediName, opt => opt.Ignore())
                 .ForMember(dest => dest.RegionName, opt => opt.Ignore())
-                .ForMember(dest => dest.ZoneCode, opt => opt.Ignore())
-                .ForMember(dest => dest.Roles, opt => opt.Ignore());
+                .ForMember(dest => dest.ZoneCode, opt => opt.Ignore());
         }
     }
 }
