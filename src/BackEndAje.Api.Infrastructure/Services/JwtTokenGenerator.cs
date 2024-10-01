@@ -46,8 +46,6 @@
                     {
                         rolePermissions[rp.Permission.PermissionName] = new Dictionary<string, bool>();
                     }
-
-                    rolePermissions[rp.Permission.PermissionName][rp.Permission.Action] = true;
                 }
 
                 permissionsDict[role.RoleName] = rolePermissions;

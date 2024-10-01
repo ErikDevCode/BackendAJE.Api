@@ -1,4 +1,6 @@
-﻿namespace BackEndAje.Api.Presentation.Controllers
+﻿using BackEndAje.Api.Application.Users.Queries.GetMenuForUserById;
+
+namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
@@ -36,7 +38,7 @@
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(CreateUserResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetUserByRouteOrEmailResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("{routeOrEmail}")]
         public async Task<IActionResult> GetUserByRouteOrEmail(string routeOrEmail)
@@ -47,7 +49,7 @@
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(CreateUserResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UpdateUserResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
@@ -55,6 +57,18 @@
             var userId = this.GetUserId();
             command.User.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetMenuForUserByIdResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("menu-for-user")]
+        public async Task<IActionResult> GetMenuForUser()
+        {
+            var userId = this.GetUserId();
+            var query = new GetMenuForUserByIdQuery(userId);
+            var result = await this._mediator.Send(query);
             return this.Ok(result);
         }
 

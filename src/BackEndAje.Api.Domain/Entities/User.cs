@@ -4,8 +4,6 @@
     {
         public int UserId { get; set; }
         
-        public int RegionId { get; set; }
-        
         public int? CediId { get; set; }
         
         public int? ZoneId { get; set; }

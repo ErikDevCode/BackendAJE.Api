@@ -28,6 +28,16 @@
 
         public DbSet<Zone> Zones { get; set; }
 
+        public DbSet<MenuGroup> MenuGroups { get; set; }
+
+        public DbSet<MenuItem> MenuItems { get; set; }
+
+        public DbSet<MenuItemAction> MenuItemActions { get; set; }
+
+        public DbSet<Action> Actions { get; set; }
+
+        public DbSet<RoleMenuAccess> RoleMenuAccess { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -49,6 +59,52 @@
             modelBuilder.Entity<Cedi>().ToTable("cedis");
 
             modelBuilder.Entity<Zone>().ToTable("zones");
+
+            modelBuilder.Entity<MenuGroup>().ToTable("menugroups");
+
+            modelBuilder.Entity<MenuItem>().ToTable("menuitems");
+
+            modelBuilder.Entity<MenuItemAction>().ToTable("menuitemactions");
+
+            modelBuilder.Entity<Action>().ToTable("actions");
+
+            modelBuilder.Entity<RoleMenuAccess>().ToTable("rolemenuaccess");
+
+            modelBuilder.Entity<MenuGroup>()
+                .HasMany(mg => mg.MenuItems)
+                .WithOne(mi => mi.MenuGroup)
+                .HasForeignKey(mi => mi.MenuGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MenuItem>()
+                .HasOne(mi => mi.ParentItem)
+                .WithMany(mi => mi.ChildItems)
+                .HasForeignKey(mi => mi.ParentMenuItemId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MenuItem>()
+                .HasMany(mi => mi.MenuItemActions)
+                .WithOne(mia => mia.MenuItem)
+                .HasForeignKey(mia => mia.MenuItemId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Action>()
+                .HasMany(a => a.MenuItemActions)
+                .WithOne(mia => mia.Action)
+                .HasForeignKey(mia => mia.ActionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RoleMenuAccess>()
+                .HasOne(rma => rma.RolePermission)
+                .WithMany(rp => rp.RoleMenuAccess)
+                .HasForeignKey(rma => rma.RolePermissionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MenuItemAction>()
+                .HasOne(mp => mp.Action)
+                .WithMany(a => a.MenuItemActions)
+                .HasForeignKey(mp => mp.ActionId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
