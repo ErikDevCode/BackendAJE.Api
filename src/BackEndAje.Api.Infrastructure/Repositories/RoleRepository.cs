@@ -37,6 +37,23 @@
             await this._context.SaveChangesAsync();
         }
 
+        public async Task<RolePermission?> GetRolePermissionsByIdsAsync(int roleId, int permissionId)
+        {
+            return await this._context.RolePermissions.AsNoTracking().FirstOrDefaultAsync(r => r.RoleId == roleId && r.PermissionId == permissionId);
+        }
+
+        public async Task AssignPermissionToRole(RolePermission rolePermission)
+        {
+            this._context.RolePermissions.Add(rolePermission);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task DeleteRoleAsync(Role role)
+        {
+            this._context.Roles.Remove(role);
+            await this._context.SaveChangesAsync();
+        }
+
         public async Task SaveChangesAsync()
         {
             await this._context.SaveChangesAsync();

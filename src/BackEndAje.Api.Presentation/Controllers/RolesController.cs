@@ -1,8 +1,13 @@
+using System.Data;
+using BackEndAje.Api.Application.Dtos.Roles;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Roles.Commands.AssignPermissionToRole;
     using BackEndAje.Api.Application.Roles.Commands.CreateRole;
+    using BackEndAje.Api.Application.Roles.Commands.DeleteRole;
     using BackEndAje.Api.Application.Roles.Commands.UpdateRole;
     using BackEndAje.Api.Application.Roles.Queries.GetAllRoles;
     using MediatR;
@@ -52,6 +57,36 @@ namespace BackEndAje.Api.Presentation.Controllers
         {
             var userId = this.GetUserId();
             command.Role.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("delete/{roleId}")]
+        public async Task<IActionResult> DeleteRole(int roleId)
+        {
+            var userId = this.GetUserId();
+            var command = new DeleteRoleCommand { RoleDelete = new DeleteRoleDto() { RoleId = roleId, UpdatedBy = userId } };
+            var result = await this._mediator.Send(command);
+            if (result)
+            {
+                return this.Ok(new { Message = $"RoleId '{roleId}' has been deleted successfully." });
+            }
+
+            return this.NotFound(new { Message = $"RoleId '{roleId}' not found or already deleted." });
+        }
+
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("AssignPermissionsToRole")]
+        public async Task<IActionResult> CreateRole([FromBody] AssignPermissionToRoleCommand command)
+        {
+            var userId = this.GetUserId();
+            command.AssignPermissionToRole.CreatedBy = userId;
+            command.AssignPermissionToRole.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }

@@ -6,8 +6,11 @@ namespace BackEndAje.Api.Domain.Repositories
     {
         Task<List<Action>> GetAllActionsAsync();
         
+        Task<Action?> GetActionByIdAsync(int actionId);
+        
         Task AddActionAsync(Action role);
         
         Task UpdateActionAsync(Action role);
+        Task DeleteActionAsync(Action action);
     }
 }

@@ -24,4 +24,8 @@
     <ProjectReference Include="..\BackEndAje.Api.Domain\BackEndAje.Api.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Menus\Commands\" />
+  </ItemGroup>
+
 </Project>

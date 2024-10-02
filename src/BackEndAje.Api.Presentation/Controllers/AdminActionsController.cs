@@ -1,3 +1,6 @@
+using BackEndAje.Api.Application.Actions.Commands.DeleteAction;
+using BackEndAje.Api.Application.Dtos.Actions;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -55,6 +58,22 @@ namespace BackEndAje.Api.Presentation.Controllers
             command.Action.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
+        }
+
+        [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("delete/{actionId}")]
+        public async Task<IActionResult> DeleteAction(int actionId)
+        {
+            var command = new DeleteActionCommand { DeleteAction = new DeleteActionDto() { ActionId = actionId } };
+            var result = await this._mediator.Send(command);
+            if (result)
+            {
+                return this.Ok(new { Message = $"ActionId '{actionId}' has been deleted successfully." });
+            }
+
+            return this.NotFound(new { Message = $"ActionId '{actionId}' not found or already deleted." });
         }
 
         private int GetUserId()

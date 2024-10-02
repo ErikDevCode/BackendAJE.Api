@@ -33,6 +33,7 @@
             services.AddScoped<IZoneRepository, ZoneRepository>();
             services.AddScoped<IClaimsTransformation, CustomClaimsTransformation>();
             services.AddScoped<IActionRepository, ActionRepository>();
+            services.AddScoped<IMenuRepository, MenuRepository>();
 
             return services;
         }

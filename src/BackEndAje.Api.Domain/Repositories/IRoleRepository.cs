@@ -10,6 +10,12 @@
         Task AddRoleAsync(Role role);
 
         Task UpdateRoleAsync(Role role);
+
+        Task<RolePermission?> GetRolePermissionsByIdsAsync(int roleId, int permissionId);
+        
+        Task AssignPermissionToRole(RolePermission rolePermission);
+
+        Task DeleteRoleAsync(Role role);
         Task SaveChangesAsync();
     }
 }
