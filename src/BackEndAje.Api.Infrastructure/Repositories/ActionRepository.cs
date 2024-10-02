@@ -19,6 +19,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await this._context.Actions.ToListAsync();
         }
 
+        public async Task<Action?> GetActionByIdAsync(int actionId)
+        {
+            return await this._context.Actions.AsNoTracking().FirstOrDefaultAsync(r => r.ActionId == actionId);
+        }
+
         public async Task AddActionAsync(Action action)
         {
             this._context.Actions.Add(action);
@@ -29,6 +34,12 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             this._context.Entry(action).State = EntityState.Detached;
             this._context.Actions.Update(action);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task DeleteActionAsync(Action action)
+        {
+            this._context.Actions.Remove(action);
             await this._context.SaveChangesAsync();
         }
     }
