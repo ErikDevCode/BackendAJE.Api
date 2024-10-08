@@ -14,6 +14,19 @@ using AssemblyReference = BackEndAje.Api.Application.AssemblyReference;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", builder =>
+    {
+        builder.WithOrigins("https://localhost:7001", "https://localhost:2001/")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+
 var jwtConfig = builder.Configuration.GetSection("JwtConfig").Get<JwtConfig>();
 
 var key = Encoding.ASCII.GetBytes(jwtConfig!.Secret);
@@ -92,6 +105,7 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
+app.UseCors("AllowSpecificOrigins");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

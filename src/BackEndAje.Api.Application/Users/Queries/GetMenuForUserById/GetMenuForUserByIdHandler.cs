@@ -49,14 +49,21 @@ namespace BackEndAje.Api.Application.Users.Queries.GetMenuForUserById
 
         private MenuItemDto MapToMenuItemDto(MenuItem mi)
         {
-            return new MenuItemDto
+            var menuItemDto = new MenuItemDto
             {
                 Label = mi.Label,
                 Icon = mi.Icon,
                 Route = mi.Route,
                 Permissions = this.MapToPermissions(mi.MenuItemActions),
-                Children = this.MapToChildren(mi.ChildItems),
+                Children = mi.ChildItems.Any() ? this.MapToChildren(mi.ChildItems) : null,
             };
+
+            if (menuItemDto.Children == null)
+            {
+                menuItemDto.GetType().GetProperty(nameof(menuItemDto.Children))?.SetValue(menuItemDto, null);
+            }
+
+            return menuItemDto;
         }
 
         private List<string> MapToPermissions(ICollection<MenuItemAction>? menuItemActions)
