@@ -1,5 +1,7 @@
 namespace BackEndAje.Api.Application.Dtos.Users.Menu
 {
+    using System.Text.Json.Serialization;
+
     public class MenuItemDto
     {
         public string Icon { get; set; }
@@ -10,6 +12,7 @@ namespace BackEndAje.Api.Application.Dtos.Users.Menu
 
         public List<string> Permissions { get; set; } = new List<string>();
 
-        public List<MenuItemDto> Children { get; set; } = new List<MenuItemDto>();
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<MenuItemDto>? Children { get; set; }
     }
 }
