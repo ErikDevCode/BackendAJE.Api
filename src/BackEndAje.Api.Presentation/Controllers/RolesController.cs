@@ -29,9 +29,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetAllRoles()
+        public async Task<IActionResult> GetAllRoles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var query = new GetAllRolesQuery();
+            var query = new GetAllRolesQuery(pageNumber, pageSize);
             var roles = await this._mediator.Send(query);
             return this.Ok(new Response { Result = roles });
         }

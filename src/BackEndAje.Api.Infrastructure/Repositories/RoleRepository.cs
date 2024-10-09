@@ -14,9 +14,17 @@
             this._context = context;
         }
 
-        public async Task<List<Role>> GetAllRolesAsync()
+        public async Task<List<Role>> GetAllRolesAsync(int pageNumber, int pageSize)
         {
-            return await this._context.Roles.ToListAsync();
+            return await this._context.Roles
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalRolesCountAsync()
+        {
+            return await this._context.Roles.CountAsync();
         }
 
         public async Task<Role?> GetRoleByIdAsync(int roleId)
@@ -52,6 +60,11 @@
         {
             this._context.Roles.Remove(role);
             await this._context.SaveChangesAsync();
+        }
+
+        public async Task<bool> RoleExistsAsync(string roleName)
+        {
+            return await this._context.Roles.AnyAsync(r => r.RoleName.Equals(roleName, StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task SaveChangesAsync()

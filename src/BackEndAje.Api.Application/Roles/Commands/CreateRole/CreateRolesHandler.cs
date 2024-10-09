@@ -18,10 +18,8 @@ namespace BackEndAje.Api.Application.Roles.Commands.CreateRole
 
         public async Task<Unit> Handle(CreateRolesCommand request, CancellationToken cancellationToken)
         {
-            var listRole = await this._roleRepository.GetAllRolesAsync();
-            var existingRole = listRole.FirstOrDefault(r => r.RoleName.Equals(request.Role.RoleName, StringComparison.OrdinalIgnoreCase));
-
-            if (existingRole != null)
+            var roleExists = await this._roleRepository.RoleExistsAsync(request.Role.RoleName);
+            if (roleExists)
             {
                 throw new InvalidOperationException($"Role '{request.Role.RoleName}' already exists.");
             }
