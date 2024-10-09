@@ -8,6 +8,8 @@
         
         public string Description { get; set; }
 
+        public bool IsActive { get; set; }
+
         public ICollection<UserRole> UserRoles { get; set; }
         public ICollection<RolePermission> RolePermissions { get; set; }
     }

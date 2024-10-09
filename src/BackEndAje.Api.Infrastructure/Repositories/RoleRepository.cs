@@ -18,13 +18,13 @@
         {
             return await this._context.Roles
                 .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+                .Take(pageSize).Where(x => x.IsActive)
                 .ToListAsync();
         }
 
         public async Task<int> GetTotalRolesCountAsync()
         {
-            return await this._context.Roles.CountAsync();
+            return await this._context.Roles.Where(x => x.IsActive).CountAsync();
         }
 
         public async Task<Role?> GetRoleByIdAsync(int roleId)
@@ -58,7 +58,8 @@
 
         public async Task DeleteRoleAsync(Role role)
         {
-            this._context.Roles.Remove(role);
+            this._context.Entry(role).State = EntityState.Detached;
+            this._context.Roles.Update(role);
             await this._context.SaveChangesAsync();
         }
 
