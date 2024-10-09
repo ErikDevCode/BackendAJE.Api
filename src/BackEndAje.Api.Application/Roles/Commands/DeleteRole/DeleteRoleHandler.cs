@@ -22,7 +22,7 @@ namespace BackEndAje.Api.Application.Roles.Commands.DeleteRole
             {
                 throw new InvalidOperationException($"RoleId '{request.RoleDelete.RoleId}' not exists.");
             }
-
+            existingRole.IsActive = false;
             await this._roleRepository.DeleteRoleAsync(existingRole);
             return true;
         }
