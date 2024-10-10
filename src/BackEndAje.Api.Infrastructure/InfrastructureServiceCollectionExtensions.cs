@@ -34,6 +34,7 @@
             services.AddScoped<IClaimsTransformation, CustomClaimsTransformation>();
             services.AddScoped<IActionRepository, ActionRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IMastersRepository, MastersRepository>();
 
             return services;
         }
