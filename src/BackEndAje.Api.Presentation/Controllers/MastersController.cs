@@ -22,6 +22,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("GetAllReasonRequest")]
         public async Task<IActionResult> GetAllReasonRequest()
         {
             var query = new GetAllReasonRequestQuery();
