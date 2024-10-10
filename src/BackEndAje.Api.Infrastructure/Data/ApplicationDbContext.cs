@@ -38,6 +38,10 @@
 
         public DbSet<RoleMenuAccess> RoleMenuAccess { get; set; }
 
+        public DbSet<ReasonRequest> ReasonRequest { get; set; }
+
+        public DbSet<WithDrawalReason> WithDrawalReason { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -69,6 +73,10 @@
             modelBuilder.Entity<Action>().ToTable("actions");
 
             modelBuilder.Entity<RoleMenuAccess>().ToTable("rolemenuaccess");
+
+            modelBuilder.Entity<ReasonRequest>().ToTable("reasonrequest");
+
+            modelBuilder.Entity<WithDrawalReason>().ToTable("withdrawalreason");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
