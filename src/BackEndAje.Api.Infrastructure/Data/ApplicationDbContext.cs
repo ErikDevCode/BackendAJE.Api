@@ -50,6 +50,12 @@
 
         public DbSet<ProductSize> ProductSize { get; set; }
 
+        public DbSet<Department> Departments { get; set; }
+
+        public DbSet<Province> Provinces { get; set; }
+
+        public DbSet<District> Districts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -93,6 +99,12 @@
             modelBuilder.Entity<Logo>().ToTable("logos");
 
             modelBuilder.Entity<ProductSize>().ToTable("productsize");
+
+            modelBuilder.Entity<Department>().ToTable("departments");
+
+            modelBuilder.Entity<Province>().ToTable("provinces");
+
+            modelBuilder.Entity<District>().ToTable("districts");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)

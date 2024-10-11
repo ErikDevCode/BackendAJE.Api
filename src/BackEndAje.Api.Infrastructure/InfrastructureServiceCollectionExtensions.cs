@@ -35,6 +35,7 @@
             services.AddScoped<IActionRepository, ActionRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<IMastersRepository, MastersRepository>();
+            services.AddScoped<IUbigeoRepository, UbigeoRepository>();
 
             return services;
         }
