@@ -25,6 +25,26 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .Where(wr => wr.ReasonRequestId == reasonRequestId)
                 .ToListAsync();
         }
+
+        public async Task<List<TimeWindow>> GetAllTimeWindows()
+        {
+            return await this._context.TimeWindows.ToListAsync();
+        }
+
+        public async Task<List<ProductType>> GetAllProductTypes()
+        {
+            return await this._context.ProductTypes.ToListAsync();
+        }
+
+        public async Task<List<Logo>> GetAllLogos()
+        {
+            return await this._context.Logos.ToListAsync();
+        }
+
+        public async Task<List<ProductSize>> GetAllProductSize()
+        {
+            return await this._context.ProductSize.ToListAsync();
+        }
     }
 }
 
