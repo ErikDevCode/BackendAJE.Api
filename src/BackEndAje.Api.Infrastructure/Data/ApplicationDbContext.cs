@@ -42,6 +42,14 @@
 
         public DbSet<WithDrawalReason> WithDrawalReason { get; set; }
 
+        public DbSet<TimeWindow> TimeWindows { get; set; }
+
+        public DbSet<ProductType> ProductTypes { get; set; }
+
+        public DbSet<Logo> Logos { get; set; }
+
+        public DbSet<ProductSize> ProductSize { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -77,6 +85,14 @@
             modelBuilder.Entity<ReasonRequest>().ToTable("reasonrequest");
 
             modelBuilder.Entity<WithDrawalReason>().ToTable("withdrawalreason");
+
+            modelBuilder.Entity<TimeWindow>().ToTable("timewindows");
+
+            modelBuilder.Entity<ProductType>().ToTable("producttypes");
+
+            modelBuilder.Entity<Logo>().ToTable("logos");
+
+            modelBuilder.Entity<ProductSize>().ToTable("productsize");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
