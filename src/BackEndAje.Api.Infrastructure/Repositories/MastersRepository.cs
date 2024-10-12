@@ -45,6 +45,26 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             return await this._context.ProductSize.ToListAsync();
         }
+
+        public async Task<List<PaymentMethods>> GetAllPaymentMethods()
+        {
+            return await this._context.PaymentMethods.ToListAsync();
+        }
+
+        public async Task<PaymentMethods?> GetPaymentMethodById(int paymentMethodId)
+        {
+            return await this._context.PaymentMethods.FirstOrDefaultAsync(x => x.PaymentMethodId == paymentMethodId);
+        }
+
+        public async Task<List<DocumentType>> GetAllDocumentType()
+        {
+            return await this._context.DocumentType.ToListAsync();
+        }
+
+        public async Task<DocumentType?> GetDocumentTypeById(int documentTypeId)
+        {
+            return await this._context.DocumentType.FirstOrDefaultAsync(x => x.DocumentTypeId == documentTypeId);
+        }
     }
 }
 

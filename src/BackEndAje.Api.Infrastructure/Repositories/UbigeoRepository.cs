@@ -28,5 +28,10 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             return await this._context.Districts.Where(x => x.ProvinceId == provinceId).ToListAsync();
         }
+
+        public async Task<District?> GetDistrictByDistrictId(string districtId)
+        {
+            return await this._context.Districts.FirstOrDefaultAsync(x => x.Id == districtId);
+        }
     }
 }

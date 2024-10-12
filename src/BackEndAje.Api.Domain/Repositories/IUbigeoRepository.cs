@@ -9,5 +9,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<Province>> GetProvincesByDepartmentId(string departmentId);
 
         Task<List<District>> GetDistrictsByProvinceId(string provinceId);
+
+        Task<District?> GetDistrictByDistrictId(string districtId);
     }
 }
