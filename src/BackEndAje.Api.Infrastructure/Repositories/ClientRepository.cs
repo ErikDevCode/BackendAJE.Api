@@ -28,10 +28,24 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<Client>> GetClients(int pageNumber, int pageSize)
         {
-            return await this._context.Clients
+            var clients = await this._context.Clients
+                .Where(c => c.IsActive)
+                .Include(c => c.DocumentType)
+                .Include(c => c.PaymentMethod)
+                .Include(c => c.District)
                 .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize).Where(x => x.IsActive)
+                .Take(pageSize)
                 .ToListAsync();
+
+            foreach (var client in clients.Where(c => c.Route != null))
+            {
+                client.Seller = await this._context.Users
+                    .Include(u => u.Cedi)
+                    .Include(u => u.Zone)
+                    .SingleOrDefaultAsync(u => u.Route == client.Route);
+            }
+
+            return clients;
         }
 
         public async Task<int> GetTotalClients()

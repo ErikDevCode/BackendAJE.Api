@@ -7,11 +7,7 @@ namespace BackEndAje.Api.Application.Dtos.Users
     {
         public int UserId { get; set; }
 
-        public int? CediId { get; set; }
-
         public CediDto Cedi { get; set; }
-
-        public int? ZoneId { get; set; }
 
         public ZoneDto Zone { get; set; }
 

@@ -161,6 +161,48 @@
             modelBuilder.Entity<DocumentType>()
                 .ToTable("documenttype")
                 .HasKey(pm => pm.DocumentTypeId);
+
+            modelBuilder.Entity<Client>()
+                .HasOne(c => c.DocumentType)
+                .WithMany()
+                .HasForeignKey(c => c.DocumentTypeId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Client>()
+                .HasOne(c => c.PaymentMethod)
+                .WithMany()
+                .HasForeignKey(c => c.PaymentMethodId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Client>()
+                .HasOne(c => c.Seller)
+                .WithMany()
+                .HasForeignKey(c => c.Route)
+                //.HasPrincipalKey(u => u.Route)  // Mapea Route en User como clave principal
+                .IsRequired(false);
+
+            modelBuilder.Entity<Client>()
+                .HasOne(c => c.District)
+                .WithMany()
+                .HasForeignKey(c => c.DistrictId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Cedi)
+                .WithMany()
+                .HasForeignKey(u => u.CediId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Zone)
+                .WithMany()
+                .HasForeignKey(u => u.ZoneId)
+                .IsRequired(false);
+/*
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Route)
+                .IsUnique();
+                */
         }
     }
 }

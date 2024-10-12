@@ -14,8 +14,6 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetAllClients
 
         public string CompanyName { get; set; }
 
-        public int DocumentTypeId { get; set; }
-
         public DocumentTypeDto DocumentType { get; set; }
 
         public string DocumentNumber { get; set; }
@@ -23,8 +21,6 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetAllClients
         public string Email { get; set; }
 
         public DateTime? EffectiveDate { get; set; }
-
-        public int PaymentMethodId { get; set; }
 
         public PaymentMethodDto PaymentMethod { get; set; }
 
@@ -35,8 +31,6 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetAllClients
         public string Phone { get; set; }
 
         public string Address { get; set; }
-
-        public string DistrictId { get; set; }
 
         public District District { get; set; }
 

@@ -6,7 +6,11 @@
         
         public int? CediId { get; set; }
         
+        public Cedi? Cedi { get; set; }
+        
         public int? ZoneId { get; set; }
+        
+        public Zone? Zone { get; set; }
         
         public int? Route { get; set; }
         

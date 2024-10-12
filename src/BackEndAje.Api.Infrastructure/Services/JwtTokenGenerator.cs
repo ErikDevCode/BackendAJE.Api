@@ -19,16 +19,14 @@
             this._configuration = configuration;
         }
 
-        public ResponseToken GeneratorToken(User user, IEnumerable<string> roles, IEnumerable<Role> rolesWithPermissions)
+        public ResponseToken GeneratorToken(User? user, IEnumerable<string> roles, IEnumerable<Role> rolesWithPermissions)
         {
             var email = user.Email ?? "N/A";
-            var route = user.Route?.ToString() ?? "N/A";
 
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, email),
-                new Claim(JwtRegisteredClaimNames.Nickname, route),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
