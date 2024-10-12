@@ -4,7 +4,7 @@
 
     public interface IUserRepository
     {
-        Task<User> GetUserByEmailOrRouteAsync(string codeRouteOrEmail);
+        Task<User?> GetUserByEmailOrRouteAsync(string codeRouteOrEmail);
         Task<AppUser> GetAppUserByRouteOrEmailAsync(string routeOrEmail);
 
         Task<IEnumerable<string>> GetRolesByUserIdAsync(int userId);

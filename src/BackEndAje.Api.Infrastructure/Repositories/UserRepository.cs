@@ -16,7 +16,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context = context;
         }
 
-        public async Task<User> GetUserByEmailOrRouteAsync(string codeRouteOrEmail)
+        public async Task<User?> GetUserByEmailOrRouteAsync(string codeRouteOrEmail)
         {
             if (string.IsNullOrEmpty(codeRouteOrEmail))
             {
@@ -25,14 +25,14 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (codeRouteOrEmail.Contains("@"))
             {
-                return (await this._context.Users.SingleOrDefaultAsync(u => u.Email == codeRouteOrEmail))!;
+                return await this._context.Users.SingleOrDefaultAsync(u => u.Email == codeRouteOrEmail);
             }
             else if (int.TryParse(codeRouteOrEmail, out var route))
             {
-                return (await this._context.Users.SingleOrDefaultAsync(u => u.Route == route))!;
+                return await this._context.Users.SingleOrDefaultAsync(u => u.Route == route);
             }
 
-            return null!;
+            return null;
         }
 
         public async Task<AppUser> GetAppUserByRouteOrEmailAsync(string routeOrEmail)
