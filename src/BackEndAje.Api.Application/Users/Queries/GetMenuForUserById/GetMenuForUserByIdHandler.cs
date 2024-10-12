@@ -16,33 +16,24 @@ namespace BackEndAje.Api.Application.Users.Queries.GetMenuForUserById
 
         public async Task<GetMenuForUserByIdResult> Handle(GetMenuForUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var menuGroups = await this._userRepository.GetMenuForUserByIdAsync(request.UserId);
+            var menuItems = await this._userRepository.GetMenuForUserByIdAsync(request.UserId);
 
-            return this.MapToGetMenuForUserByIdResult(menuGroups);
+            return this.MapToGetMenuForUserByIdResult(menuItems);
         }
 
-        private GetMenuForUserByIdResult MapToGetMenuForUserByIdResult(List<MenuGroup> menuGroups)
+        private GetMenuForUserByIdResult MapToGetMenuForUserByIdResult(List<MenuItem> menuItems)
         {
             return new GetMenuForUserByIdResult
             {
-                MenuGroups = menuGroups.Select(this.MapToMenuGroupDto).ToList(),
+                label = "Módulos",
+                Items = this.MapToMenuItems(menuItems),
             };
         }
 
-        private MenuGroupDto MapToMenuGroupDto(MenuGroup mg)
+        private List<MenuItemDto> MapToMenuItems(List<MenuItem> menuItems)
         {
-            return new MenuGroupDto
-            {
-                Group = mg.GroupName,
-                Separator = mg.IsSeparator,
-                Items = this.MapToMenuItems(mg),
-            };
-        }
-
-        private List<MenuItemDto> MapToMenuItems(MenuGroup mg)
-        {
-            return mg.MenuItems?
-                .Where(mi => !mg.MenuItems.Any(parent => parent.ChildItems.Any(child => child.MenuItemId == mi.MenuItemId)))
+            return menuItems
+                .Where(mi => !mi.ParentMenuItemId.HasValue)
                 .Select(this.MapToMenuItemDto)
                 .ToList() ?? new List<MenuItemDto>();
         }
@@ -53,15 +44,9 @@ namespace BackEndAje.Api.Application.Users.Queries.GetMenuForUserById
             {
                 Label = mi.Label,
                 Icon = mi.Icon,
-                Route = mi.Route,
+                RouterLink = mi.Route,
                 Permissions = this.MapToPermissions(mi.MenuItemActions),
-                Children = mi.ChildItems.Any() ? this.MapToChildren(mi.ChildItems) : null,
             };
-
-            if (menuItemDto.Children == null)
-            {
-                menuItemDto.GetType().GetProperty(nameof(menuItemDto.Children))?.SetValue(menuItemDto, null);
-            }
 
             return menuItemDto;
         }
@@ -73,18 +58,6 @@ namespace BackEndAje.Api.Application.Users.Queries.GetMenuForUserById
                 .SelectMany(mia => mia.RoleMenuAccesses.Select(rma => $"{rma.RolePermission.Permission.PermissionName}:{mia.Action.ActionName}"))
                 .Distinct()
                 .ToList() ?? new List<string>();
-        }
-
-        private List<MenuItemDto> MapToChildren(ICollection<MenuItem>? childMenuChildren)
-        {
-            return childMenuChildren?
-                .Select(mc => new MenuItemDto
-                {
-                    Label = mc.Label,
-                    Route = mc.Route,
-                    Icon = mc.Icon,
-                    Permissions = this.MapToPermissions(mc.MenuItemActions),
-                }).ToList() ?? new List<MenuItemDto>();
         }
     }
 }

@@ -4,6 +4,8 @@ namespace BackEndAje.Api.Application.Users.Queries.GetMenuForUserById
 
     public class GetMenuForUserByIdResult
     {
-        public List<MenuGroupDto> MenuGroups { get; set; } = new List<MenuGroupDto>();
+        public string label { get; set; }
+
+        public List<MenuItemDto> Items { get; set; } = new List<MenuItemDto>();
     }
 }
