@@ -1,6 +1,4 @@
-﻿using BackEndAje.Api.Application.Dtos.Users.Menu;
-
-namespace BackEndAje.Api.Infrastructure.Repositories
+﻿namespace BackEndAje.Api.Infrastructure.Repositories
 {
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
@@ -186,18 +184,8 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .ThenInclude(rma => rma.RolePermission)
                 .ThenInclude(rma => rma.Permission)
                 .Where(mi => mi.MenuItemActions.Any(mia =>
-                    mia.RoleMenuAccesses.Any(rma => roleIds.Contains(rma.RolePermission.RoleId))))
+                    mia.RoleMenuAccesses.Any(rma => roleIds.Contains(rma.RolePermission.RoleId) && rma.RolePermission.Status)))
                 .Where(mi => mi.ParentMenuItemId == null)
-                .Select(mi => new MenuItem
-                {
-                    MenuItemId = mi.MenuItemId,
-                    Label = mi.Label,
-                    Icon = mi.Icon,
-                    Route = mi.Route,
-                    MenuItemActions = mi.MenuItemActions
-                        .Where(mia => mia.RoleMenuAccesses.Any(rma => roleIds.Contains(rma.RolePermission.RoleId)))
-                        .ToList(),
-                })
                 .AsNoTracking()
                 .ToListAsync();
 

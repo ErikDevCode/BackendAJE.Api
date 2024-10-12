@@ -5,5 +5,7 @@ namespace BackEndAje.Api.Domain.Repositories
     public interface IRolePermissionRepository
     {
         Task<List<RolePermission>> GetAllRolePermissionsAsync();
+
+        Task RolePermissionAsync(int roleId, int permissionId, bool status, int createdBy, int updatedBy);
     }
 }

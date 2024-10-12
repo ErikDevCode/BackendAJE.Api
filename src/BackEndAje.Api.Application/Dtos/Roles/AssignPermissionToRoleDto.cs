@@ -6,6 +6,8 @@ namespace BackEndAje.Api.Application.Dtos.Roles
 
         public int PermissionId { get; set; }
 
+        public bool Status { get; set; }
+
         public int CreatedBy { get; set; }
 
         public int UpdatedBy { get; set; }
