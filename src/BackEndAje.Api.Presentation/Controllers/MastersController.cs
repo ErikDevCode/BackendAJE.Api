@@ -2,7 +2,9 @@ namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Masters.Queries.GetAllDocumentType;
     using BackEndAje.Api.Application.Masters.Queries.GetAllLogos;
+    using BackEndAje.Api.Application.Masters.Queries.GetAllPaymentMethod;
     using BackEndAje.Api.Application.Masters.Queries.GetAllProductSize;
     using BackEndAje.Api.Application.Masters.Queries.GetAllProductTypes;
     using BackEndAje.Api.Application.Masters.Queries.GetAllReasonRequest;
@@ -85,6 +87,28 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetAllProductSize()
         {
             var query = new GetAllProductSizeQuery();
+            var results = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = results });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("GetAllPaymentMethod")]
+        public async Task<IActionResult> GetAllPaymentMethod()
+        {
+            var query = new GetAllPaymentMethodQuery();
+            var results = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = results });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("GetAllDocumentType")]
+        public async Task<IActionResult> GetAllDocumentType()
+        {
+            var query = new GetAllDocumentTypeQuery();
             var results = await this._mediator.Send(query);
             return this.Ok(new Response { Result = results });
         }

@@ -15,5 +15,13 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<Logo>> GetAllLogos();
         
         Task<List<ProductSize>> GetAllProductSize();
+        
+        Task<List<PaymentMethods>> GetAllPaymentMethods();
+        
+        Task<PaymentMethods?> GetPaymentMethodById(int paymentMethodId);
+        
+        Task<List<DocumentType>> GetAllDocumentType();
+
+        Task<DocumentType?> GetDocumentTypeById(int documentTypeId);
     }
 }

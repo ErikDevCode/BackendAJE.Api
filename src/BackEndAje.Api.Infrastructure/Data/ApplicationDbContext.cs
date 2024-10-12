@@ -56,6 +56,12 @@
 
         public DbSet<District> Districts { get; set; }
 
+        public DbSet<Client> Clients { get; set; }
+
+        public DbSet<PaymentMethods> PaymentMethods { get; set; }
+
+        public DbSet<DocumentType> DocumentType { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -106,6 +112,12 @@
 
             modelBuilder.Entity<District>().ToTable("districts");
 
+            modelBuilder.Entity<Client>().ToTable("clients");
+
+            modelBuilder.Entity<PaymentMethods>().ToTable("paymentmethods");
+
+            modelBuilder.Entity<DocumentType>().ToTable("documenttype");
+
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
                 .WithOne(mi => mi.MenuGroup)
@@ -141,6 +153,14 @@
                 .WithMany(a => a.MenuItemActions)
                 .HasForeignKey(mp => mp.ActionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PaymentMethods>()
+                .ToTable("paymentmethods")
+                .HasKey(pm => pm.PaymentMethodId);
+
+            modelBuilder.Entity<DocumentType>()
+                .ToTable("documenttype")
+                .HasKey(pm => pm.DocumentTypeId);
         }
     }
 }
