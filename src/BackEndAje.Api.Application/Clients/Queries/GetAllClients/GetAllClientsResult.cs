@@ -1,9 +1,9 @@
-using BackEndAje.Api.Application.Dtos.DocumentType;
-using BackEndAje.Api.Application.Dtos.PaymentMethod;
-using BackEndAje.Api.Application.Dtos.Users;
-
 namespace BackEndAje.Api.Application.Clients.Queries.GetAllClients
 {
+    using BackEndAje.Api.Application.Dtos.DocumentType;
+    using BackEndAje.Api.Application.Dtos.PaymentMethod;
+    using BackEndAje.Api.Application.Dtos.Users;
+
     using BackEndAje.Api.Domain.Entities;
 
     public class GetAllClientsResult
@@ -44,7 +44,7 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetAllClients
 
         public DateTime CreatedAt { get; set; }
 
-        public DateTime UpdatedAy { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public int CreatedBy { get; set; }
 

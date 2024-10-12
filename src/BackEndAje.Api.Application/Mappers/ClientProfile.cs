@@ -2,6 +2,7 @@ namespace BackEndAje.Api.Application.Mappers
 {
     using AutoMapper;
     using BackEndAje.Api.Application.Clients.Commands.CreateClient;
+    using BackEndAje.Api.Application.Clients.Commands.UpdateClient;
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
     using BackEndAje.Api.Application.Dtos.Cedi;
     using BackEndAje.Api.Application.Dtos.DocumentType;
@@ -35,6 +36,9 @@ namespace BackEndAje.Api.Application.Mappers
             this.CreateMap<Cedi, CediDto>();
             this.CreateMap<Zone, ZoneDto>();
             this.CreateMap<District, DistrictDto>();
+
+            this.CreateMap<UpdateClientCommand, Client>()
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
         }
     }
 }
