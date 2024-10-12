@@ -52,5 +52,17 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             return await this._context.Clients.Where(x => x.IsActive).CountAsync();
         }
+
+        public async Task<Client?> GetClientById(int clientId)
+        {
+            return await this._context.Clients.FirstOrDefaultAsync(x => x.ClientId == clientId);
+        }
+
+        public async Task UpdateClientAsync(Client client)
+        {
+            this._context.Entry(client).State = EntityState.Detached;
+            this._context.Clients.Update(client);
+            await this._context.SaveChangesAsync();
+        }
     }
 }

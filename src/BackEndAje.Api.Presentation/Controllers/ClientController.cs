@@ -2,6 +2,7 @@ namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Clients.Commands.CreateClient;
+    using BackEndAje.Api.Application.Clients.Commands.UpdateClient;
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
     using BackEndAje.Api.Application.Dtos;
     using MediatR;
@@ -41,6 +42,18 @@ namespace BackEndAje.Api.Presentation.Controllers
             var query = new GetAllClientsQuery(pageNumber, pageSize);
             var clients = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clients });
+        }
+
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("update")]
+        public async Task<IActionResult> UpdateClient([FromBody] UpdateClientCommand command)
+        {
+            var userId = this.GetUserId();
+            command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
         }
 
         private int GetUserId()
