@@ -7,6 +7,8 @@ namespace BackEndAje.Api.Domain.Repositories
         Task AddClient(Client client);
 
         Task<Client?> GetClientByDocumentNumber(string documentNumber);
+        
+        Task<Client?> GetClientByClientCode(int clientCode);
 
         Task<List<Client>> GetClients(int pageNumber, int pageSize);
         

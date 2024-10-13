@@ -1,9 +1,12 @@
+using BackEndAje.Api.Application.Clients.Commands.DisableClient;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Clients.Commands.CreateClient;
     using BackEndAje.Api.Application.Clients.Commands.UpdateClient;
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
+    using BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode;
     using BackEndAje.Api.Application.Dtos;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
@@ -37,6 +40,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("all")]
         public async Task<IActionResult> GetAllClients([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var query = new GetAllClientsQuery(pageNumber, pageSize);
@@ -49,6 +53,29 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("update")]
         public async Task<IActionResult> UpdateClient([FromBody] UpdateClientCommand command)
+        {
+            var userId = this.GetUserId();
+            command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("clientCode/{clientCode}")]
+        public async Task<IActionResult> GetClientByClientCode(int clientCode)
+        {
+            var query = new GetClientByClientCodeQuery(clientCode);
+            var clients = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = clients });
+        }
+
+        [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("disable")]
+        public async Task<IActionResult> DisableClient([FromBody] DisableClientCommand command)
         {
             var userId = this.GetUserId();
             command.UpdatedBy = userId;

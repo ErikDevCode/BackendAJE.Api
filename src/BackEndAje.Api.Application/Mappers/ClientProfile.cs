@@ -2,8 +2,10 @@ namespace BackEndAje.Api.Application.Mappers
 {
     using AutoMapper;
     using BackEndAje.Api.Application.Clients.Commands.CreateClient;
+    using BackEndAje.Api.Application.Clients.Commands.DisableClient;
     using BackEndAje.Api.Application.Clients.Commands.UpdateClient;
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
+    using BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode;
     using BackEndAje.Api.Application.Dtos.Cedi;
     using BackEndAje.Api.Application.Dtos.DocumentType;
     using BackEndAje.Api.Application.Dtos.PaymentMethod;
@@ -20,14 +22,12 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
 
-            // Mapeo entre Client y GetAllClientsResult
             this.CreateMap<Client, GetAllClientsResult>()
                 .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType))
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
                 .ForMember(dest => dest.Seller, opt => opt.MapFrom(src => src.Seller))
                 .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.District));
 
-            // Mapeo de las entidades relacionadas
             this.CreateMap<DocumentType, DocumentTypeDto>();
             this.CreateMap<PaymentMethods, PaymentMethodDto>();
             this.CreateMap<User, UserDto>()
@@ -38,6 +38,15 @@ namespace BackEndAje.Api.Application.Mappers
             this.CreateMap<District, DistrictDto>();
 
             this.CreateMap<UpdateClientCommand, Client>()
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
+
+            this.CreateMap<Client, GetClientByClientCodeResult>()
+                .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType))
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
+                .ForMember(dest => dest.Seller, opt => opt.MapFrom(src => src.Seller))
+                .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.District));
+
+            this.CreateMap<DisableClientCommand, Client>()
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
         }
     }
