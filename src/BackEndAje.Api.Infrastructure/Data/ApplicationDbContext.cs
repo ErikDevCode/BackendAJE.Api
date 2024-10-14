@@ -178,7 +178,6 @@
                 .HasOne(c => c.Seller)
                 .WithMany()
                 .HasForeignKey(c => c.Route)
-                //.HasPrincipalKey(u => u.Route)  // Mapea Route en User como clave principal
                 .IsRequired(false);
 
             modelBuilder.Entity<Client>()
@@ -198,11 +197,6 @@
                 .WithMany()
                 .HasForeignKey(u => u.ZoneId)
                 .IsRequired(false);
-/*
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Route)
-                .IsUnique();
-                */
         }
     }
 }

@@ -65,7 +65,7 @@
 
         public async Task<bool> RoleExistsAsync(string roleName)
         {
-            return await this._context.Roles.AnyAsync(r => r.RoleName.Equals(roleName, StringComparison.OrdinalIgnoreCase));
+            return await this._context.Roles.AnyAsync(r => r.RoleName.ToLower() == roleName.ToLower());
         }
 
         public async Task SaveChangesAsync()
