@@ -5,8 +5,8 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Dtos.Roles;
     using BackEndAje.Api.Application.Roles.Commands.AssignPermissionToRole;
     using BackEndAje.Api.Application.Roles.Commands.CreateRole;
-    using BackEndAje.Api.Application.Roles.Commands.DeleteRole;
     using BackEndAje.Api.Application.Roles.Commands.UpdateRole;
+    using BackEndAje.Api.Application.Roles.Commands.UpdateStatusRole;
     using BackEndAje.Api.Application.Roles.Queries.GetAllRoles;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
@@ -59,18 +59,18 @@ namespace BackEndAje.Api.Presentation.Controllers
             return this.Ok(result);
         }
 
-        [HttpDelete]
+        [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [Route("delete/{roleId}")]
-        public async Task<IActionResult> DeleteRole(int roleId)
+        [Route("updateStatus/{roleId}")]
+        public async Task<IActionResult> UpdateStatusRole(int roleId)
         {
             var userId = this.GetUserId();
-            var command = new DeleteRoleCommand { RoleDelete = new DeleteRoleDto() { RoleId = roleId, UpdatedBy = userId } };
+            var command = new UpdateStatusRoleCommand { RoleUpdateStatus = new UpdateStatusRoleDto() { RoleId = roleId, UpdatedBy = userId } };
             var result = await this._mediator.Send(command);
             if (result)
             {
-                return this.Ok(new { Message = $"RoleId '{roleId}' has been deleted successfully." });
+                return this.Ok(new { Message = $"RoleId '{roleId}' has been update status successfully." });
             }
 
             return this.NotFound(new { Message = $"RoleId '{roleId}' not found or already deleted." });

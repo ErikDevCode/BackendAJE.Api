@@ -25,7 +25,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
 
-            this.CreateMap<DeleteRoleDto, Role>()
+            this.CreateMap<UpdateStatusRoleDto, Role>()
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
         }

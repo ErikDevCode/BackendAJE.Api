@@ -1,6 +1,6 @@
 namespace BackEndAje.Api.Application.Dtos.Roles
 {
-    public class DeleteRoleDto
+    public class UpdateStatusRoleDto
     {
         public int RoleId { get; set; }
 
