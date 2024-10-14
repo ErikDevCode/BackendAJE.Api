@@ -25,6 +25,7 @@ namespace BackEndAje.Api.Application.Roles.Commands.CreateRole
             }
 
             var newRole = this._mapper.Map<Role>(request.Role);
+            newRole.IsActive = true;
             await this._roleRepository.AddRoleAsync(newRole);
             return Unit.Value;
         }

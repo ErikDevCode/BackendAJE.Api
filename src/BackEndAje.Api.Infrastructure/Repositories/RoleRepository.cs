@@ -18,13 +18,13 @@
         {
             return await this._context.Roles
                 .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize).Where(x => x.IsActive)
+                .Take(pageSize)
                 .ToListAsync();
         }
 
         public async Task<int> GetTotalRolesCountAsync()
         {
-            return await this._context.Roles.Where(x => x.IsActive).CountAsync();
+            return await this._context.Roles.CountAsync();
         }
 
         public async Task<Role?> GetRoleByIdAsync(int roleId)
