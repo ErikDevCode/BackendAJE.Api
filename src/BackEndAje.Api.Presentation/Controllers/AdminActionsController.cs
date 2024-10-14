@@ -1,13 +1,12 @@
-using BackEndAje.Api.Application.Actions.Commands.DeleteAction;
-using BackEndAje.Api.Application.Dtos.Actions;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Actions.Commands.CreateAction;
+    using BackEndAje.Api.Application.Actions.Commands.DeleteAction;
     using BackEndAje.Api.Application.Actions.Commands.UpdateAction;
     using BackEndAje.Api.Application.Actions.Queries.GetAllActions;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Dtos.Actions;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

@@ -62,6 +62,10 @@
 
         public DbSet<DocumentType> DocumentType { get; set; }
 
+        public DbSet<OrderRequest> OrderRequests { get; set; }
+
+        public DbSet<OrderRequestDocument> OrderRequestDocuments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -117,6 +121,10 @@
             modelBuilder.Entity<PaymentMethods>().ToTable("paymentmethods");
 
             modelBuilder.Entity<DocumentType>().ToTable("documenttype");
+
+            modelBuilder.Entity<OrderRequest>().ToTable("orderrequests");
+
+            modelBuilder.Entity<OrderRequestDocument>().ToTable("orderrequestDocuments");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -197,6 +205,14 @@
                 .WithMany()
                 .HasForeignKey(u => u.ZoneId)
                 .IsRequired(false);
+
+            modelBuilder.Entity<OrderRequest>()
+                .ToTable("orderrequests")
+                .HasKey(pm => pm.OrderRequestId);
+
+            modelBuilder.Entity<OrderRequestDocument>()
+                .ToTable("orderrequestdocuments")
+                .HasKey(pm => pm.DocumentId);
         }
     }
 }
