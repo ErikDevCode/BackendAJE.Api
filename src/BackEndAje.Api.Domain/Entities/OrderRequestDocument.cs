@@ -8,5 +8,7 @@ namespace BackEndAje.Api.Domain.Entities
         public decimal DocumentWeight { get; set; }
         public byte[] DocumentContent { get; set; }
         public bool IsActive { get; set; }
+        
+        public OrderRequest OrderRequest { get; set; }
     }
 }

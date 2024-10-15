@@ -7,5 +7,13 @@ namespace BackEndAje.Api.Domain.Repositories
         Task AddOrderRequestAsync(OrderRequest orderRequest);
         
         Task AddOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument);
+        
+        Task<OrderRequest?> GetOrderRequestById(int id);
+
+        Task<OrderRequestDocument> GetOrderRequestDocumentById(int id);
+
+        Task<List<OrderRequest>> GetAllOrderRequestAsync(int pageNumber, int pageSize);
+
+        Task<int> GetTotalOrderRequestCountAsync();
     }
 }
