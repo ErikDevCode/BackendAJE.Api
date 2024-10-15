@@ -23,6 +23,11 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
             var orderRequestId = orderRequest.OrderRequestId;
 
+            if (request.Documents == null || !request.Documents.Any())
+            {
+                return Unit.Value;
+            }
+
             var orderRequestDocuments = this._mapper.Map<List<OrderRequestDocument>>(request.Documents);
 
             foreach (var document in orderRequestDocuments)
@@ -33,6 +38,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
                 document.UpdatedBy = request.UpdatedBy;
                 await this._orderRequestRepository.AddOrderRequestDocumentAsync(document);
             }
+
             return Unit.Value;
         }
     }
