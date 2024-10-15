@@ -1,6 +1,10 @@
+using BackEndAje.Api.Application.Dtos.OrderRequests;
+
 namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 {
-    public class CreateOrderRequestsCommand
+    using MediatR;
+
+    public class CreateOrderRequestsCommand : IRequest<Unit>
     {
         public int SupervisorId { get; set; }
 
@@ -10,13 +14,15 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
         public DateTime NegotiatedDate { get; set; }
 
+        public int TimeWindowId { get; set; }
+
         public int? WithDrawalReasonId { get; set; }
 
         public int ClientCode { get; set; }
 
         public string Observations { get; set; }
 
-        private string Reference { get; set; }
+        public string Reference { get; set; }
 
         public int ProductTypeId { get; set; }
 
@@ -25,6 +31,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
         public string Modelo { get; set; }
 
         public int ProductSizeId { get; set; }
+
+        public List<OrderRequestDocumentDto> Documents { get; set; }
 
         public int CreatedBy { get; set; }
 
