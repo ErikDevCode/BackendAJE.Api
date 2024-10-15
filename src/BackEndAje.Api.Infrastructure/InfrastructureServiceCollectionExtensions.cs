@@ -37,6 +37,7 @@
             services.AddScoped<IMastersRepository, MastersRepository>();
             services.AddScoped<IUbigeoRepository, UbigeoRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<IOrderRequestRepository, OrderRequestRepository>();
 
             return services;
         }
