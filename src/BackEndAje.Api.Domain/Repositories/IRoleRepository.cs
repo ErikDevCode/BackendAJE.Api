@@ -20,5 +20,7 @@
         
         Task<bool> RoleExistsAsync(string roleName);
         Task SaveChangesAsync();
+        
+        Task<List<RolesWithPermissions>> GetRoleWithPermissionsAsync();
     }
 }

@@ -72,5 +72,26 @@
         {
             await this._context.SaveChangesAsync();
         }
+
+        public async Task<List<RolesWithPermissions>> GetRoleWithPermissionsAsync()
+        {
+            var rolesWithPermissions = await (
+                from r in this._context.Roles
+                from p in this._context.Permissions
+                join rp in this._context.RolePermissions
+                    on new { r.RoleId, p.PermissionId } equals new { rp.RoleId, rp.PermissionId } into rolePermissions
+                from rp in rolePermissions.DefaultIfEmpty()
+                select new RolesWithPermissions
+                {
+                    RoleId = r.RoleId,
+                    Role = r.RoleName,
+                    PermissionId = p.PermissionId,
+                    Permission = p.Label,
+                    Status = rp != null,
+                })
+            .OrderBy(rp => rp.Role).ThenBy(rp => rp.Permission).ToListAsync();
+
+            return rolesWithPermissions;
+        }
     }
 }
