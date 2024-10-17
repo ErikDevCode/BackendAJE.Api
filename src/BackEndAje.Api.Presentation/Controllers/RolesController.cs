@@ -8,6 +8,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Roles.Commands.UpdateRole;
     using BackEndAje.Api.Application.Roles.Commands.UpdateStatusRole;
     using BackEndAje.Api.Application.Roles.Queries.GetAllRoles;
+    using BackEndAje.Api.Application.Roles.Queries.GetAllRolesWithPermissions;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -87,6 +88,17 @@ namespace BackEndAje.Api.Presentation.Controllers
             command.AssignPermissionToRole.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("GetRolesWithPermissions")]
+        public async Task<IActionResult> GetAllRolesWithPermissions()
+        {
+            var query = new GetAllRolesWithPermissionsQuery();
+            var roles = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = roles });
         }
 
         private int GetUserId()
