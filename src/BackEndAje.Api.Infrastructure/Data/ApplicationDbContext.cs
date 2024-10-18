@@ -183,12 +183,6 @@
                 .IsRequired(false);
 
             modelBuilder.Entity<Client>()
-                .HasOne(c => c.Seller)
-                .WithMany()
-                .HasForeignKey(c => c.Route)
-                .IsRequired(false);
-
-            modelBuilder.Entity<Client>()
                 .HasOne(c => c.District)
                 .WithMany()
                 .HasForeignKey(c => c.DistrictId)

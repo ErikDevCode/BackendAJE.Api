@@ -1,4 +1,6 @@
 using BackEndAje.Api.Application.Clients.Commands.DisableClient;
+using BackEndAje.Api.Application.Clients.Commands.UploadClient;
+using Microsoft.AspNetCore.Http;
 
 namespace BackEndAje.Api.Presentation.Controllers
 {
@@ -71,14 +73,38 @@ namespace BackEndAje.Api.Presentation.Controllers
             return this.Ok(new Response { Result = clients });
         }
 
-        [HttpDelete]
+        [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
-        [Route("disable")]
+        [Route("updateStatusClient")]
         public async Task<IActionResult> DisableClient([FromBody] DisableClientCommand command)
         {
             var userId = this.GetUserId();
             command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpPost]
+        [Route("upload")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> UploadClients(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest("No file uploaded.");
+            }
+
+            var userId = this.GetUserId();
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            var command = new UploadClientsCommand
+            {
+                FileBytes = memoryStream.ToArray(),
+                CreatedBy = userId,
+                UpdatedBy = userId,
+            };
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }

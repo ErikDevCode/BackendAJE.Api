@@ -23,7 +23,7 @@ namespace BackEndAje.Api.Application.Clients.Commands.DisableClient
                 throw new InvalidOperationException($"Client with code '{request.ClientCode}' not exists.");
             }
 
-            existingClient.IsActive = false;
+            existingClient.IsActive = existingClient.IsActive is false;
             existingClient.UpdatedBy = request.UpdatedBy;
             this._mapper.Map(request, existingClient);
             await this._clientRepository.UpdateClientAsync(existingClient);
