@@ -12,6 +12,8 @@ namespace BackEndAje.Api.Domain.Entities
         public DateTime? EffectiveDate { get; set; }
         public int PaymentMethodId { get; set; }
         public PaymentMethods PaymentMethod { get; set; }
+        
+        public int UserId { get; set; }
         public int? Route { get; set; }
         public User? Seller { get; set; }
         public string Phone { get; set; }

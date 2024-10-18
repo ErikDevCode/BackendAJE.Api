@@ -1,18 +1,15 @@
 namespace BackEndAje.Api.Application.Roles.Commands.UpdateStatusRole
 {
-    using AutoMapper;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 
     public class UpdateStatusRoleHandler : IRequestHandler<UpdateStatusRoleCommand, bool>
     {
         private readonly IRoleRepository _roleRepository;
-        private readonly IMapper _mapper;
 
-        public UpdateStatusRoleHandler(IRoleRepository roleRepository, IMapper mapper)
+        public UpdateStatusRoleHandler(IRoleRepository roleRepository)
         {
             this._roleRepository = roleRepository;
-            this._mapper = mapper;
         }
 
         public async Task<bool> Handle(UpdateStatusRoleCommand request, CancellationToken cancellationToken)

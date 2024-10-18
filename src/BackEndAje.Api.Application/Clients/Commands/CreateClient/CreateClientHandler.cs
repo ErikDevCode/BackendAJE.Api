@@ -8,12 +8,14 @@ namespace BackEndAje.Api.Application.Clients.Commands.CreateClient
     public class CreateClientHandler : IRequestHandler<CreateClientCommand, Unit>
     {
         private readonly IClientRepository _clientRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public CreateClientHandler(IClientRepository clientRepository, IMapper mapper)
+        public CreateClientHandler(IClientRepository clientRepository, IMapper mapper, IUserRepository userRepository)
         {
             this._clientRepository = clientRepository;
             this._mapper = mapper;
+            this._userRepository = userRepository;
         }
 
         public async Task<Unit> Handle(CreateClientCommand request, CancellationToken cancellationToken)
@@ -24,7 +26,9 @@ namespace BackEndAje.Api.Application.Clients.Commands.CreateClient
                 throw new InvalidOperationException($"Client '{request.DocumentNumber}' already exists.");
             }
 
+            var existingUser = await this._userRepository.GetUserByRouteAsync(request.Route);
             var newClient = this._mapper.Map<Client>(request);
+            newClient.UserId = existingUser!.UserId;
             await this._clientRepository.AddClient(newClient);
             return Unit.Value;
         }

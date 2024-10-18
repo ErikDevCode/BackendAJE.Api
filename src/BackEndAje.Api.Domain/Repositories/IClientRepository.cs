@@ -6,6 +6,8 @@ namespace BackEndAje.Api.Domain.Repositories
     {
         Task AddClient(Client client);
 
+        Task AddClientsAsync(IEnumerable<Client> clients);
+
         Task<Client?> GetClientByDocumentNumber(string documentNumber);
         
         Task<Client?> GetClientByClientCode(int clientCode);

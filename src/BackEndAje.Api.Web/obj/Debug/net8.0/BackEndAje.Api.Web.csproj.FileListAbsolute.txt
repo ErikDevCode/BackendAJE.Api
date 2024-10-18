@@ -9,6 +9,9 @@ C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\AutoMappe
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\BCrypt.Net-Next.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Castle.Core.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\EPPlus.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\EPPlus.Interfaces.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\EPPlus.System.Drawing.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\FakeItEasy.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\FluentValidation.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
@@ -34,7 +37,9 @@ C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Microsoft
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Microsoft.IO.RecyclableMemoryStream.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\MySqlConnector.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
@@ -42,8 +47,11 @@ C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Pomelo.En
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\System.Drawing.Common.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
+C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\BackEndAje.Api.Application.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\BackEndAje.Api.Domain.dll
 C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Web\bin\Debug\net8.0\BackEndAje.Api.Infrastructure.dll

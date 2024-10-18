@@ -191,5 +191,11 @@
 
             return menuItems;
         }
+
+        public async Task<User?> GetUserByRouteAsync(int? route)
+        {
+            return await this._context.Users
+                .FirstOrDefaultAsync(u => u.Route == route);
+        }
     }
 }

@@ -18,7 +18,6 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode
         public async Task<GetClientByClientCodeResult> Handle(GetClientByClientCodeQuery request, CancellationToken cancellationToken)
         {
             var clients = await this._clientRepository.GetClientByClientCode(request.ClientCode);
-
             var result = this._mapper.Map<GetClientByClientCodeResult>(clients);
             return result;
         }

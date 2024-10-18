@@ -32,5 +32,7 @@
         Task SaveChangesAsync();
 
         Task<List<MenuItem>> GetMenuForUserByIdAsync(int userId);
+        
+        Task<User?> GetUserByRouteAsync(int? route);
     }
 }
