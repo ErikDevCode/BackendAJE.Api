@@ -4,6 +4,6 @@ namespace BackEndAje.Api.Domain.Repositories
     
     public interface IRegionRepository
     {
-        Task<List<Region>> GetAllPermissionsAsync();
+        Task<List<Region>> GetAllRegionsAsync();
     }
 }

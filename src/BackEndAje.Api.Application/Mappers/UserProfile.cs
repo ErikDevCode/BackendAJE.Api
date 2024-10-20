@@ -35,7 +35,6 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(dest => dest.CediName, opt => opt.Ignore())
-                .ForMember(dest => dest.RegionName, opt => opt.Ignore())
                 .ForMember(dest => dest.ZoneCode, opt => opt.Ignore());
         }
     }
