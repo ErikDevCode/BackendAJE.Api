@@ -14,7 +14,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context = context;
         }
 
-        public async Task<List<Region>> GetAllPermissionsAsync()
+        public async Task<List<Region>> GetAllRegionsAsync()
         {
             return await this._context.Regions.ToListAsync();
         }
