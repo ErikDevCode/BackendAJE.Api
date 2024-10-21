@@ -1,4 +1,5 @@
 ﻿using BackEndAje.Api.Application.Users.Commands.UploadUsers;
+using BackEndAje.Api.Application.Users.Queries.GetUsersByParam;
 using Microsoft.AspNetCore.Http;
 
 namespace BackEndAje.Api.Presentation.Controllers
@@ -50,6 +51,17 @@ namespace BackEndAje.Api.Presentation.Controllers
             var query = new GetAllUserQuery(pageNumber, pageSize);
             var result = await this._mediator.Send(query);
             return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetAllUserResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("SearchBoxUsers/{param}")]
+        public async Task<IActionResult> GetUsersByParam(string param)
+        {
+            var query = new GetUsersByParamQuery(param);
+            var result = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = result });
         }
 
         [HttpGet]
