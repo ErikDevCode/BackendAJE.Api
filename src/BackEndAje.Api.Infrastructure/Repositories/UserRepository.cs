@@ -246,5 +246,18 @@
         {
             return await this._context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.DocumentNumber == documentNumber);
         }
+
+        public async Task<List<User>> GetUsersByParamAsync(string param)
+        {
+            return await this._context.Users
+                .Where(u => (u.Names.ToLower().Contains(param) ||
+                            u.PaternalSurName.ToLower().Contains(param) ||
+                            u.MaternalSurName.ToLower().Contains(param) ||
+                            u.Route.ToString()!.Contains(param))
+                   && u.Route != null)
+                .OrderBy(u => u.Names)
+                .Take(50)
+                .ToListAsync();
+        }
     }
 }

@@ -47,5 +47,7 @@
         Task<UserRole> GetUserRoleByUserIdAsync(int userId);
         
         Task<User?> GetUserByDocumentNumberAsync(string? documentNumber);
+
+        Task<List<User>> GetUsersByParamAsync(string param);
     }
 }
