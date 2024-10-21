@@ -16,7 +16,7 @@
 
         public async Task<AssingRolesToUserResult> Handle(AssignRolesToUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await this._userRepository.GetUserByIdAsync(request.UserId);
+            var user = await this._userRepository.GetUserWithRoleByIdAsync(request.UserId);
 
             if (user == null)
             {

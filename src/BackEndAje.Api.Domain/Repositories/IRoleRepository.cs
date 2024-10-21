@@ -3,7 +3,7 @@
     using BackEndAje.Api.Domain.Entities;
     public interface IRoleRepository
     {
-        Task<List<Role>> GetAllRolesAsync(int pageNumber, int pageSize);
+        Task<List<Role>> GetAllPaginateRolesAsync(int pageNumber, int pageSize);
         Task<int> GetTotalRolesCountAsync();
 
         Task<Role?> GetRoleByIdAsync(int roleId);
@@ -22,5 +22,7 @@
         Task SaveChangesAsync();
         
         Task<List<RolesWithPermissions>> GetRoleWithPermissionsAsync();
+        
+        Task<List<Role>> GetAllRolesAsync();
     }
 }

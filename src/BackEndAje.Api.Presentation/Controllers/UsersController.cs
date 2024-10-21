@@ -1,5 +1,5 @@
-﻿using BackEndAje.Api.Application.Users.Queries.GetAllUser;
-using BackEndAje.Api.Application.Users.Queries.GetMenuForUserById;
+﻿using BackEndAje.Api.Application.Users.Commands.UploadUsers;
+using Microsoft.AspNetCore.Http;
 
 namespace BackEndAje.Api.Presentation.Controllers
 {
@@ -7,6 +7,9 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Users.Commands.CreateUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUser;
+    using BackEndAje.Api.Application.Users.Queries.GetAllUser;
+    using BackEndAje.Api.Application.Users.Queries.GetMenuForUserById;
+    using BackEndAje.Api.Application.Users.Queries.GetUserById;
     using BackEndAje.Api.Application.Users.Queries.GetUserByRouteOrEmail;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
@@ -39,7 +42,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(GetUserByRouteOrEmailResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAllUserResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("all")]
         public async Task<IActionResult> GetAllUser([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -56,6 +59,17 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetUserByRouteOrEmail(string routeOrEmail)
         {
             var query = new GetUserByRouteOrEmailQuery(routeOrEmail);
+            var result = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = result });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetUserByIdResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("GetUserById/{id:int}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var query = new GetUserByIdQuery(id);
             var result = await this._mediator.Send(query);
             return this.Ok(new Response { Result = result });
         }
@@ -81,6 +95,30 @@ namespace BackEndAje.Api.Presentation.Controllers
             var userId = this.GetUserId();
             var query = new GetMenuForUserByIdQuery(userId);
             var result = await this._mediator.Send(query);
+            return this.Ok(result);
+        }
+
+        [HttpPost]
+        [Route("upload")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> UploadUsers(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest("No file uploaded.");
+            }
+
+            var userId = this.GetUserId();
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            var command = new UploadUsersCommand
+            {
+                FileBytes = memoryStream.ToArray(),
+                CreatedBy = userId,
+                UpdatedBy = userId,
+            };
+            var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
 

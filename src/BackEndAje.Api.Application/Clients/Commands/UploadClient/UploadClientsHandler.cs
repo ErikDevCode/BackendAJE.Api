@@ -1,6 +1,5 @@
 namespace BackEndAje.Api.Application.Clients.Commands.UploadClient
 {
-    using System.Text;
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
