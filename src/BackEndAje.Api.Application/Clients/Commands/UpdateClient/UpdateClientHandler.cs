@@ -1,8 +1,7 @@
-using BackEndAje.Api.Domain.Entities;
-
 namespace BackEndAje.Api.Application.Clients.Commands.UpdateClient
 {
     using AutoMapper;
+    using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 
