@@ -75,7 +75,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<int> GetTotalClients()
         {
-            return await this._context.Clients.Where(x => x.IsActive).CountAsync();
+            return await this._context.Clients.CountAsync();
         }
 
         public async Task<Client?> GetClientById(int clientId)

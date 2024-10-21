@@ -1,11 +1,10 @@
-using BackEndAje.Api.Application.Locations.Queries.GetZoneByCediId;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Locations.Queries.GetCedisByRegionId;
     using BackEndAje.Api.Application.Locations.Queries.GetRegions;
+    using BackEndAje.Api.Application.Locations.Queries.GetZoneByCediId;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
 

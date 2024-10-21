@@ -4,6 +4,7 @@ namespace BackEndAje.Api.Domain.Entities
     {
         public int RegionId { get; set; }
         
+        
         public string RegionName { get; set; }
     }
 }
