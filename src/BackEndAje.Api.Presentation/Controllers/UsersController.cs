@@ -1,4 +1,5 @@
-﻿using BackEndAje.Api.Application.Users.Queries.GetMenuForUserById;
+﻿using BackEndAje.Api.Application.Users.Queries.GetAllUser;
+using BackEndAje.Api.Application.Users.Queries.GetMenuForUserById;
 
 namespace BackEndAje.Api.Presentation.Controllers
 {
@@ -34,6 +35,17 @@ namespace BackEndAje.Api.Presentation.Controllers
             command.User.CreatedBy = userId;
             command.User.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetUserByRouteOrEmailResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("all")]
+        public async Task<IActionResult> GetAllUser([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var query = new GetAllUserQuery(pageNumber, pageSize);
+            var result = await this._mediator.Send(query);
             return this.Ok(result);
         }
 

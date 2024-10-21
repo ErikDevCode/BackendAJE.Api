@@ -34,5 +34,8 @@
         Task<List<MenuItem>> GetMenuForUserByIdAsync(int userId);
         
         Task<User?> GetUserByRouteAsync(int? route);
+
+        Task<List<User>> GetAllUsers(int pageNumber, int pageSize);
+        Task<int> GetTotalUsers();
     }
 }

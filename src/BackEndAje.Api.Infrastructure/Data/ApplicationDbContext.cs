@@ -200,6 +200,11 @@
                 .HasForeignKey(u => u.ZoneId)
                 .IsRequired(false);
 
+            modelBuilder.Entity<Cedi>()
+                .HasOne(u => u.Region)
+                .WithMany()
+                .HasForeignKey(u => u.RegionId);
+
             modelBuilder.Entity<OrderRequest>()
                 .ToTable("orderrequests")
                 .HasKey(pm => pm.OrderRequestId);

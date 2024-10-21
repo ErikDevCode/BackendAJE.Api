@@ -1,6 +1,6 @@
-﻿namespace BackEndAje.Api.Application.Users.Queries.GetUserByRouteOrEmail
+namespace BackEndAje.Api.Application.Users.Queries.GetAllUser
 {
-    public class GetUserByRouteOrEmailResult
+    public class GetAllUserResult
     {
         public int UserId { get; set; }
 

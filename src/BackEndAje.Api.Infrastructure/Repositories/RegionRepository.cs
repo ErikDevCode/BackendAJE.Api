@@ -14,6 +14,17 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context = context;
         }
 
+        public async Task<Region> GetRegionByCediIdAsync(int? cediId)
+        {
+            var cedi = await this._context.Cedis.FirstOrDefaultAsync(r => r.CediId == cediId);
+            if (cedi == null)
+            {
+                return null;
+            }
+
+            return (await this._context.Regions.FirstOrDefaultAsync(r => r.RegionId == cedi.RegionId))!;
+        }
+
         public async Task<List<Region>> GetAllRegionsAsync()
         {
             return await this._context.Regions.ToListAsync();

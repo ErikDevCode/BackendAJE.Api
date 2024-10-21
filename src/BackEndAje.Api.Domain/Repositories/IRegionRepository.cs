@@ -4,6 +4,7 @@ namespace BackEndAje.Api.Domain.Repositories
     
     public interface IRegionRepository
     {
+        Task<Region> GetRegionByCediIdAsync(int? cediId);
         Task<List<Region>> GetAllRegionsAsync();
     }
 }

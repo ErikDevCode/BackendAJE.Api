@@ -197,5 +197,22 @@
             return await this._context.Users
                 .FirstOrDefaultAsync(u => u.Route == route);
         }
+
+        public async Task<List<User>> GetAllUsers(int pageNumber, int pageSize)
+        {
+            var users = await this._context.Users
+                .Include(c => c.Cedi)
+                .ThenInclude(c => c!.Region)
+                .Include(c => c.Zone)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return users;
+        }
+
+        public async Task<int> GetTotalUsers()
+        {
+            return await this._context.Users.CountAsync();
+        }
     }
 }
