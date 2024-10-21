@@ -28,5 +28,10 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             return await this._context.Zones.Where(c => c.CediId == cediId).ToListAsync();
         }
+
+        public async Task<List<Zone>> GetAllZones()
+        {
+            return await this._context.Zones.ToListAsync();
+        }
     }
 }

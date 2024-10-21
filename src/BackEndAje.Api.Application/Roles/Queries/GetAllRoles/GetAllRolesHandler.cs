@@ -18,7 +18,7 @@ namespace BackEndAje.Api.Application.Roles.Queries.GetAllRoles
 
         public async Task<PaginatedResult<GetAllRolesResult>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
         {
-            var roles = await this._roleRepository.GetAllRolesAsync(request.PageNumber, request.PageSize);
+            var roles = await this._roleRepository.GetAllPaginateRolesAsync(request.PageNumber, request.PageSize);
             var totalRoles = await this._roleRepository.GetTotalRolesCountAsync();
             var result = this._mapper.Map<List<GetAllRolesResult>>(roles);
             var paginatedResult = new PaginatedResult<GetAllRolesResult>

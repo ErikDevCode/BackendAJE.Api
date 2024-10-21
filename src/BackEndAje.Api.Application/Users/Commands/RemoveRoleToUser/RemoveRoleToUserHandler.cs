@@ -16,7 +16,7 @@ namespace BackEndAje.Api.Application.Users.Commands.RemoveRoleToUser
 
         public async Task<Unit> Handle(RemoveRolesToUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await this._userRepository.GetUserByIdAsync(request.UserId);
+            var user = await this._userRepository.GetUserWithRoleByIdAsync(request.UserId);
             if (user == null)
             {
                 throw new KeyNotFoundException($"User with ID '{request.UserId}' not found.");

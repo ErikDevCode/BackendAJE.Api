@@ -7,5 +7,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<Zone> GetZoneByZoneIdAsync(int? zoneId);
         
         Task<List<Zone>> GetZonesByCediIdAsync(int cediId);
+
+        Task<List<Zone>> GetAllZones();
     }
 }

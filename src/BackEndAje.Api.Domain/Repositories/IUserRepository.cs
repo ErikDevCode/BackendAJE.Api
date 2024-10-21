@@ -13,7 +13,7 @@
 
         Task<IEnumerable<Permission>> GetPermissionsByUserIdAsync(int userId);
         
-        Task<User?> GetUserByIdAsync(int userId);
+        Task<User?> GetUserWithRoleByIdAsync(int userId);
 
         Task<List<int>> GetUserRolesAsync(int userId);
         
@@ -37,5 +37,15 @@
 
         Task<List<User>> GetAllUsers(int pageNumber, int pageSize);
         Task<int> GetTotalUsers();
+        
+        Task<User?> GetUserByIdAsync(int userId);
+        
+        Task AddUsersAsync(IEnumerable<User> users);
+        
+        Task AddAppUsersAsync(IEnumerable<AppUser> appUsers);
+        
+        Task<UserRole> GetUserRoleByUserIdAsync(int userId);
+        
+        Task<User?> GetUserByDocumentNumberAsync(string? documentNumber);
     }
 }

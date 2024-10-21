@@ -88,7 +88,7 @@
             return permissions;
         }
 
-        public async Task<User?> GetUserByIdAsync(int userId)
+        public async Task<User?> GetUserWithRoleByIdAsync(int userId)
         {
             return await this._context.Users
                 .Include(u => u.UserRoles)
@@ -213,6 +213,38 @@
         public async Task<int> GetTotalUsers()
         {
             return await this._context.Users.CountAsync();
+        }
+
+        public async Task<User?> GetUserByIdAsync(int userId)
+        {
+            var users = await this._context.Users
+                .Include(c => c.Cedi)
+                .ThenInclude(c => c!.Region)
+                .Include(c => c.Zone)
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+            return users;
+        }
+
+        public async Task AddUsersAsync(IEnumerable<User> users)
+        {
+            await this._context.Users.AddRangeAsync(users);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task AddAppUsersAsync(IEnumerable<AppUser> appUsers)
+        {
+            await this._context.AppUsers.AddRangeAsync(appUsers);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task<UserRole> GetUserRoleByUserIdAsync(int userId)
+        {
+            return (await this._context.UserRoles.FirstOrDefaultAsync(x => x.UserId == userId))!;
+        }
+
+        public async Task<User?> GetUserByDocumentNumberAsync(string? documentNumber)
+        {
+            return await this._context.Users.FirstOrDefaultAsync(x => x.DocumentNumber == documentNumber);
         }
     }
 }
