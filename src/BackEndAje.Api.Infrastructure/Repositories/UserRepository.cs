@@ -194,7 +194,7 @@
 
         public async Task<User?> GetUserByRouteAsync(int? route)
         {
-            return await this._context.Users
+            return await this._context.Users.AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Route == route);
         }
 
@@ -239,12 +239,12 @@
 
         public async Task<UserRole> GetUserRoleByUserIdAsync(int userId)
         {
-            return (await this._context.UserRoles.FirstOrDefaultAsync(x => x.UserId == userId))!;
+            return (await this._context.UserRoles.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId))!;
         }
 
         public async Task<User?> GetUserByDocumentNumberAsync(string? documentNumber)
         {
-            return await this._context.Users.FirstOrDefaultAsync(x => x.DocumentNumber == documentNumber);
+            return await this._context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.DocumentNumber == documentNumber);
         }
     }
 }

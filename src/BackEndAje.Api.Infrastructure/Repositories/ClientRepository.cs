@@ -80,7 +80,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<Client?> GetClientById(int clientId)
         {
-            return await this._context.Clients.FirstOrDefaultAsync(x => x.ClientId == clientId);
+            return await this._context.Clients.AsNoTracking().FirstOrDefaultAsync(x => x.ClientId == clientId);
         }
 
         public async Task UpdateClientAsync(Client client)
