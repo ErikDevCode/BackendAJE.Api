@@ -1,19 +1,18 @@
-﻿using BackEndAje.Api.Application.Users.Commands.UploadUsers;
-using BackEndAje.Api.Application.Users.Queries.GetUsersByParam;
-using Microsoft.AspNetCore.Http;
-
-namespace BackEndAje.Api.Presentation.Controllers
+﻿namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Users.Commands.CreateUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUser;
+    using BackEndAje.Api.Application.Users.Commands.UploadUsers;
     using BackEndAje.Api.Application.Users.Queries.GetAllUser;
     using BackEndAje.Api.Application.Users.Queries.GetMenuForUserById;
     using BackEndAje.Api.Application.Users.Queries.GetUserById;
     using BackEndAje.Api.Application.Users.Queries.GetUserByRouteOrEmail;
+    using BackEndAje.Api.Application.Users.Queries.GetUsersByParam;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     /// <inheritdoc />
@@ -54,12 +53,12 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(GetAllUserResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetUsersByParamResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
-        [Route("SearchBoxUsers/{param}")]
-        public async Task<IActionResult> GetUsersByParam(string param)
+        [Route("SearchBoxUsers")]
+        public async Task<IActionResult> GetUsersByParam([FromQuery] string? param = null)
         {
-            var query = new GetUsersByParamQuery(param);
+            var query = new GetUsersByParamQuery(param ?? string.Empty);
             var result = await this._mediator.Send(query);
             return this.Ok(new Response { Result = result });
         }
