@@ -21,5 +21,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
         public int? OrderStatusId { get; set; }
 
         public string StatusName { get; set; }
+
+        public bool? IsActive { get; set; }
     }
 }
