@@ -24,6 +24,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
             var status = await this._mastersRepository.GetAllOrderStatus();
             var statusInitial = status.FirstOrDefault(x => x.StatusName == "GENERADO") !.OrderStatusId;
             orderRequest.OrderStatusId = statusInitial;
+            orderRequest.IsActive = true;
             await this._orderRequestRepository.AddOrderRequestAsync(orderRequest);
 
             var orderRequestStatusHistory = new OrderRequestStatusHistory

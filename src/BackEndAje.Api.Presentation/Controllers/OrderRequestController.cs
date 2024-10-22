@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -84,6 +86,18 @@ namespace BackEndAje.Api.Presentation.Controllers
         {
             var userId = this.GetUserId();
             var command = new UpdateStatusDocumentCommand { DocumentId = documentId, UpdatedBy = userId };
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpPatch]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("updateStatusOrderRequest")]
+        public async Task<IActionResult> UpdateStatusOrderRequest([FromBody] UpdateStatusOrderRequestCommand command)
+        {
+            var userId = this.GetUserId();
+            command.CreatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }

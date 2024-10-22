@@ -20,6 +20,7 @@ namespace BackEndAje.Api.Domain.Entities
         public int ProductSizeId { get; set; }
         public int? OrderStatusId { get; set; }
 
+        public bool? IsActive { get; set; }
         public User Supervisor { get; set; }
         public Cedi Sucursal { get; set; }
         public ReasonRequest ReasonRequest { get; set; }
