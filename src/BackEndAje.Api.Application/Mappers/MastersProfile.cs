@@ -3,6 +3,7 @@ namespace BackEndAje.Api.Application.Mappers
     using AutoMapper;
     using BackEndAje.Api.Application.Masters.Queries.GetAllDocumentType;
     using BackEndAje.Api.Application.Masters.Queries.GetAllLogos;
+    using BackEndAje.Api.Application.Masters.Queries.GetAllOrderStatus;
     using BackEndAje.Api.Application.Masters.Queries.GetAllPaymentMethod;
     using BackEndAje.Api.Application.Masters.Queries.GetAllProductSize;
     using BackEndAje.Api.Application.Masters.Queries.GetAllProductTypes;
@@ -30,6 +31,8 @@ namespace BackEndAje.Api.Application.Mappers
             this.CreateMap<PaymentMethods, GetAllPaymentMethodResult>();
 
             this.CreateMap<DocumentType, GetAllDocumentTypeResult>();
+
+            this.CreateMap<OrderStatus, GetAllOrderStatusResult>();
         }
     }
 }

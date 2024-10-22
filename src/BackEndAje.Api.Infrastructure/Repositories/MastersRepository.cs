@@ -16,7 +16,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<ReasonRequest>> GetAllReasonRequest()
         {
-            return await this._context.ReasonRequest.ToListAsync();
+            return await this._context.ReasonRequest.Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<List<WithDrawalReason>> GetWithDrawalReasonsByReasonRequestId(int reasonRequestId)
@@ -28,22 +28,22 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<TimeWindow>> GetAllTimeWindows()
         {
-            return await this._context.TimeWindows.ToListAsync();
+            return await this._context.TimeWindows.Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<List<ProductType>> GetAllProductTypes()
         {
-            return await this._context.ProductTypes.ToListAsync();
+            return await this._context.ProductTypes.Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<List<Logo>> GetAllLogos()
         {
-            return await this._context.Logos.ToListAsync();
+            return await this._context.Logos.Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<List<ProductSize>> GetAllProductSize()
         {
-            return await this._context.ProductSize.ToListAsync();
+            return await this._context.ProductSize.Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<List<PaymentMethods>> GetAllPaymentMethods()
@@ -64,6 +64,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<DocumentType?> GetDocumentTypeById(int documentTypeId)
         {
             return await this._context.DocumentType.FirstOrDefaultAsync(x => x.DocumentTypeId == documentTypeId);
+        }
+
+        public async Task<List<OrderStatus>> GetAllOrderStatus()
+        {
+            return await this._context.OrderStatus.Where(x => x.IsActive).ToListAsync();
         }
     }
 }

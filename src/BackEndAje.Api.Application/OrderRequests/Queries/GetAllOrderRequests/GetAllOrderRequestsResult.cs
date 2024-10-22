@@ -12,12 +12,14 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
 
         public string CompanyName { get; set; }
 
-        public string clientCode { get; set; }
+        public string ClientCode { get; set; }
 
         public string Zone { get; set; }
 
         public string Route { get; set; }
 
-        public int? Status { get; set; }
+        public int? OrderStatusId { get; set; }
+
+        public string StatusName { get; set; }
     }
 }

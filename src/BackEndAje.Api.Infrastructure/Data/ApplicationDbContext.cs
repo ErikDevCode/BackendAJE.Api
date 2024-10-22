@@ -66,6 +66,8 @@
 
         public DbSet<OrderRequestDocument> OrderRequestDocuments { get; set; }
 
+        public DbSet<OrderStatus> OrderStatus { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -125,6 +127,8 @@
             modelBuilder.Entity<OrderRequest>().ToTable("orderrequests");
 
             modelBuilder.Entity<OrderRequestDocument>().ToTable("orderrequestDocuments");
+
+            modelBuilder.Entity<OrderStatus>().ToTable("orderstatus");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
