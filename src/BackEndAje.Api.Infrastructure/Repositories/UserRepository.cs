@@ -253,10 +253,10 @@
 
             if (!string.IsNullOrWhiteSpace(param))
             {
-                query = query.Where(u => (u.Names.ToLower().Contains(param) ||
+                query = query.Where(u => u.Names.ToLower().Contains(param) ||
                                           u.PaternalSurName.ToLower().Contains(param) ||
                                           u.MaternalSurName.ToLower().Contains(param) ||
-                                          (u.Route != null && u.Route.ToString()!.Contains(param))));
+                                          (u.Route != null && u.Route.ToString()!.Contains(param)));
             }
 
             return await query

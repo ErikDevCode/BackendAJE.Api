@@ -7,12 +7,10 @@ namespace BackEndAje.Api.Application.Clients.Commands.DisableClient
     public class DisableClientHandler : IRequestHandler<DisableClientCommand, Unit>
     {
         private readonly IClientRepository _clientRepository;
-        private readonly IMapper _mapper;
 
-        public DisableClientHandler(IClientRepository clientRepository, IMapper mapper)
+        public DisableClientHandler(IClientRepository clientRepository)
         {
             this._clientRepository = clientRepository;
-            this._mapper = mapper;
         }
 
         public async Task<Unit> Handle(DisableClientCommand request, CancellationToken cancellationToken)
@@ -25,7 +23,6 @@ namespace BackEndAje.Api.Application.Clients.Commands.DisableClient
 
             existingClient.IsActive = existingClient.IsActive is false;
             existingClient.UpdatedBy = request.UpdatedBy;
-            this._mapper.Map(request, existingClient);
             await this._clientRepository.UpdateClientAsync(existingClient);
             return Unit.Value;
         }
