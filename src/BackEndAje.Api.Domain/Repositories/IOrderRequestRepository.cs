@@ -17,5 +17,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<int> GetTotalOrderRequestCountAsync();
         
         Task UpdateStatusOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument);
+        
+        Task AddOrderRequestStatusHistoryAsync(OrderRequestStatusHistory orderRequestStatusHistory);
     }
 }

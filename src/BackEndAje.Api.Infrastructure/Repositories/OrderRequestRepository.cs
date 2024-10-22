@@ -97,5 +97,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context.OrderRequestDocuments.Update(orderRequestDocument);
             await this._context.SaveChangesAsync();
         }
+
+        public async Task AddOrderRequestStatusHistoryAsync(OrderRequestStatusHistory orderRequestStatusHistory)
+        {
+            this._context.OrderRequestStatusHistory.Add(orderRequestStatusHistory);
+            await this._context.SaveChangesAsync();
+        }
     }
 }
