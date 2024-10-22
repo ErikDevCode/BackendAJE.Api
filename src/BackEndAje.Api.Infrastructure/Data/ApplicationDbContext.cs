@@ -224,6 +224,12 @@
             modelBuilder.Entity<OrderRequestStatusHistory>()
                 .ToTable("orderrequeststatushistory")
                 .HasKey(pm => pm.OrderStatusHistoryId);
+
+            modelBuilder.Entity<OrderRequestStatusHistory>()
+                .HasOne(history => history.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(history => history.CreatedBy)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

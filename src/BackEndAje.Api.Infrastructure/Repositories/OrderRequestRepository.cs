@@ -103,5 +103,26 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context.OrderRequestStatusHistory.Add(orderRequestStatusHistory);
             await this._context.SaveChangesAsync();
         }
+
+        public async Task UpdateStatusOrderRequestAsync(int orderRequestId, int newStatusId, int createdBy)
+        {
+            var orderRequest = new OrderRequest { OrderRequestId = orderRequestId, OrderStatusId = newStatusId, UpdatedBy = createdBy };
+
+            this._context.OrderRequests.Attach(orderRequest);
+            this._context.Entry(orderRequest).Property(o => o.OrderStatusId).IsModified = true;
+
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task<List<OrderRequestStatusHistory>> GetOrderRequestStatusHistoryByOrderRequestId(int orderRequestId)
+        {
+            return await this._context.OrderRequestStatusHistory
+                .Include(x => x.OrderRequest)
+                .Include(x => x.OrderStatus)
+                .Include(x => x.CreatedByUser)
+                .Where(o => o.OrderRequestId == orderRequestId)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
+        }
     }
 }
