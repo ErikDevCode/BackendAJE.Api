@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingByOrderRequestId;
+
 namespace BackEndAje.Api.Application.Mappers
 {
     using AutoMapper;
@@ -58,6 +60,10 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.Zone, opt => opt.MapFrom(src => src.Client.Seller!.Zone!.ZoneCode))
                 .ForMember(dest => dest.Route, opt => opt.MapFrom(src => src.Client.Route))
                 .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.OrderStatus.StatusName));
+
+            this.CreateMap<OrderRequestStatusHistory, GetTrackingByOrderRequestIdResult>()
+                .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.OrderStatus.StatusName))
+                .ForMember(dest => dest.ResponsibleUser, opt => opt.MapFrom(src => $"{src.CreatedByUser .Names} {src.CreatedByUser .PaternalSurName} {src.CreatedByUser .MaternalSurName}"));
         }
     }
 }

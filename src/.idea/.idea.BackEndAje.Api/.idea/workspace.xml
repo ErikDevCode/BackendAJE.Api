@@ -10,10 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79ab4f3f-1be8-4167-a190-27fe9877c5d8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Commands/UpdateStatusOrderRequest/UpdateStatusOrderRequestCommand.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Commands/UpdateStatusOrderRequest/UpdateStatusOrderRequestHandler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetTrackingByOrderRequestId/GetTrackingByOrderRequestIdHandler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetTrackingByOrderRequestId/GetTrackingByOrderRequestIdQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetTrackingByOrderRequestId/GetTrackingByOrderRequestIdResult.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsResult.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/Mappers/OrderRequestProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/Mappers/OrderRequestProfile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Commands/UpdateStatusOrderRequest/UpdateStatusOrderRequestHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Commands/UpdateStatusOrderRequest/UpdateStatusOrderRequestHandler.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
@@ -27,7 +29,8 @@
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/ref/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/ref/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/refint/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/refint/BackEndAje.Api.Application.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/Entities/OrderRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/Entities/OrderRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/Entities/OrderRequestStatusHistory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/Entities/OrderRequestStatusHistory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/Repositories/IOrderRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/Repositories/IOrderRequestRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.AssemblyInfo.cs" afterDir="false" />
@@ -37,6 +40,8 @@
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/ref/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/ref/BackEndAje.Api.Domain.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/refint/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/refint/BackEndAje.Api.Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Data/ApplicationDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/OrderRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/OrderRequestRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
@@ -298,7 +303,7 @@
       <workItem from="1729443339334" duration="3833000" />
       <workItem from="1729510096938" duration="2612000" />
       <workItem from="1729512745298" duration="22618000" />
-      <workItem from="1729547492178" duration="28929000" />
+      <workItem from="1729547492178" duration="35390000" />
     </task>
     <servers />
   </component>
@@ -647,13 +652,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Commands/CreateOrderRequests/CreateOrderRequestsHandler.cs</url>
-          <line>28</line>
+          <line>29</line>
           <properties documentPath="C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\OrderRequests\Commands\CreateOrderRequests\CreateOrderRequestsHandler.cs" containingFunctionPresentation="Method 'Handle'">
             <startOffsets>
-              <option value="1345" />
+              <option value="1387" />
             </startOffsets>
             <endOffsets>
-              <option value="1670" />
+              <option value="1712" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="72" />

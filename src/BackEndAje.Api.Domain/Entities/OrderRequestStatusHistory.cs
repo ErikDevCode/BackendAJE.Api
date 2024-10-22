@@ -8,5 +8,9 @@ namespace BackEndAje.Api.Domain.Entities
         public string? ChangeReason { get; set; }
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; }
+        
+        public OrderRequest OrderRequest { get; set; }
+        public OrderStatus OrderStatus { get; set; }
+        public User CreatedByUser  { get; set; }
     }
 }
