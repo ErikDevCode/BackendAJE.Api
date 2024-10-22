@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Masters.Queries.GetAllOrderStatus;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -26,7 +28,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAllReasonRequestResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetAllReasonRequest")]
         public async Task<IActionResult> GetAllReasonRequest()
@@ -37,7 +39,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetWithDrawalReasonResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetWithDrawalReason/{reasonRequestId}")]
         public async Task<IActionResult> GetWithDrawalReasonByReasonRequestId(int reasonRequestId)
@@ -48,7 +50,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAllTimeWindowsResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetAllTimeWindows")]
         public async Task<IActionResult> GetAllTimeWindows()
@@ -59,7 +61,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAllProductTypesResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetAllProductTypes")]
         public async Task<IActionResult> GetAllProductTypes()
@@ -70,7 +72,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAllLogosResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetAllLogos")]
         public async Task<IActionResult> GetAllLogos()
@@ -81,7 +83,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAllProductSizeResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetAllProductSize")]
         public async Task<IActionResult> GetAllProductSize()
@@ -92,7 +94,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAllPaymentMethodResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetAllPaymentMethod")]
         public async Task<IActionResult> GetAllPaymentMethod()
@@ -103,12 +105,23 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAllDocumentTypeResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetAllDocumentType")]
         public async Task<IActionResult> GetAllDocumentType()
         {
             var query = new GetAllDocumentTypeQuery();
+            var results = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = results });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetAllOrderStatusResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("GetAllOrderRequestStatus")]
+        public async Task<IActionResult> GetAllOrderRequestStatus()
+        {
+            var query = new GetAllOrderStatusQuery();
             var results = await this._mediator.Send(query);
             return this.Ok(new Response { Result = results });
         }

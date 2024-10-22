@@ -4,6 +4,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderRequestDocumentById;
     using BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests;
+    using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusDocument;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById;
     using MediatR;
@@ -39,6 +40,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("all")]
         public async Task<IActionResult> GetAllOrderRequests([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var query = new GetAllOrderRequestsQuery(pageNumber, pageSize);
@@ -61,7 +63,7 @@ namespace BackEndAje.Api.Presentation.Controllers
             return this.Ok(result);
         }
 
-        [HttpGet("{documentId}/download")]
+        [HttpGet("documents/{documentId}/download")]
         public async Task<IActionResult> DownloadDocument(int documentId)
         {
             var result = await this._mediator.Send(new GetOrderRequestDocumentByIdQuery(documentId));
@@ -72,6 +74,18 @@ namespace BackEndAje.Api.Presentation.Controllers
             }
 
             return this.File(result.DocumentContent, result.ContentType, result.FileName);
+        }
+
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("documents/updateStatusDocument/{documentId}")]
+        public async Task<IActionResult> UpdateStatusDocument(int documentId)
+        {
+            var userId = this.GetUserId();
+            var command = new UpdateStatusDocumentCommand { DocumentId = documentId, UpdatedBy = userId };
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
         }
 
         private int GetUserId()

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BackEndAje.Api.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+da4021d4d4fa2f0921292d95b6b8fe18b9101368")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c31c667f94715d0dae0012812f155fadbefdceef")]
 [assembly: System.Reflection.AssemblyProductAttribute("BackEndAje.Api.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BackEndAje.Api.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

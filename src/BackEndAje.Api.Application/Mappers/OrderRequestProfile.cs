@@ -54,10 +54,10 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.ReasonRequest.ReasonDescription))
                 .ForMember(dest => dest.Branch, opt => opt.MapFrom(src => src.Sucursal.CediName))
                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Client.CompanyName))
-                .ForMember(dest => dest.clientCode, opt => opt.MapFrom(src => src.Client.ClientCode))
+                .ForMember(dest => dest.ClientCode, opt => opt.MapFrom(src => src.Client.ClientCode))
                 .ForMember(dest => dest.Zone, opt => opt.MapFrom(src => src.Client.Seller!.Zone!.ZoneCode))
                 .ForMember(dest => dest.Route, opt => opt.MapFrom(src => src.Client.Route))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+                .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.OrderStatus.StatusName));
         }
     }
 }

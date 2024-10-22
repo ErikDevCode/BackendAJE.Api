@@ -80,6 +80,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     .Include(o => o.Client)
                     .ThenInclude(t => t.DocumentType)
                     .Include(o => o.OrderRequestDocuments)
+                    .Include(o => o.OrderStatus)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
@@ -87,7 +88,14 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<int> GetTotalOrderRequestCountAsync()
         {
-            return await this._context.Roles.CountAsync();
+            return await this._context.OrderRequests.CountAsync();
+        }
+
+        public async Task UpdateStatusOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument)
+        {
+            this._context.Entry(orderRequestDocument).State = EntityState.Detached;
+            this._context.OrderRequestDocuments.Update(orderRequestDocument);
+            await this._context.SaveChangesAsync();
         }
     }
 }

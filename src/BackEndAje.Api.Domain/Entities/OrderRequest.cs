@@ -18,7 +18,7 @@ namespace BackEndAje.Api.Domain.Entities
         public int LogoId { get; set; }
         public string Modelo { get; set; }
         public int ProductSizeId { get; set; }
-        public int? Status { get; set; }
+        public int? OrderStatusId { get; set; }
 
         public User Supervisor { get; set; }
         public Cedi Sucursal { get; set; }
@@ -30,6 +30,8 @@ namespace BackEndAje.Api.Domain.Entities
         public WithDrawalReason? WithDrawalReason { get; set; }
         
         public Client Client { get; set; }
+        
+        public OrderStatus OrderStatus { get; set; }
         
         public ICollection<OrderRequestDocument> OrderRequestDocuments { get; set; }
     }
