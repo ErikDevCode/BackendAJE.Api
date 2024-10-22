@@ -68,6 +68,8 @@
 
         public DbSet<OrderStatus> OrderStatus { get; set; }
 
+        public DbSet<OrderRequestStatusHistory> OrderRequestStatusHistory { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -129,6 +131,8 @@
             modelBuilder.Entity<OrderRequestDocument>().ToTable("orderrequestDocuments");
 
             modelBuilder.Entity<OrderStatus>().ToTable("orderstatus");
+
+            modelBuilder.Entity<OrderRequestStatusHistory>().ToTable("orderrequeststatushistory");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -216,6 +220,10 @@
             modelBuilder.Entity<OrderRequestDocument>()
                 .ToTable("orderrequestdocuments")
                 .HasKey(pm => pm.DocumentId);
+
+            modelBuilder.Entity<OrderRequestStatusHistory>()
+                .ToTable("orderrequeststatushistory")
+                .HasKey(pm => pm.OrderStatusHistoryId);
         }
     }
 }

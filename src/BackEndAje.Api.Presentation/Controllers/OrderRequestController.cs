@@ -28,7 +28,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("create")]
-        public async Task<IActionResult> CreateAction([FromBody] CreateOrderRequestsCommand command)
+        public async Task<IActionResult> CreateOrderRequest([FromBody] CreateOrderRequestsCommand command)
         {
             var userId = this.GetUserId();
             command.CreatedBy = userId;
