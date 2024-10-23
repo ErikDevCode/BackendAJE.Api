@@ -76,11 +76,11 @@ namespace BackEndAje.Api.Presentation.Controllers
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
-        [Route("updateStatusClient/{clientCode}")]
-        public async Task<IActionResult> DisableClient(int clientCode)
+        [Route("updateStatusClient/{clientId}")]
+        public async Task<IActionResult> DisableClient(int clientId)
         {
             var userId = this.GetUserId();
-            var command = new DisableClientCommand { ClientCode = clientCode, UpdatedBy = userId };
+            var command = new DisableClientCommand { ClientId = clientId, UpdatedBy = userId };
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }

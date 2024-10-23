@@ -1,11 +1,10 @@
-using BackEndAje.Api.Application.Masters.Queries.GetAllOrderStatus;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Masters.Queries.GetAllDocumentType;
     using BackEndAje.Api.Application.Masters.Queries.GetAllLogos;
+    using BackEndAje.Api.Application.Masters.Queries.GetAllOrderStatus;
     using BackEndAje.Api.Application.Masters.Queries.GetAllPaymentMethod;
     using BackEndAje.Api.Application.Masters.Queries.GetAllProductSize;
     using BackEndAje.Api.Application.Masters.Queries.GetAllProductTypes;
@@ -13,7 +12,6 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Masters.Queries.GetAllTimeWindows;
     using BackEndAje.Api.Application.Masters.Queries.GetWithDrawalReason;
     using MediatR;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]

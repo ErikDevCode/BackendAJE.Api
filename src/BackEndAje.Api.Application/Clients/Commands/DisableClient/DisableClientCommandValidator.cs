@@ -6,8 +6,8 @@ namespace BackEndAje.Api.Application.Clients.Commands.DisableClient
     {
         public DisableClientCommandValidator()
         {
-            this.RuleFor(x => x.ClientCode)
-                .NotEmpty().WithMessage("Código Cliente es requerido.");
+            this.RuleFor(x => x.ClientId)
+                .NotEmpty().WithMessage("ClientId es requerido.");
         }
     }
 }
