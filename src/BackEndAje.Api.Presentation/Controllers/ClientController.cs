@@ -1,17 +1,16 @@
-using BackEndAje.Api.Application.Clients.Commands.DisableClient;
-using BackEndAje.Api.Application.Clients.Commands.UploadClient;
-using Microsoft.AspNetCore.Http;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Clients.Commands.CreateClient;
+    using BackEndAje.Api.Application.Clients.Commands.DisableClient;
     using BackEndAje.Api.Application.Clients.Commands.UpdateClient;
+    using BackEndAje.Api.Application.Clients.Commands.UploadClient;
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
     using BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode;
     using BackEndAje.Api.Application.Dtos;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
