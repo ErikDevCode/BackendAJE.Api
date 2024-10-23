@@ -11,6 +11,7 @@ namespace BackEndAje.Api.Application.Mappers
     {
         public UserProfile()
         {
+            this.CreateMap<MenuItemDto, Dtos.Users.Menu.MenuItemDto>();
             this.CreateMap<CreateUserDto, User>()
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now))
