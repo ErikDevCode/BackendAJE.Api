@@ -29,10 +29,34 @@ obj/
 *.vs/
 .vscode/
 .vs/
-echo "src/" >> .gitignore
-git add .gitignore
-git commit -m "Añadir .gitignore para excluir src/"
-echo ".idea/" >> .gitignore
-git rm --cached -r .idea/
-git add .gitignore
-git commit -m "Excluir carpeta .idea/"
+
+# Ignorar carpetas bin y obj
+bin/
+obj/
+
+# Ignorar archivos de Rider/IDEA
+.idea/
+*.iml
+workspace.xml
+
+# Ignorar archivos de depuración y compilación
+*.dll
+*.exe
+*.pdb
+*.cache
+*.suo
+*.user
+*.log
+*.sln.docstates
+
+# Ignorar archivos generados por dotnet
+project.lock.json
+project.fragment.lock.json
+
+# Ignorar archivos de configuración de Visual Studio/Rider
+.vscode/
+.vs/
+
+# Ignorar archivos temporales o de salida
+*.sourcelink.json
+*.AssemblyInfo.cache
