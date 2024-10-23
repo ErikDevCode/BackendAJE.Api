@@ -169,23 +169,32 @@
             await this._context.SaveChangesAsync();
         }
 
-        public async Task<List<MenuItem>> GetMenuForUserByIdAsync(int userId)
+        public async Task<List<MenuItemDto>> GetMenuForUserByIdAsync(int userId)
         {
             var roleIds = await this._context.UserRoles
                 .Where(ur => ur.UserId == userId)
                 .Select(ur => ur.RoleId)
                 .ToListAsync();
 
+            var accessibleActions = await this._context.RoleMenuAccess
+                .Where(rma => roleIds.Contains(rma.RolePermission.RoleId) && rma.RolePermission.Status)
+                .Select(rma => rma.MenuItemActionId)
+                .ToListAsync();
+
             var menuItems = await this._context.MenuItems
-                .Include(mi => mi.MenuItemActions)
-                .ThenInclude(mia => mia.Action)
-                .Include(mi => mi.MenuItemActions)
-                .ThenInclude(mia => mia.RoleMenuAccesses)
-                .ThenInclude(rma => rma.RolePermission)
-                .ThenInclude(rma => rma.Permission)
-                .Where(mi => mi.MenuItemActions.Any(mia =>
-                    mia.RoleMenuAccesses.Any(rma => roleIds.Contains(rma.RolePermission.RoleId) && rma.RolePermission.Status)))
-                .Where(mi => mi.ParentMenuItemId == null)
+                .Where(mi => mi.MenuItemActions.Any(mia => accessibleActions.Contains(mia.MenuItemActionId)))
+                .Select(mi => new MenuItemDto
+                {
+                    MenuItemId = mi.MenuItemId,
+                    Label = mi.Label,
+                    Icon = mi.Icon,
+                    RouterLink = mi.Route,
+                    Permissions = mi.MenuItemActions
+                        .Where(mia => accessibleActions.Contains(mia.MenuItemActionId))
+                        .Select(mia => mia.Action.ActionName)
+                        .Distinct()
+                        .ToList(),
+                })
                 .AsNoTracking()
                 .ToListAsync();
 

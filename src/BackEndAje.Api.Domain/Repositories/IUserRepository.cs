@@ -31,7 +31,7 @@
         Task UpdateAppUserAsync(AppUser appUser);
         Task SaveChangesAsync();
 
-        Task<List<MenuItem>> GetMenuForUserByIdAsync(int userId);
+        Task<List<MenuItemDto>> GetMenuForUserByIdAsync(int userId);
         
         Task<User?> GetUserByRouteAsync(int? route);
 

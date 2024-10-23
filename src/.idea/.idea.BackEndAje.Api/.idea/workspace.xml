@@ -10,9 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79ab4f3f-1be8-4167-a190-27fe9877c5d8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/Entities/MenuItemDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsQuery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application.Tests/obj/Debug/net8.0/BackEndAje.Api.Application.Tests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application.Tests/obj/Debug/net8.0/BackEndAje.Api.Application.Tests.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application.Tests/obj/Debug/net8.0/BackEndAje.Api.Application.Tests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application.Tests/obj/Debug/net8.0/BackEndAje.Api.Application.Tests.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/Mappers/UserProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/Mappers/UserProfile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/Users/Queries/GetMenuForUserById/GetMenuForUserByIdHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/Users/Queries/GetMenuForUserById/GetMenuForUserByIdHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/Users/Queries/GetMenuForUserById/GetMenuForUserByIdQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/Users/Queries/GetMenuForUserById/GetMenuForUserByIdQuery.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
@@ -25,17 +29,24 @@
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/ref/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/ref/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/refint/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/refint/BackEndAje.Api.Application.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/Repositories/IOrderRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/Repositories/IOrderRequestRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Architecture.Tests/obj/Debug/net8.0/BackEndAje.Api.Architecture.Tests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Architecture.Tests/obj/Debug/net8.0/BackEndAje.Api.Architecture.Tests.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Architecture.Tests/obj/Debug/net8.0/BackEndAje.Api.Architecture.Tests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Architecture.Tests/obj/Debug/net8.0/BackEndAje.Api.Architecture.Tests.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain.Tests/obj/Debug/net8.0/BackEndAje.Api.Domain.Tests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain.Tests/obj/Debug/net8.0/BackEndAje.Api.Domain.Tests.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain.Tests/obj/Debug/net8.0/BackEndAje.Api.Domain.Tests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain.Tests/obj/Debug/net8.0/BackEndAje.Api.Domain.Tests.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/Repositories/IUserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/Repositories/IUserRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/ref/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/ref/BackEndAje.Api.Domain.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/refint/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/refint/BackEndAje.Api.Domain.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/OrderRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/OrderRequestRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure.Tests/obj/Debug/net8.0/BackEndAje.Api.Infrastructure.Tests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure.Tests/obj/Debug/net8.0/BackEndAje.Api.Infrastructure.Tests.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure.Tests/obj/Debug/net8.0/BackEndAje.Api.Infrastructure.Tests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure.Tests/obj/Debug/net8.0/BackEndAje.Api.Infrastructure.Tests.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/UserRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
@@ -50,7 +61,8 @@
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/obj/Debug/net8.0/BackEndAje.Api.Infrastructure.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/obj/Debug/net8.0/BackEndAje.Api.Infrastructure.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/obj/Debug/net8.0/ref/BackEndAje.Api.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/obj/Debug/net8.0/ref/BackEndAje.Api.Infrastructure.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/obj/Debug/net8.0/refint/BackEndAje.Api.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/obj/Debug/net8.0/refint/BackEndAje.Api.Infrastructure.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/OrderRequestController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/OrderRequestController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation.Tests/obj/Debug/net8.0/BackEndAje.Api.Presentation.Tests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation.Tests/obj/Debug/net8.0/BackEndAje.Api.Presentation.Tests.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation.Tests/obj/Debug/net8.0/BackEndAje.Api.Presentation.Tests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation.Tests/obj/Debug/net8.0/BackEndAje.Api.Presentation.Tests.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
@@ -65,6 +77,8 @@
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/obj/Debug/net8.0/BackEndAje.Api.Presentation.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/obj/Debug/net8.0/BackEndAje.Api.Presentation.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/obj/Debug/net8.0/ref/BackEndAje.Api.Presentation.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/obj/Debug/net8.0/ref/BackEndAje.Api.Presentation.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/obj/Debug/net8.0/refint/BackEndAje.Api.Presentation.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/obj/Debug/net8.0/refint/BackEndAje.Api.Presentation.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Web.Tests/obj/Debug/net8.0/BackEndAje.Api.Web.Tests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Web.Tests/obj/Debug/net8.0/BackEndAje.Api.Web.Tests.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Web.Tests/obj/Debug/net8.0/BackEndAje.Api.Web.Tests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Web.Tests/obj/Debug/net8.0/BackEndAje.Api.Web.Tests.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Web/bin/Debug/net8.0/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Web/bin/Debug/net8.0/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Web/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Web/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Web/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Web/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
@@ -134,6 +148,7 @@
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Data/ApplicationDbContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/ClientRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/RoleRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Erik/Proyect/BackendAje-Api/src/BackEndAje.Api.Infrastructure/Repositories/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/ZoneRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/ClientController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -297,7 +312,8 @@
       <workItem from="1729443339334" duration="3833000" />
       <workItem from="1729510096938" duration="2612000" />
       <workItem from="1729512745298" duration="22618000" />
-      <workItem from="1729547492178" duration="40949000" />
+      <workItem from="1729547492178" duration="45504000" />
+      <workItem from="1729695909425" duration="4711000" />
     </task>
     <servers />
   </component>
@@ -396,45 +412,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/BackEndAje.Api.Application/Users/Queries/GetMenuForUserById/GetMenuForUserByIdHandler.cs</url>
-          <line>55</line>
-          <properties documentPath="C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\Users\Queries\GetMenuForUserById\GetMenuForUserByIdHandler.cs" containingFunctionPresentation="Method 'MapToPermissions'">
-            <startOffsets>
-              <option value="1920" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2229" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="36" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/BackEndAje.Api.Application/Users/Queries/GetMenuForUserById/GetMenuForUserByIdHandler.cs</url>
-          <line>42</line>
-          <properties documentPath="C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\Users\Queries\GetMenuForUserById\GetMenuForUserByIdHandler.cs" containingFunctionPresentation="Method 'MapToMenuItemDto'">
-            <startOffsets>
-              <option value="1521" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1761" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/BackEndAje.Api.Application/Users/Queries/GetMenuForUserById/GetMenuForUserByIdHandler.cs</url>
-          <line>34</line>
-          <properties documentPath="C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\Users\Queries\GetMenuForUserById\GetMenuForUserByIdHandler.cs" containingFunctionPresentation="Method 'MapToMenuItems'">
-            <startOffsets>
-              <option value="1252" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1429" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/MastersController.cs</url>
@@ -607,13 +584,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/UserRepository.cs</url>
-          <line>202</line>
+          <line>211</line>
           <properties documentPath="C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Infrastructure\Repositories\UserRepository.cs" containingFunctionPresentation="Method 'GetAllUsers'">
             <startOffsets>
-              <option value="6924" />
+              <option value="7259" />
             </startOffsets>
             <endOffsets>
-              <option value="7197" />
+              <option value="7532" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="69" />
@@ -656,6 +633,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/BackEndAje.Api.Application/Users/Queries/GetMenuForUserById/GetMenuForUserByIdHandler.cs</url>
+          <line>20</line>
+          <properties documentPath="C:\Erik\Proyect\BackendAje-Api\src\BackEndAje.Api.Application\Users\Queries\GetMenuForUserById\GetMenuForUserByIdHandler.cs" containingFunctionPresentation="Method 'Handle'">
+            <startOffsets>
+              <option value="780" />
+            </startOffsets>
+            <endOffsets>
+              <option value="863" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
