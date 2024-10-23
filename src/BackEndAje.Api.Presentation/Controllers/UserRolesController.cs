@@ -23,9 +23,9 @@
         }
 
         [HttpPost]
-        [Route("assign-role")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [Route("assign-role")]
         public async Task<IActionResult> AssignRoleToUser([FromBody] AssignRolesToUserCommand command)
         {
             var userId = this.GetUserId();
@@ -36,9 +36,9 @@
         }
 
         [HttpGet]
-        [Route("{userId}/roles")]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetUserRolesByIdResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("{userId}/roles")]
         public async Task<IActionResult> GetUserRolesById(int userId)
         {
             var query = new GetUserRolesByIdQuery(userId);
@@ -52,8 +52,8 @@
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<GetUsersWithRolesResult>), (int)HttpStatusCode.OK)]
         [Route("all-with-roles")]
-        [ProducesResponseType(typeof(List<GetUsersWithRolesQuery>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllUsersWithRoles()
         {
             var query = new GetUsersWithRolesQuery();
