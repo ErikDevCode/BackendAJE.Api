@@ -21,7 +21,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetDepartmentsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetDepartments")]
         public async Task<IActionResult> GetDepartments()
@@ -32,7 +32,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetProvincesByDepartmentIdResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetProvinces/{departmentId}")]
         public async Task<IActionResult> GetProvinces(string departmentId)
@@ -43,7 +43,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetDistrictsByProvinceIdResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetDistricts/{provinceId}")]
         public async Task<IActionResult> GetDistricts(string provinceId)

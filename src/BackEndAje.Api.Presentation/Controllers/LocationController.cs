@@ -21,7 +21,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetRegionsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetRegions")]
         public async Task<IActionResult> GetRegions()
@@ -32,7 +32,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetCedisByRegionIdResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetCedisByRegionId/{regionId}")]
         public async Task<IActionResult> GetCedisByRegionId(int regionId)
@@ -46,7 +46,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetZoneByCediIdResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetZoneByCediId/{cediId}")]
         public async Task<IActionResult> GetZoneByCediId(int cediId)

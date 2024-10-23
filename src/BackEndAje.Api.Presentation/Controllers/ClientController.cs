@@ -40,7 +40,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetAllClientsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("all")]
         public async Task<IActionResult> GetAllClients([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -63,7 +63,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetClientByClientCodeResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("clientCode/{clientCode}")]
         public async Task<IActionResult> GetClientByClientCode(int clientCode)

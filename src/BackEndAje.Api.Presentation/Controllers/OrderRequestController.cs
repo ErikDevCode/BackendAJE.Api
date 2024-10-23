@@ -40,7 +40,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetAllOrderRequestsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("all")]
         public async Task<IActionResult> GetAllOrderRequests(
@@ -58,7 +58,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet("{orderRequestId}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetOrderRequestByIdResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetOrderRequestById(int orderRequestId)
         {
@@ -85,7 +85,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<GetTrackingByOrderRequestIdResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.NotFound)]
         [Route("tracking/{orderRequestId}")]
         public async Task<IActionResult> GetTrackingByOrderRequestId(int orderRequestId)

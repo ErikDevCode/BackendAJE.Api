@@ -110,9 +110,9 @@
         }
 
         [HttpPost]
-        [Route("upload")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [Route("upload")]
         public async Task<IActionResult> UploadUsers(IFormFile file)
         {
             if (file == null || file.Length == 0)
