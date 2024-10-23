@@ -274,5 +274,23 @@
                 .Take(20)
                 .ToListAsync();
         }
+
+        public async Task<List<User>> GetSupervisorByCediId(int cediId)
+        {
+            const int roleId = 5;
+
+            var supervisors = await this._context.Users
+                .Join(
+                    this._context.UserRoles,
+                    user => user.UserId,
+                    userRole => userRole.UserId,
+                    (user, userRole) => new { user, userRole }
+                )
+                .Where(u => u.userRole.RoleId == roleId && u.user.CediId == cediId)
+                .Select(u => u.user)
+                .ToListAsync();
+
+            return supervisors;
+        }
     }
 }
