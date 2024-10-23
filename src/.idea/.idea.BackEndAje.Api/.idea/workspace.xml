@@ -10,9 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79ab4f3f-1be8-4167-a190-27fe9877c5d8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/ClientController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/ClientController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/UsersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/UsersController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Presentation.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Presentation.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Presentation.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/bin/Debug/net8.0/BackEndAje.Api.Presentation.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Presentation/obj/Debug/net8.0/BackEndAje.Api.Presentation.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Presentation/obj/Debug/net8.0/BackEndAje.Api.Presentation.AssemblyInfo.cs" afterDir="false" />
@@ -42,6 +41,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ChangesViewManager" show_ignored="true" />
   <component name="DpaMonitoringSettings">
     <option name="autoShow" value="false" />
   </component>
@@ -92,6 +92,7 @@
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/RolesController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/UserRolesController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Presentation/Controllers/UsersController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Erik/Proyect/BackendAje-Api/src/BackEndAje.Api.Presentation/obj/Debug/net8.0/BackEndAje.Api.Presentation.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackEndAje.Api.Shared/Abstractions/IInstaller.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Symbols/src/dotnet/aspnetcore/2f1db20456007c9515068a35a65afdf99af70bc6/src/Mvc/Mvc.Core/src/Builder/ControllerEndpointRouteBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Symbols/src/dotnet/aspnetcore/2f1db20456007c9515068a35a65afdf99af70bc6/src/Mvc/Mvc.Core/src/ControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
@@ -251,7 +252,7 @@
       <workItem from="1729512745298" duration="22618000" />
       <workItem from="1729547492178" duration="45504000" />
       <workItem from="1729695909425" duration="9025000" />
-      <workItem from="1729705403714" duration="2218000" />
+      <workItem from="1729705403714" duration="4615000" />
     </task>
     <servers />
   </component>

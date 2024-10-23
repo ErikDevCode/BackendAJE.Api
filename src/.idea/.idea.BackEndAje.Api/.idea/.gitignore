@@ -1,70 +1,30 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-# Rider ignored files
-/modules.xml
-/projectSettingsUpdater.xml
-/contentModel.xml
-/.idea.BackEndAje.Api.iml
-# Editor-based HTTP Client requests
-/httpRequests/
-# Datasource local storage ignored files
-/dataSources/
-/dataSources.local.xml
-# Ignorar archivos de ensamblado y ejecutables
-*.dll
-*.exe
-*.pdb
-# Ignorar carpetas de salida de compilación
-bin/
-obj/
-# Ignorar archivos de Rider/JetBrains
-.idea/
-.idea_modules/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-# Ignorar archivos de configuración
-*.vs/
-.vscode/
-.vs/
+# Ignorar bin y obj globalmente
+**/bin/
+**/obj/
 
-# Ignorar carpetas bin y obj
-src/BackEndAje.Api.Application/bin/
-src/BackEndAje.Api.Application/obj/
-src/BackEndAje.Api.Presentation/bin/
-src/BackEndAje.Api.Presentation/obj/
-src/BackEndAje.Api.Domain/bin/
-src/BackEndAje.Api.Domain/obj/
-src/BackEndAje.Api.Infrastructure/bin/
-src/BackEndAje.Api.Infrastructure/obj/
-src/BackEndAje.Api.Web/bin/
-src/BackEndAje.Api.Web/obj/
-
-# Ignorar archivos de Rider/IDEA
+# Ignorar archivos generados y de Rider/JetBrains
 .idea/
 *.iml
 workspace.xml
+projectSettingsUpdater.xml
+modules.xml
+*.cache
 
-# Ignorar archivos de depuración y compilación
+# Ignorar archivos binarios
 *.dll
 *.exe
 *.pdb
-*.cache
-*.suo
-*.user
-*.log
-*.sln.docstates
-
-# Ignorar archivos generados por dotnet
-project.lock.json
-project.fragment.lock.json
 
 # Ignorar archivos de configuración de Visual Studio/Rider
 .vscode/
 .vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-# Ignorar archivos temporales o de salida
+# Ignorar archivos específicos de compilación
+project.lock.json
+project.fragment.lock.json
 *.sourcelink.json
 *.AssemblyInfo.cache
