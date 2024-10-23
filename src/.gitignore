@@ -1,6 +1,8 @@
 # Ignorar bin y obj globalmente
 **/bin/
 **/obj/
+bin/
+obj/
 
 # Ignorar archivos generados y de Rider/JetBrains
 .idea/
