@@ -49,5 +49,7 @@
         Task<User?> GetUserByDocumentNumberAsync(string? documentNumber);
 
         Task<List<User>> GetUsersByParamAsync(string param);
+
+        Task<List<User>> GetSupervisorByCediId(int cediId);
     }
 }

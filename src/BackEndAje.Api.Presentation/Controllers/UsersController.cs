@@ -1,4 +1,6 @@
-﻿namespace BackEndAje.Api.Presentation.Controllers
+﻿using BackEndAje.Api.Application.Users.Queries.GetSupervisorByCedi;
+
+namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
@@ -130,6 +132,17 @@
             };
             var result = await this._mediator.Send(command);
             return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetSupervisorByCediResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("GetSupervisorByCediId/{cediId}")]
+        public async Task<IActionResult> GetSupervisorByCedi(int cediId)
+        {
+            var query = new GetSupervisorByCediQuery(cediId);
+            var result = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = result });
         }
 
         private int GetUserId()

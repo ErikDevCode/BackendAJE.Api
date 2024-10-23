@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Users.Queries.GetSupervisorByCedi;
+
 namespace BackEndAje.Api.Application.Mappers
 {
     using AutoMapper;
@@ -86,6 +88,10 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+
+            this.CreateMap<User, GetSupervisorByCediResult>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.Supervisor, opt => opt.MapFrom(src => $"{src.PaternalSurName} {src.MaternalSurName} {src.Names}"));
         }
     }
 }
