@@ -4,7 +4,7 @@ namespace BackEndAje.Api.Application.Clients.Commands.DisableClient
 
     public class DisableClientCommand : IRequest<Unit>
     {
-        public int ClientCode { get; set; }
+        public int ClientId { get; set; }
 
         public int UpdatedBy { get; set; }
     }

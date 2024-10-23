@@ -15,10 +15,10 @@ namespace BackEndAje.Api.Application.Clients.Commands.DisableClient
 
         public async Task<Unit> Handle(DisableClientCommand request, CancellationToken cancellationToken)
         {
-            var existingClient = await this._clientRepository.GetClientByClientCode(request.ClientCode);
+            var existingClient = await this._clientRepository.GetClientById(request.ClientId);
             if (existingClient == null)
             {
-                throw new InvalidOperationException($"Client with code '{request.ClientCode}' not exists.");
+                throw new InvalidOperationException($"Client with code '{request.ClientId}' not exists.");
             }
 
             existingClient.IsActive = existingClient.IsActive is false;
