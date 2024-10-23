@@ -15,7 +15,6 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
-    /// <inheritdoc />
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]

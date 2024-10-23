@@ -31,16 +31,16 @@ obj/
 .vs/
 
 # Ignorar carpetas bin y obj
-/BackEndAje.Api.Application/bin/
-/BackEndAje.Api.Application/obj/
-/BackEndAje.Api.Presentation/bin/
-/BackEndAje.Api.Presentation/obj/
-/BackEndAje.Api.Domain/bin/
-/BackEndAje.Api.Domain/obj/
-/BackEndAje.Api.Infrastructure/bin/
-/BackEndAje.Api.Infrastructure/obj/
-/BackEndAje.Api.Web/bin/
-/BackEndAje.Api.Web/obj/
+src/BackEndAje.Api.Application/bin/
+src/BackEndAje.Api.Application/obj/
+src/BackEndAje.Api.Presentation/bin/
+src/BackEndAje.Api.Presentation/obj/
+src/BackEndAje.Api.Domain/bin/
+src/BackEndAje.Api.Domain/obj/
+src/BackEndAje.Api.Infrastructure/bin/
+src/BackEndAje.Api.Infrastructure/obj/
+src/BackEndAje.Api.Web/bin/
+src/BackEndAje.Api.Web/obj/
 
 # Ignorar archivos de Rider/IDEA
 .idea/
