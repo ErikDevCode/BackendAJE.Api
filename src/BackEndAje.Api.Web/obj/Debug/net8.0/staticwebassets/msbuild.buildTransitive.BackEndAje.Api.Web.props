@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\BackEndAje.Api.Web.props" />
-</Project>

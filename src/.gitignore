@@ -1,0 +1,32 @@
+# Ignorar bin y obj globalmente
+**/bin/
+**/obj/
+bin/
+obj/
+
+# Ignorar archivos generados y de Rider/JetBrains
+.idea/
+*.iml
+workspace.xml
+projectSettingsUpdater.xml
+modules.xml
+*.cache
+
+# Ignorar archivos binarios
+*.dll
+*.exe
+*.pdb
+
+# Ignorar archivos de configuración de Visual Studio/Rider
+.vscode/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignorar archivos específicos de compilación
+project.lock.json
+project.fragment.lock.json
+*.sourcelink.json
+*.AssemblyInfo.cache
