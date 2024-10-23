@@ -12,9 +12,9 @@ namespace BackEndAje.Api.Domain.Repositories
 
         Task<OrderRequestDocument> GetOrderRequestDocumentById(int id);
 
-        Task<List<OrderRequest>> GetAllOrderRequestAsync(int pageNumber, int pageSize);
+        Task<List<OrderRequest>> GetAllOrderRequestAsync(int pageNumber, int pageSize, int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate);
 
-        Task<int> GetTotalOrderRequestCountAsync();
+        Task<int> GetTotalOrderRequestCountAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate);
         
         Task UpdateStatusOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument);
         

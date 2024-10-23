@@ -18,8 +18,24 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
 
         public async Task<PaginatedResult<GetAllOrderRequestsResult>> Handle(GetAllOrderRequestsQuery request, CancellationToken cancellationToken)
         {
-            var orderRequests = await this._orderRequestRepository.GetAllOrderRequestAsync(request.PageNumber, request.PageSize);
-            var totalOrderRequests = await this._orderRequestRepository.GetTotalOrderRequestCountAsync();
+            var orderRequests = await this._orderRequestRepository.GetAllOrderRequestAsync(
+                request.PageNumber,
+                request.PageSize,
+                request.ClientCode,
+                request.OrderStatusId,
+                request.ReasonRequestId,
+                request.StartDate,
+                request.EndDate
+            );
+
+            var totalOrderRequests = await this._orderRequestRepository.GetTotalOrderRequestCountAsync(
+                request.ClientCode,
+                request.OrderStatusId,
+                request.ReasonRequestId,
+                request.StartDate,
+                request.EndDate
+            );
+
             var result = this._mapper.Map<List<GetAllOrderRequestsResult>>(orderRequests);
             var paginatedResult = new PaginatedResult<GetAllOrderRequestsResult>
             {

@@ -10,12 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79ab4f3f-1be8-4167-a190-27fe9877c5d8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetTrackingByOrderRequestId/GetTrackingByOrderRequestIdHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetTrackingByOrderRequestId/GetTrackingByOrderRequestIdQuery.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetTrackingByOrderRequestId/GetTrackingByOrderRequestIdResult.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BackEndAje.Api/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/Mappers/OrderRequestProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/Mappers/OrderRequestProfile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Commands/UpdateStatusOrderRequest/UpdateStatusOrderRequestHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Commands/UpdateStatusOrderRequest/UpdateStatusOrderRequestHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/OrderRequests/Queries/GetAllOrderRequests/GetAllOrderRequestsQuery.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
@@ -23,13 +20,11 @@
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/BackEndAje.Api.Application.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/ref/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/ref/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/refint/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Application/obj/Debug/net8.0/refint/BackEndAje.Api.Application.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/Entities/OrderRequestStatusHistory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/Entities/OrderRequestStatusHistory.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/Repositories/IOrderRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/Repositories/IOrderRequestRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/bin/Debug/net8.0/BackEndAje.Api.Domain.pdb" afterDir="false" />
@@ -40,7 +35,6 @@
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/BackEndAje.Api.Domain.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/ref/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/ref/BackEndAje.Api.Domain.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/refint/BackEndAje.Api.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Domain/obj/Debug/net8.0/refint/BackEndAje.Api.Domain.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Data/ApplicationDbContext.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/OrderRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/Repositories/OrderRequestRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/BackEndAje.Api.Infrastructure/bin/Debug/net8.0/BackEndAje.Api.Application.pdb" afterDir="false" />
@@ -303,7 +297,7 @@
       <workItem from="1729443339334" duration="3833000" />
       <workItem from="1729510096938" duration="2612000" />
       <workItem from="1729512745298" duration="22618000" />
-      <workItem from="1729547492178" duration="35390000" />
+      <workItem from="1729547492178" duration="40949000" />
     </task>
     <servers />
   </component>
