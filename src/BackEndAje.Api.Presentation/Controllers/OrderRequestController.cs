@@ -43,9 +43,16 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(List<string>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("all")]
-        public async Task<IActionResult> GetAllOrderRequests([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAllOrderRequests(
+            [FromQuery] int? pageNumber = 1,
+            [FromQuery] int? pageSize = 10,
+            [FromQuery] int? ClientCode = null,
+            [FromQuery] int? StatusCode = null,
+            [FromQuery] int? ReasonRequestId = null,
+            [FromQuery] DateTime? StartDate = null,
+            [FromQuery] DateTime? EndDate = null)
         {
-            var query = new GetAllOrderRequestsQuery(pageNumber, pageSize);
+            var query = new GetAllOrderRequestsQuery(pageNumber ?? 1, pageSize ?? 10, ClientCode, StatusCode, ReasonRequestId, StartDate, EndDate);
             var roles = await this._mediator.Send(query);
             return this.Ok(new Response { Result = roles });
         }

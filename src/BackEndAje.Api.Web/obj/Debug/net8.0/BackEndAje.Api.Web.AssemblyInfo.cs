@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BackEndAje.Api.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3459295ae4f5335e48485bc23b577f413774c9f6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87a3dffabcdf1ba92f03f691e71df72051e83487")]
 [assembly: System.Reflection.AssemblyProductAttribute("BackEndAje.Api.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BackEndAje.Api.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
