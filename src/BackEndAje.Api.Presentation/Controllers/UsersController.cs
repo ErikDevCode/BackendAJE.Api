@@ -1,6 +1,4 @@
-﻿using BackEndAje.Api.Application.Users.Queries.GetSupervisorByCedi;
-
-namespace BackEndAje.Api.Presentation.Controllers
+﻿namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
@@ -9,6 +7,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Users.Commands.UploadUsers;
     using BackEndAje.Api.Application.Users.Queries.GetAllUser;
     using BackEndAje.Api.Application.Users.Queries.GetMenuForUserById;
+    using BackEndAje.Api.Application.Users.Queries.GetSupervisorByCedi;
     using BackEndAje.Api.Application.Users.Queries.GetUserById;
     using BackEndAje.Api.Application.Users.Queries.GetUserByRouteOrEmail;
     using BackEndAje.Api.Application.Users.Queries.GetUsersByParam;
