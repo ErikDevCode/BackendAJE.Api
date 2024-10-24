@@ -213,6 +213,7 @@
                 .Include(c => c.Cedi)
                 .ThenInclude(c => c!.Region)
                 .Include(c => c.Zone)
+                .Include(c => c.Position)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -230,6 +231,7 @@
                 .Include(c => c.Cedi)
                 .ThenInclude(c => c!.Region)
                 .Include(c => c.Zone)
+                .Include(c => c.Position)
                 .FirstOrDefaultAsync(u => u.UserId == userId);
             return users;
         }

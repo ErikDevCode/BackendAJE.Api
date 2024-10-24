@@ -70,6 +70,8 @@
 
         public DbSet<OrderRequestStatusHistory> OrderRequestStatusHistory { get; set; }
 
+        public DbSet<Position> Positions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -133,6 +135,8 @@
             modelBuilder.Entity<OrderStatus>().ToTable("orderstatus");
 
             modelBuilder.Entity<OrderRequestStatusHistory>().ToTable("orderrequeststatushistory");
+
+            modelBuilder.Entity<Position>().ToTable("positions");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)

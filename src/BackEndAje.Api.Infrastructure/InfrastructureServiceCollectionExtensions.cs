@@ -38,6 +38,7 @@
             services.AddScoped<IUbigeoRepository, UbigeoRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IOrderRequestRepository, OrderRequestRepository>();
+            services.AddScoped<IPositionRepository, PositionRepository>();
 
             return services;
         }

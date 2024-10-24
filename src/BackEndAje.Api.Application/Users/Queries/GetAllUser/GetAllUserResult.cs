@@ -32,6 +32,8 @@ namespace BackEndAje.Api.Application.Users.Queries.GetAllUser
 
         public string Phone { get; set; }
 
+        public string PositionName { get; set; }
+
         public bool IsActive { get; set; }
 
         public DateTime CreatedAt { get; set; }
