@@ -23,5 +23,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task UpdateStatusOrderRequestAsync(int orderRequestId, int newStatusId, int createdBy);
         
         Task<List<OrderRequestStatusHistory>> GetOrderRequestStatusHistoryByOrderRequestId(int orderRequestId);
+        
+        Task UpdateOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument);
     }
 }
