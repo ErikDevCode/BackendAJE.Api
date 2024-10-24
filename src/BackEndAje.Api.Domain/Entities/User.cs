@@ -16,6 +16,10 @@
         
         public int? Code { get; set; }
         
+        public int PositionId { get; set; }
+        
+        public Position Position { get; set; }
+        
         public string? DocumentNumber { get; set; }
         
         public string PaternalSurName { get; set; }

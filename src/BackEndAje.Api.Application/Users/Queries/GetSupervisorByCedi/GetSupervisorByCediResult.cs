@@ -5,5 +5,7 @@ namespace BackEndAje.Api.Application.Users.Queries.GetSupervisorByCedi
         public int Id { get; set; }
 
         public string Supervisor { get; set; }
+
+        public string Phone { get; set; }
     }
 }

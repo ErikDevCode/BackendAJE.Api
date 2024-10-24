@@ -81,7 +81,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("AssignPermissionsToRole")]
-        public async Task<IActionResult> CreateRole([FromBody] AssignPermissionToRoleCommand command)
+        public async Task<IActionResult> AssignPermissionsToRole([FromBody] AssignPermissionToRoleCommand command)
         {
             var userId = this.GetUserId();
             command.AssignPermissionToRole.CreatedBy = userId;

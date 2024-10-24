@@ -20,7 +20,8 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.CediId, opt => opt.MapFrom(src => src.CediId > 0 ? src.CediId : null))
                 .ForMember(dest => dest.ZoneId, opt => opt.MapFrom(src => src.ZoneId > 0 ? src.ZoneId : null))
                 .ForMember(dest => dest.Route, opt => opt.MapFrom(src => src.Route > 0 ? src.Route : null))
-                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code > 0 ? src.Code : null));
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code > 0 ? src.Code : null))
+                .ForMember(dest => dest.PositionId, opt => opt.MapFrom(src => src.PositionId));
 
             this.CreateMap<UpdateUserDto, User>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
@@ -61,6 +62,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => $"{src.PaternalSurName} {src.MaternalSurName} {src.Names}"))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email ?? string.Empty))
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.PositionName, opt => opt.MapFrom(src => src.Position.PositionName))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
@@ -83,6 +85,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => $"{src.PaternalSurName} {src.MaternalSurName} {src.Names}"))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email ?? string.Empty))
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.PositionName, opt => opt.MapFrom(src => src.Position.PositionName))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
@@ -91,7 +94,8 @@ namespace BackEndAje.Api.Application.Mappers
 
             this.CreateMap<User, GetSupervisorByCediResult>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
-                .ForMember(dest => dest.Supervisor, opt => opt.MapFrom(src => $"{src.PaternalSurName} {src.MaternalSurName} {src.Names}"));
+                .ForMember(dest => dest.Supervisor, opt => opt.MapFrom(src => $"{src.PaternalSurName} {src.MaternalSurName} {src.Names}"))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone));
         }
     }
 }

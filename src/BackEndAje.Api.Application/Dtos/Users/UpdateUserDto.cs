@@ -20,6 +20,8 @@ namespace BackEndAje.Api.Application.Dtos.Users
 
         public string Phone { get; set; }
 
+        public int PositionId { get; set; }
+
         public bool IsActive { get; set; }
 
         public int UpdatedBy { get; set; }
