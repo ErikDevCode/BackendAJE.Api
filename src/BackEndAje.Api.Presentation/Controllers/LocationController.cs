@@ -2,6 +2,7 @@ namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Locations.Queries.GetCedisById;
     using BackEndAje.Api.Application.Locations.Queries.GetCedisByRegionId;
     using BackEndAje.Api.Application.Locations.Queries.GetRegions;
     using BackEndAje.Api.Application.Locations.Queries.GetZoneByCediId;
@@ -55,6 +56,17 @@ namespace BackEndAje.Api.Presentation.Controllers
             {
                 CediId = cediId,
             };
+            var results = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = results });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetCedisByRegionIdResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("GetCediById/{cediId}")]
+        public async Task<IActionResult> GetCedisById(int cediId)
+        {
+            var query = new GetCedisByIdQuery(cediId);
             var results = await this._mediator.Send(query);
             return this.Ok(new Response { Result = results });
         }
