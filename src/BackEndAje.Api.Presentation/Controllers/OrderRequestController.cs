@@ -1,6 +1,3 @@
-using BackEndAje.Api.Application.OrderRequests.Documents.Commands.CreateDocumentByOrderRequest;
-using BackEndAje.Api.Application.OrderRequests.Documents.Commands.UpdateDocumentByOrderRequest;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -9,6 +6,8 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusDocument;
     using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest;
+    using BackEndAje.Api.Application.OrderRequests.Documents.Commands.CreateDocumentByOrderRequest;
+    using BackEndAje.Api.Application.OrderRequests.Documents.Commands.UpdateDocumentByOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingByOrderRequestId;
