@@ -179,5 +179,12 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
         }
+
+        public async Task UpdateOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument)
+        {
+            this._context.Entry(orderRequestDocument).State = EntityState.Detached;
+            this._context.OrderRequestDocuments.Update(orderRequestDocument);
+            await this._context.SaveChangesAsync();
+        }
     }
 }

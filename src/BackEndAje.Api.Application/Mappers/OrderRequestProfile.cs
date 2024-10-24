@@ -1,5 +1,3 @@
-using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingByOrderRequestId;
-
 namespace BackEndAje.Api.Application.Mappers
 {
     using AutoMapper;
@@ -13,8 +11,11 @@ namespace BackEndAje.Api.Application.Mappers
     using BackEndAje.Api.Application.Dtos.WithDrawalReason;
     using BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderRequestDocumentById;
     using BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests;
+    using BackEndAje.Api.Application.OrderRequests.Documents.Commands.CreateDocumentByOrderRequest;
+    using BackEndAje.Api.Application.OrderRequests.Documents.Commands.UpdateDocumentByOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById;
+    using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingByOrderRequestId;
     using BackEndAje.Api.Domain.Entities;
 
     public class OrderRequestProfile : Profile
@@ -27,6 +28,16 @@ namespace BackEndAje.Api.Application.Mappers
 
             this.CreateMap<CreateOrderRequestDocumentDto, OrderRequestDocument>()
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
+
+            this.CreateMap<CreateDocumentByOrderRequestCommand, OrderRequestDocument>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
+
+            this.CreateMap<UpdateDocumentByOrderRequestCommand, OrderRequestDocument>()
+                .ForMember(dest => dest.DocumentId, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
 
             this.CreateMap<OrderRequest, GetOrderRequestByIdResult>()

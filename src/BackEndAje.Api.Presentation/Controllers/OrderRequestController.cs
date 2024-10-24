@@ -1,3 +1,6 @@
+using BackEndAje.Api.Application.OrderRequests.Documents.Commands.CreateDocumentByOrderRequest;
+using BackEndAje.Api.Application.OrderRequests.Documents.Commands.UpdateDocumentByOrderRequest;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -100,18 +103,32 @@ namespace BackEndAje.Api.Presentation.Controllers
             return this.Ok(result);
         }
 
-        [HttpGet("documents/{documentId}/download")]
-        public async Task<IActionResult> DownloadDocument(int documentId)
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("documents/create")]
+        public async Task<IActionResult> CreateDocumentByOrderRequest([FromBody] CreateDocumentByOrderRequestCommand command)
         {
-            var result = await this._mediator.Send(new GetOrderRequestDocumentByIdQuery(documentId));
-
-            if (result == null)
-            {
-                return this.NotFound(new { Message = $"Order request with ID {documentId} not found." });
-            }
-
-            return this.File(result.DocumentContent, result.ContentType, result.FileName);
+            var userId = this.GetUserId();
+            command.CreatedBy = userId;
+            command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
         }
+
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("documents/update")]
+        public async Task<IActionResult> UpdateDocumentByOrderRequest([FromBody] UpdateDocumentByOrderRequestCommand command)
+        {
+            var userId = this.GetUserId();
+            command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+
 
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -123,6 +140,19 @@ namespace BackEndAje.Api.Presentation.Controllers
             var command = new UpdateStatusDocumentCommand { DocumentId = documentId, UpdatedBy = userId };
             var result = await this._mediator.Send(command);
             return this.Ok(result);
+        }
+
+        [HttpGet("documents/{documentId}/download")]
+        public async Task<IActionResult> DownloadDocument(int documentId)
+        {
+            var result = await this._mediator.Send(new GetOrderRequestDocumentByIdQuery(documentId));
+
+            if (result == null)
+            {
+                return this.NotFound(new { Message = $"Order request with ID {documentId} not found." });
+            }
+
+            return this.File(result.DocumentContent, result.ContentType, result.FileName);
         }
 
         private int GetUserId()
