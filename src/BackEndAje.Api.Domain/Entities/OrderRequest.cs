@@ -18,7 +18,7 @@ namespace BackEndAje.Api.Domain.Entities
         public int LogoId { get; set; }
         public string Modelo { get; set; }
         public int ProductSizeId { get; set; }
-        public int? OrderStatusId { get; set; }
+        public int OrderStatusId { get; set; }
 
         public bool? IsActive { get; set; }
         public User Supervisor { get; set; }

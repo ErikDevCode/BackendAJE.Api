@@ -232,6 +232,8 @@
                 .ThenInclude(c => c!.Region)
                 .Include(c => c.Zone)
                 .Include(c => c.Position)
+                .Include(c => c.UserRoles)
+                .ThenInclude(c => c.Role)
                 .FirstOrDefaultAsync(u => u.UserId == userId);
             return users;
         }
