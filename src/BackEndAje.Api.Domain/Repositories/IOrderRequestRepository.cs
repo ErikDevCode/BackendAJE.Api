@@ -25,5 +25,25 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<OrderRequestStatusHistory>> GetOrderRequestStatusHistoryByOrderRequestId(int orderRequestId);
         
         Task UpdateOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument);
+
+        Task<int> GetTotalOrderRequestStatusCount(
+            int? statusId = null,
+            int? supervisorId = null,
+            int? vendedorId = null,
+            int? regionId = null,
+            int? zoneId = null,
+            int? route = null,
+            int? month = null,
+            int? year = null);
+
+        Task<int> GetTotalOrderRequestReasonCount(
+            int? reasonRequestId = null,
+            int? supervisorId = null,
+            int? vendedorId = null,
+            int? regionId = null,
+            int? zoneId = null,
+            int? route = null,
+            int? month = null,
+            int? year = null);
     }
 }

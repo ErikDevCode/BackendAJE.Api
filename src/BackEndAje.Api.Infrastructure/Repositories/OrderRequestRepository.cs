@@ -186,5 +186,130 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context.OrderRequestDocuments.Update(orderRequestDocument);
             await this._context.SaveChangesAsync();
         }
+
+        public async Task<int> GetTotalOrderRequestStatusCount(
+            int? statusId = null,
+            int? supervisorId = null,
+            int? vendedorId = null,
+            int? regionId = null,
+            int? zoneId = null,
+            int? route = null,
+            int? month = null,
+            int? year = null)
+        {
+            var query = this._context.OrderRequests
+                .Include(c => c.Client)
+                    .ThenInclude(c => c.Seller)
+                        .ThenInclude(s => s!.Cedi)
+                            .ThenInclude(c => c.Region)
+                .Include(o => o.Client)
+                    .ThenInclude(c => c.Seller)
+                        .ThenInclude(s => s!.Zone)
+                .Include(d => d.Supervisor).AsQueryable();
+
+            if (statusId.HasValue)
+            {
+                query = query.Where(x => x.OrderStatusId == statusId.Value);
+            }
+
+            if (supervisorId.HasValue)
+            {
+                query = query.Where(x => x.Supervisor.UserId == supervisorId.Value);
+            }
+
+            if (vendedorId.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.UserId == vendedorId.Value);
+            }
+
+            if (regionId.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.Cedi!.Region!.RegionId == regionId.Value);
+            }
+
+            if (zoneId.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.Zone!.ZoneId == zoneId.Value);
+            }
+
+            if (route.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.Route == route.Value);
+            }
+            if (month.HasValue && year.HasValue)
+            {
+                query = query.Where(x => x.CreatedAt.Month == month.Value &&
+                                         x.CreatedAt.Year == year.Value);
+            }
+            else if (year.HasValue)
+            {
+                query = query.Where(x => x.CreatedAt.Year == year.Value);
+            }
+
+            return await query.CountAsync();
+        }
+
+        public async Task<int> GetTotalOrderRequestReasonCount(
+            int? reasonRequestId = null,
+            int? supervisorId = null,
+            int? vendedorId = null,
+            int? regionId = null,
+            int? zoneId = null,
+            int? route = null,
+            int? month = null,
+            int? year = null)
+        {
+            var query = this._context.OrderRequests
+                .Include(c => c.Client)
+                .ThenInclude(c => c.Seller)
+                .ThenInclude(s => s!.Cedi)
+                .ThenInclude(c => c.Region)
+                .Include(o => o.Client)
+                .ThenInclude(c => c.Seller)
+                .ThenInclude(s => s!.Zone)
+                .Include(d => d.Supervisor).AsQueryable();
+
+            if (reasonRequestId.HasValue)
+            {
+                query = query.Where(x => x.ReasonRequestId == reasonRequestId.Value);
+            }
+
+            if (supervisorId.HasValue)
+            {
+                query = query.Where(x => x.Supervisor.UserId == supervisorId.Value);
+            }
+
+            if (vendedorId.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.UserId == vendedorId.Value);
+            }
+
+            if (regionId.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.Cedi!.Region!.RegionId == regionId.Value);
+            }
+
+            if (zoneId.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.Zone!.ZoneId == zoneId.Value);
+            }
+
+            if (route.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.Route == route.Value);
+            }
+
+            if (month.HasValue && year.HasValue)
+            {
+                query = query.Where(x => x.CreatedAt.Month == month.Value &&
+                                         x.CreatedAt.Year == year.Value);
+            }
+            else if (year.HasValue)
+            {
+                query = query.Where(x => x.CreatedAt.Year == year.Value);
+            }
+
+            return await query.CountAsync();
+        }
     }
 }
