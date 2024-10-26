@@ -58,7 +58,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return (await this._context.OrderRequestDocuments.AsNoTracking().FirstOrDefaultAsync(r => r.DocumentId == id))!;
         }
 
-        public async Task<List<OrderRequest>> GetAllOrderRequestAsync(int pageNumber, int pageSize, int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate)
+        public async Task<List<OrderRequest>> GetAllOrderRequestAsync(int pageNumber, int pageSize, int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
         {
             var query = this._context.OrderRequests
                 .Include(o => o.Supervisor)
@@ -82,6 +82,16 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .Include(o => o.OrderRequestDocuments)
                 .Include(o => o.OrderStatus)
                 .AsQueryable();
+
+            if (supervisorId.HasValue)
+            {
+                query = query.Where(o => o.Supervisor.UserId == supervisorId.Value);
+            }
+
+            if (vendedorId.HasValue)
+            {
+                query = query.Where(o => o.Client.Seller!.UserId == vendedorId.Value);
+            }
 
             if (clientCode.HasValue)
             {
@@ -114,9 +124,19 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<int> GetTotalOrderRequestCountAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate)
+        public async Task<int> GetTotalOrderRequestCountAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
         {
             var query = this._context.OrderRequests.AsQueryable();
+
+            if (supervisorId.HasValue)
+            {
+                query = query.Where(o => o.Supervisor.UserId == supervisorId.Value);
+            }
+
+            if (vendedorId.HasValue)
+            {
+                query = query.Where(o => o.Client.Seller!.UserId == vendedorId.Value);
+            }
 
             if (clientCode.HasValue)
             {

@@ -54,7 +54,8 @@ namespace BackEndAje.Api.Presentation.Controllers
             [FromQuery] DateTime? StartDate = null,
             [FromQuery] DateTime? EndDate = null)
         {
-            var query = new GetAllOrderRequestsQuery(pageNumber ?? 1, pageSize ?? 10, ClientCode, StatusCode, ReasonRequestId, StartDate, EndDate);
+            var userId = this.GetUserId();
+            var query = new GetAllOrderRequestsQuery(userId, pageNumber ?? 1, pageSize ?? 10, ClientCode, StatusCode, ReasonRequestId, StartDate, EndDate);
             var roles = await this._mediator.Send(query);
             return this.Ok(new Response { Result = roles });
         }
