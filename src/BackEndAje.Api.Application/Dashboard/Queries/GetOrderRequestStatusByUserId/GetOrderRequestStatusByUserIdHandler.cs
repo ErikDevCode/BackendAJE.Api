@@ -20,69 +20,57 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetOrderRequestStatusByUs
             var user = await this._userRepository.GetUserByIdAsync(requestStatus.userId);
             var role = user!.UserRoles.Select(x => x.Role.RoleName).FirstOrDefault();
 
-            var attended = 0;
-            var generated = 0;
-            var refused = 0;
-            var approved = 0;
-            var programmed = 0;
-            var falseFreight = 0;
-            var canceled = 0;
-
-            switch (role)
+            var statusIds = new Dictionary<string, int>
             {
-                case RolesConst.Administrador:
-                    attended = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 5, regionId: requestStatus.regionId, zoneId: requestStatus.zoneId, route: requestStatus.route, month: requestStatus.month, year: requestStatus.year);
-                    generated = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 1, regionId: requestStatus.regionId, zoneId: requestStatus.zoneId, route: requestStatus.route, month: requestStatus.month, year: requestStatus.year);
-                    refused = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 3, regionId: requestStatus.regionId, zoneId: requestStatus.zoneId, route: requestStatus.route, month: requestStatus.month, year: requestStatus.year);
-                    approved = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 2, regionId: requestStatus.regionId, zoneId: requestStatus.zoneId, route: requestStatus.route, month: requestStatus.month, year: requestStatus.year);
-                    programmed = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 4, regionId: requestStatus.regionId, zoneId: requestStatus.zoneId, route: requestStatus.route, month: requestStatus.month, year: requestStatus.year);
-                    falseFreight = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 6, regionId: requestStatus.regionId, zoneId: requestStatus.zoneId, route: requestStatus.route, month: requestStatus.month, year: requestStatus.year);
-                    canceled = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 7, regionId: requestStatus.regionId, zoneId: requestStatus.zoneId, route: requestStatus.route, month: requestStatus.month, year: requestStatus.year);
-                    break;
-                case RolesConst.Jefe:
-                case RolesConst.ProveedorLogistico:
-                case RolesConst.Trade:
-                    attended = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 5, month: requestStatus.month, year: requestStatus.year);
-                    generated = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 1, month: requestStatus.month, year: requestStatus.year);
-                    refused = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 3, month: requestStatus.month, year: requestStatus.year);
-                    approved = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 2, month: requestStatus.month, year: requestStatus.year);
-                    programmed = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 4, month: requestStatus.month, year: requestStatus.year);
-                    falseFreight = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 6, month: requestStatus.month, year: requestStatus.year);
-                    canceled = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 7, month: requestStatus.month, year: requestStatus.year);
-                    break;
-                case RolesConst.Supervisor:
-                    attended = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 5, supervisorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    generated = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 1, supervisorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    refused = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 3, supervisorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    approved = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 2, supervisorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    programmed = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 4, supervisorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    falseFreight = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 6, supervisorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    canceled = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 7, supervisorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    break;
-                case RolesConst.Vendedor:
-                    attended = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 5, vendedorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    generated = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 1, vendedorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    refused = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 3, vendedorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    approved = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 2, vendedorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    programmed = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 4, vendedorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    falseFreight = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 6, vendedorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    canceled = await this._orderRequestRepository.GetTotalOrderRequestStatusCount(statusId: 7, vendedorId: requestStatus.userId, month: requestStatus.month, year: requestStatus.year);
-                    break;
-            }
-
-
-            var result = new List<GetOrderRequestStatusByUserIdResult>
-            {
-                new GetOrderRequestStatusByUserIdResult { Type = "Atendidos", Value = attended },
-                new GetOrderRequestStatusByUserIdResult { Type = "Generados", Value = generated },
-                new GetOrderRequestStatusByUserIdResult { Type = "Rechazados", Value = refused },
-                new GetOrderRequestStatusByUserIdResult { Type = "Aprobado", Value = approved },
-                new GetOrderRequestStatusByUserIdResult { Type = "Programado", Value = programmed },
-                new GetOrderRequestStatusByUserIdResult { Type = "Falso Flete", Value = falseFreight },
-                new GetOrderRequestStatusByUserIdResult { Type = "Anulado", Value = canceled },
+                { "Atendidos", 5 },
+                { "Generados", 1 },
+                { "Rechazados", 3 },
+                { "Aprobado", 2 },
+                { "Programado", 4 },
+                { "Falso Flete", 6 },
+                { "Anulado", 7 },
             };
 
-            return result;
+            var results = new List<GetOrderRequestStatusByUserIdResult>();
+
+            foreach (var (statusName, statusId) in statusIds)
+            {
+                var count = await this.GetOrderRequestCountByRole(role!, statusId, requestStatus);
+                results.Add(new GetOrderRequestStatusByUserIdResult { Type = statusName, Value = count });
+            }
+
+            return results;
+        }
+
+        private async Task<int> GetOrderRequestCountByRole(string role, int statusId, GetOrderRequestStatusByUserIdQuery requestStatus)
+        {
+            return role switch
+            {
+                RolesConst.Administrador or RolesConst.Jefe or RolesConst.ProveedorLogistico or RolesConst.Trade =>
+                    await this._orderRequestRepository.GetTotalOrderRequestStatusCount(
+                        statusId: statusId,
+                        regionId: requestStatus.regionId,
+                        zoneId: requestStatus.zoneId,
+                        route: requestStatus.route,
+                        month: requestStatus.month,
+                        year: requestStatus.year),
+
+                RolesConst.Supervisor =>
+                    await this._orderRequestRepository.GetTotalOrderRequestStatusCount(
+                        statusId: statusId,
+                        supervisorId: requestStatus.userId,
+                        month: requestStatus.month,
+                        year: requestStatus.year),
+
+                RolesConst.Vendedor =>
+                    await this._orderRequestRepository.GetTotalOrderRequestStatusCount(
+                        statusId: statusId,
+                        vendedorId: requestStatus.userId,
+                        month: requestStatus.month,
+                        year: requestStatus.year),
+
+                _ => 0
+            };
         }
     }
 }
