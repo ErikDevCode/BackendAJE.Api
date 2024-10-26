@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Exceptions;
+
 namespace BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode
 {
     using AutoMapper;
@@ -17,7 +19,12 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode
 
         public async Task<GetClientByClientCodeResult> Handle(GetClientByClientCodeQuery request, CancellationToken cancellationToken)
         {
-            var clients = await this._clientRepository.GetClientByClientCode(request.ClientCode);
+            var clients = await this._clientRepository.GetClientByClientCode(request.ClientCode, request.CediId);
+            if (clients == null)
+            {
+                throw new NotFoundException($"Cliente con código {request.ClientCode} no encontrado en la sucursal");
+            }
+
             var result = this._mapper.Map<GetClientByClientCodeResult>(clients);
             return result;
         }

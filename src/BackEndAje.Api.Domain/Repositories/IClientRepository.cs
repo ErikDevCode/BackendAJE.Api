@@ -10,7 +10,7 @@ namespace BackEndAje.Api.Domain.Repositories
 
         Task<Client?> GetClientByDocumentNumber(string documentNumber);
         
-        Task<Client?> GetClientByClientCode(int clientCode);
+        Task<Client?> GetClientByClientCode(int clientCode, int cediId);
 
         Task<List<Client>> GetClients(int pageNumber, int pageSize);
         

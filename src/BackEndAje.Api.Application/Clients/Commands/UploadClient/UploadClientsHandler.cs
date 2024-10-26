@@ -42,7 +42,7 @@ namespace BackEndAje.Api.Application.Clients.Commands.UploadClient
                     var clientCode = int.Parse(worksheet.Cells[row, 1].Text);
                     var route = int.Parse(worksheet.Cells[row, 8].Text);
                     var existingUser = await this._userRepository.GetUserByRouteAsync(route);
-                    var existingClient = await this._clientRepository.GetClientByClientCode(clientCode);
+                    var existingClient = await this._clientRepository.GetClientByClientCode(clientCode, existingUser!.Cedi!.CediId);
 
                     var documentTypeName = worksheet.Cells[row, 3].Text.ToUpper();
                     if (!documentTypeDict.TryGetValue(documentTypeName, out var documentType))
