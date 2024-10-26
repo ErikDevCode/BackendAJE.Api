@@ -8,6 +8,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
     using BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Exceptions;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -64,12 +65,19 @@ namespace BackEndAje.Api.Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<GetClientByClientCodeResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [Route("clientCode/{clientCode}")]
-        public async Task<IActionResult> GetClientByClientCode(int clientCode)
+        [Route("clientCode/{clientCode}/cediId/{cediId}")]
+        public async Task<IActionResult> GetClientByClientCode(int clientCode, int cediId)
         {
-            var query = new GetClientByClientCodeQuery(clientCode);
-            var clients = await this._mediator.Send(query);
-            return this.Ok(new Response { Result = clients });
+            try
+            {
+                var query = new GetClientByClientCodeQuery(clientCode, cediId);
+                var client = await this._mediator.Send(query);
+                return this.Ok(new Response { Result = client });
+            }
+            catch (NotFoundException ex)
+            {
+                return this.NotFound(new { Message = ex.Message });
+            }
         }
 
         [HttpPut]

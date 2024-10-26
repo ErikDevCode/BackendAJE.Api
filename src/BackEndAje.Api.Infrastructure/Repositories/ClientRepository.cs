@@ -32,7 +32,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.DocumentNumber == documentNumber);
         }
 
-        public async Task<Client?> GetClientByClientCode(int clientCode)
+        public async Task<Client?> GetClientByClientCode(int clientCode, int cediId)
         {
             var client = await this._context.Clients
                 .Where(c => c.ClientCode == clientCode)
@@ -41,13 +41,22 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .Include(c => c.District)
                 .FirstOrDefaultAsync();
 
-            if (client?.Route != null)
+            if (client?.Route == null)
             {
-                client.Seller = await this._context.Users
-                    .Include(u => u.Cedi)
-                    .Include(u => u.Zone)
-                    .SingleOrDefaultAsync(u => u.Route == client.Route);
+                return null;
             }
+
+            var seller = await this._context.Users
+                .Include(u => u.Cedi)
+                .Include(u => u.Zone)
+                .SingleOrDefaultAsync(u => u.Route == client.Route && u.CediId == cediId);
+
+            if (seller == null)
+            {
+                return null;
+            }
+
+            client.Seller = seller;
 
             return client;
         }
