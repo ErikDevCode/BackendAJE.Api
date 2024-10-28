@@ -41,7 +41,7 @@
             var user = await this._userRepository.GetUserByEmailOrRouteAsync(routeOrEmail);
             if (user == null)
             {
-                throw new KeyNotFoundException($"User with email or route '{routeOrEmail}' not found.");
+                throw new KeyNotFoundException($"Usuario con email o ruta: '{routeOrEmail}' no encontrado.");
             }
 
             return user;

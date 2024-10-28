@@ -21,7 +21,7 @@
 
             if (appUser == null)
             {
-                throw new KeyNotFoundException($"User with Route or email '{request.RouteOrEmail}' not found.");
+                throw new KeyNotFoundException($"Usuario con Ruta o email '{request.RouteOrEmail}' no encontrado.");
             }
 
             appUser.PasswordHash = this._hashingService.HashPassword(request.NewPassword);

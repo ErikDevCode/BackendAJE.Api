@@ -17,7 +17,7 @@ namespace BackEndAje.Api.Application.Actions.Commands.DeleteAction
             var existingAction = await this._actionRepository.GetActionByIdAsync(request.DeleteAction.ActionId);
             if (existingAction == null)
             {
-                throw new InvalidOperationException($"ActionId '{request.DeleteAction.ActionId}' not exists.");
+                throw new InvalidOperationException($"ActionId '{request.DeleteAction.ActionId}' no existe.");
             }
 
             await this._actionRepository.DeleteActionAsync(existingAction);

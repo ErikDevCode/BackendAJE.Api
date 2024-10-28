@@ -18,7 +18,7 @@ namespace BackEndAje.Api.Application.Permissions.Commands.DeletePermission
             var existingPermission = await this._permissionRepository.GetPermissionByIdAsync(request.DeletePermission.PermissionId);
             if (existingPermission == null)
             {
-                throw new InvalidOperationException($"PermissionId '{request.DeletePermission.PermissionId}' not exists.");
+                throw new InvalidOperationException($"Permison con ID '{request.DeletePermission.PermissionId}' no existe.");
             }
 
             await this._permissionRepository.DeletePermissionAsync(existingPermission);

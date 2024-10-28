@@ -20,14 +20,14 @@
 
             if (user == null)
             {
-                throw new KeyNotFoundException($"User with ID '{request.UserId}' not found.");
+                throw new KeyNotFoundException($"Usuario con ID '{request.UserId}' no encontrado.");
             }
 
             var currentRoles = await this._userRepository.GetUserRolesAsync(user.UserId);
 
             if (currentRoles.Any(roleId => roleId == request.RoleId))
             {
-                throw new InvalidOperationException($"Role with ID '{request.RoleId}' is already assigned to user with ID '{user.UserId}'.");
+                throw new InvalidOperationException($"Rol con ID '{request.RoleId}' ya esta asignado al usuario con ID '{user.UserId}'.");
             }
 
             var roleById = await this._roleRepository.GetRoleByIdAsync(request.RoleId);

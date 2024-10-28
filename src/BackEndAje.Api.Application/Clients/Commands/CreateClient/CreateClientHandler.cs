@@ -23,7 +23,7 @@ namespace BackEndAje.Api.Application.Clients.Commands.CreateClient
             var existingClient = await this._clientRepository.GetClientByDocumentNumber(request.DocumentNumber);
             if (existingClient != null)
             {
-                throw new InvalidOperationException($"Client '{request.DocumentNumber}' already exists.");
+                throw new InvalidOperationException($"Cliente con documento: '{request.DocumentNumber}' ya existe.");
             }
 
             var existingUser = await this._userRepository.GetUserByRouteAsync(request.Route);

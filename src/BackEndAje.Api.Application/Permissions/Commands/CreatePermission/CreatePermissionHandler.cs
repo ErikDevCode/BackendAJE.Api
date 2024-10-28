@@ -23,7 +23,7 @@ namespace BackEndAje.Api.Application.Permissions.Commands.CreatePermission
 
             if (existingRole != null)
             {
-                throw new InvalidOperationException($"Permission '{request.Permission.PermissionName}' already exists.");
+                throw new InvalidOperationException($"Permiso: '{request.Permission.PermissionName}' ya existe.");
             }
 
             var newRole = this._mapper.Map<Permission>(request.Permission);

@@ -19,19 +19,19 @@ namespace BackEndAje.Api.Application.Users.Commands.RemoveRoleToUser
             var user = await this._userRepository.GetUserWithRoleByIdAsync(request.UserId);
             if (user == null)
             {
-                throw new KeyNotFoundException($"User with ID '{request.UserId}' not found.");
+                throw new KeyNotFoundException($"Usuario Con ID '{request.UserId}' no encontrado.");
             }
 
             var role = await this._roleRepository.GetRoleByIdAsync(request.RoleId);
             if (role == null)
             {
-                throw new KeyNotFoundException($"Role with ID '{request.RoleId}' not found.");
+                throw new KeyNotFoundException($"Rol con ID '{request.RoleId}' no encontrado.");
             }
 
             var userRoles = await this._userRepository.GetUserRolesAsync(user.UserId);
             if (!userRoles.Contains(role.RoleId))
             {
-                throw new InvalidOperationException($"User with ID '{request.UserId}' does not have the role '{role.RoleName}' assigned.");
+                throw new InvalidOperationException($"Usuario con ID '{request.UserId}' no tiene el rol '{role.RoleName}' asignado.");
             }
 
             await this._userRepository.RemoveUserRoleAsync(user.UserId, role.RoleId);

@@ -21,7 +21,7 @@ namespace BackEndAje.Api.Application.Positions.Commands.CreatePosition
             var positionExists = await this._positionRepository.PositionExistsAsync(request.PositionName);
             if (positionExists)
             {
-                throw new InvalidOperationException($"Cargo '{request.PositionName}' already exists.");
+                throw new InvalidOperationException($"Cargo: '{request.PositionName}' ya existe.");
             }
 
             var newPosition = this._mapper.Map<Position>(request);

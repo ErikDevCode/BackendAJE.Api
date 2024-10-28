@@ -21,7 +21,7 @@ namespace BackEndAje.Api.Application.Permissions.Commands.UpdatePermission
             var existingPermission = listPermissions.FirstOrDefault(action => action.PermissionId == request.Permission.PermissionId);
             if (existingPermission == null)
             {
-                throw new InvalidOperationException($"Permission with ID '{request.Permission.PermissionId}' not exists.");
+                throw new InvalidOperationException($"Permiso con ID '{request.Permission.PermissionId}' no existe.");
             }
 
             this._mapper.Map(request.Permission, existingPermission);

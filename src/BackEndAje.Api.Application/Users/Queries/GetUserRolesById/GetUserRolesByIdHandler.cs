@@ -19,7 +19,7 @@
             var roles = await this._userRepository.GetUserRolesAsync(request.UserId);
             if (roles == null || roles.Count == 0)
             {
-                throw new KeyNotFoundException($"No roles found for user with ID {request.UserId}.");
+                throw new KeyNotFoundException($"No hay roles encontrados para el usuario ID {request.UserId}.");
             }
 
             var result = new List<GetUserRolesByIdResult>();
@@ -30,7 +30,7 @@
 
                 if (role == null)
                 {
-                    throw new KeyNotFoundException($"Role with ID {roleId} not found.");
+                    throw new KeyNotFoundException($"Rol con ID {roleId} no encontrado.");
                 }
 
                 result.Add(new GetUserRolesByIdResult

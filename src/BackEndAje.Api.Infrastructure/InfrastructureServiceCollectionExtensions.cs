@@ -39,6 +39,7 @@
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IOrderRequestRepository, OrderRequestRepository>();
             services.AddScoped<IPositionRepository, PositionRepository>();
+            services.AddScoped<IAssetRepository, AssetRepository>();
 
             return services;
         }

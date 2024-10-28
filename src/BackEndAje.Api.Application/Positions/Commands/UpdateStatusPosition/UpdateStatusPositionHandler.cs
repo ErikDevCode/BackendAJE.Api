@@ -17,7 +17,7 @@ namespace BackEndAje.Api.Application.Positions.Commands.UpdateStatusPosition
             var existingPosition = await this._positionRepository.GetPositionByIdAsync(request.PositionId);
             if (existingPosition == null)
             {
-                throw new InvalidOperationException($"Cargo ID '{request.PositionId}' not exists.");
+                throw new InvalidOperationException($"Cargo con ID '{request.PositionId}' no existe.");
             }
 
             existingPosition.IsActive = existingPosition.IsActive is false;

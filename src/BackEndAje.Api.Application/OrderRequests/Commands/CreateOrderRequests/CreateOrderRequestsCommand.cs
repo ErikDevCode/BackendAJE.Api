@@ -25,12 +25,6 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
         public string Reference { get; set; }
 
-        public int ProductTypeId { get; set; }
-
-        public int LogoId { get; set; }
-
-        public string Modelo { get; set; }
-
         public int ProductSizeId { get; set; }
 
         public List<CreateOrderRequestDocumentDto> Documents { get; set; }

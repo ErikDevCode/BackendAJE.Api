@@ -22,9 +22,9 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetOrderRequestStatusByUs
 
             var statusIds = new Dictionary<string, int>
             {
-                { "Atendidos", 5 },
-                { "Generados", 1 },
-                { "Rechazados", 3 },
+                { "Atendido", 5 },
+                { "Generado", 1 },
+                { "Rechazado", 3 },
                 { "Aprobado", 2 },
                 { "Programado", 4 },
                 { "Falso Flete", 6 },

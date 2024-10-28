@@ -20,7 +20,7 @@ namespace BackEndAje.Api.Application.Roles.Commands.UpdateRole
             var existingRole = await this._roleRepository.GetRoleByIdAsync(request.Role.RoleId);
             if (existingRole == null)
             {
-                throw new InvalidOperationException($"Role '{request.Role.RoleName}' not exists.");
+                throw new InvalidOperationException($"Rol: '{request.Role.RoleName}' no existe.");
             }
 
             this._mapper.Map(request.Role, existingRole);

@@ -48,7 +48,7 @@ namespace BackEndAje.Api.Presentation.Controllers
             var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
             {
-                throw new UnauthorizedAccessException("User ID not found or invalid in token.");
+                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
             }
 
             return userId;

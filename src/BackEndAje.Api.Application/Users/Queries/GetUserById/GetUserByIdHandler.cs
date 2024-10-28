@@ -1,6 +1,7 @@
 namespace BackEndAje.Api.Application.Users.Queries.GetUserById
 {
     using AutoMapper;
+    using BackEndAje.Api.Application.Exceptions;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 
@@ -18,6 +19,11 @@ namespace BackEndAje.Api.Application.Users.Queries.GetUserById
         public async Task<GetUserByIdResult> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             var users = await this._userRepository.GetUserByIdAsync(request.userId);
+            if (users == null)
+            {
+                throw new KeyNotFoundException($"USuario con ID '{request.userId}' no existe.");
+            }
+
             var result = this._mapper.Map<GetUserByIdResult>(users);
             return result;
         }

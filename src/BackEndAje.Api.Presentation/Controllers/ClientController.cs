@@ -8,7 +8,6 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
     using BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode;
     using BackEndAje.Api.Application.Dtos;
-    using BackEndAje.Api.Application.Exceptions;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -68,16 +67,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("clientCode/{clientCode}/cediId/{cediId}")]
         public async Task<IActionResult> GetClientByClientCode(int clientCode, int cediId)
         {
-            try
-            {
-                var query = new GetClientByClientCodeQuery(clientCode, cediId);
-                var client = await this._mediator.Send(query);
-                return this.Ok(new Response { Result = client });
-            }
-            catch (NotFoundException ex)
-            {
-                return this.NotFound(new { Message = ex.Message });
-            }
+            var query = new GetClientByClientCodeQuery(clientCode, cediId);
+            var client = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = client });
         }
 
         [HttpPut]
@@ -89,7 +81,12 @@ namespace BackEndAje.Api.Presentation.Controllers
             var userId = this.GetUserId();
             var command = new DisableClientCommand { ClientId = clientId, UpdatedBy = userId };
             var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            if (result)
+            {
+                return this.Ok(new { Message = $"Cliente con ID: '{command.ClientId}' fue actualizado satisfactoriamente." });
+            }
+
+            return this.NotFound(new { Message = $"Cliente con ID: '{command.ClientId}' no encontrado o ya se encuentra eliminado." });
         }
 
         [HttpPost]
@@ -100,7 +97,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         {
             if (file == null || file.Length == 0)
             {
-                return this.BadRequest("No file uploaded.");
+                return this.BadRequest("No hay documento uploaded.");
             }
 
             var userId = this.GetUserId();
@@ -121,7 +118,7 @@ namespace BackEndAje.Api.Presentation.Controllers
             var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
             {
-                throw new UnauthorizedAccessException("User ID not found or invalid in token.");
+                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
             }
 
             return userId;
