@@ -20,7 +20,7 @@ namespace BackEndAje.Api.Application.Positions.Commands.UpdatePosition
             var existingPosition = await this._positionRepository.GetPositionByIdAsync(request.PositionId);
             if (existingPosition == null)
             {
-                throw new InvalidOperationException($"Cargo '{request.PositionName}' not exists.");
+                throw new InvalidOperationException($"Cargo: '{request.PositionName}' no existe.");
             }
 
             this._mapper.Map(request, existingPosition);

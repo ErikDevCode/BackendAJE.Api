@@ -44,7 +44,7 @@
             var existingUser = await this._userRepository.GetUserByEmailOrRouteAsync(emailOrRoute!);
             if (existingUser != null)
             {
-                throw new ArgumentException("Email o Ruta already in use.");
+                throw new ArgumentException("Email o Ruta ya se encuentra en uso.");
             }
         }
 

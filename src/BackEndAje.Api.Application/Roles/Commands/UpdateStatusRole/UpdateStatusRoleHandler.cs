@@ -17,7 +17,7 @@ namespace BackEndAje.Api.Application.Roles.Commands.UpdateStatusRole
             var existingRole = await this._roleRepository.GetRoleByIdAsync(request.RoleUpdateStatus.RoleId);
             if (existingRole == null)
             {
-                throw new InvalidOperationException($"RoleId '{request.RoleUpdateStatus.RoleId}' not exists.");
+                throw new InvalidOperationException($"Rol con ID '{request.RoleUpdateStatus.RoleId}' no existe.");
             }
 
             existingRole.IsActive = existingRole.IsActive is false;

@@ -20,7 +20,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Documents.Commands.UpdateDocu
             var orderRequestDocument = await this._orderRequestRepository.GetOrderRequestDocumentById(request.DocumentId);
             if (orderRequestDocument == null)
             {
-                throw new InvalidOperationException($"DocumentId '{request.DocumentId}' not exists.");
+                throw new InvalidOperationException($"Documento con ID '{request.DocumentId}' no existe.");
             }
 
             this._mapper.Map(request, orderRequestDocument);

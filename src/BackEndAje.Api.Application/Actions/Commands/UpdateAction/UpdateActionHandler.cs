@@ -21,7 +21,7 @@ namespace BackEndAje.Api.Application.Actions.Commands.UpdateAction
             var existingAction = listActions.FirstOrDefault(action => action.ActionId == request.Action.ActionId);
             if (existingAction == null)
             {
-                throw new InvalidOperationException($"Action with ID '{request.Action.ActionId}' not exists.");
+                throw new InvalidOperationException($"Action con ID '{request.Action.ActionId}' no existe.");
             }
 
             this._mapper.Map(request.Action, existingAction);

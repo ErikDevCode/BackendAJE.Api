@@ -23,7 +23,7 @@ namespace BackEndAje.Api.Application.Actions.Commands.CreateAction
 
             if (existingAction != null)
             {
-                throw new InvalidOperationException($"Action '{request.Action.ActionName}' already exists.");
+                throw new InvalidOperationException($"Action '{request.Action.ActionName}' ya existe.");
             }
 
             var newAction = this._mapper.Map<Action>(request.Action);

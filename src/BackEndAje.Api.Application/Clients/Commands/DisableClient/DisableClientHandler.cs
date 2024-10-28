@@ -1,10 +1,9 @@
 namespace BackEndAje.Api.Application.Clients.Commands.DisableClient
 {
-    using AutoMapper;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 
-    public class DisableClientHandler : IRequestHandler<DisableClientCommand, Unit>
+    public class DisableClientHandler : IRequestHandler<DisableClientCommand, bool>
     {
         private readonly IClientRepository _clientRepository;
 
@@ -13,18 +12,18 @@ namespace BackEndAje.Api.Application.Clients.Commands.DisableClient
             this._clientRepository = clientRepository;
         }
 
-        public async Task<Unit> Handle(DisableClientCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DisableClientCommand request, CancellationToken cancellationToken)
         {
             var existingClient = await this._clientRepository.GetClientById(request.ClientId);
             if (existingClient == null)
             {
-                throw new InvalidOperationException($"Client with code '{request.ClientId}' not exists.");
+                throw new InvalidOperationException($"Cliente con ID '{request.ClientId}' no existe.");
             }
 
             existingClient.IsActive = existingClient.IsActive is false;
             existingClient.UpdatedBy = request.UpdatedBy;
             await this._clientRepository.UpdateClientAsync(existingClient);
-            return Unit.Value;
+            return true;
         }
     }
 }

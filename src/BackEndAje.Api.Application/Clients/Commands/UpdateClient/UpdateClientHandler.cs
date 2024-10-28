@@ -23,12 +23,14 @@ namespace BackEndAje.Api.Application.Clients.Commands.UpdateClient
             var existingClient = await this._clientRepository.GetClientById(request.ClientId);
             if (existingClient == null)
             {
-                throw new InvalidOperationException($"Client with ID '{request.ClientId}' not exists.");
+                throw new InvalidOperationException($"Cliente con ID '{request.ClientId}' no existe.");
             }
 
             var existingUser = await this._userRepository.GetUserByRouteAsync(request.Route);
             var newClient = this._mapper.Map<Client>(request);
+            newClient.CreatedAt = existingClient.CreatedAt;
             newClient.UserId = existingUser!.UserId;
+            newClient.CreatedBy = existingClient.CreatedBy;
             await this._clientRepository.UpdateClientAsync(newClient);
             return Unit.Value;
         }

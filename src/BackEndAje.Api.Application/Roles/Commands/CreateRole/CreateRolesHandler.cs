@@ -21,7 +21,7 @@ namespace BackEndAje.Api.Application.Roles.Commands.CreateRole
             var roleExists = await this._roleRepository.RoleExistsAsync(request.Role.RoleName);
             if (roleExists)
             {
-                throw new InvalidOperationException($"Role '{request.Role.RoleName}' already exists.");
+                throw new InvalidOperationException($"Rol: '{request.Role.RoleName}' ya existe.");
             }
 
             var newRole = this._mapper.Map<Role>(request.Role);

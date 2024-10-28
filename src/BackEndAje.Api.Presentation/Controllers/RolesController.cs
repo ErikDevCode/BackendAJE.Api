@@ -71,10 +71,10 @@ namespace BackEndAje.Api.Presentation.Controllers
             var result = await this._mediator.Send(command);
             if (result)
             {
-                return this.Ok(new { Message = $"RoleId '{roleId}' has been update status successfully." });
+                return this.Ok(new { Message = $"Role con ID: '{roleId}' fue actualizado satisfactoriamente." });
             }
 
-            return this.NotFound(new { Message = $"RoleId '{roleId}' not found or already deleted." });
+            return this.NotFound(new { Message = $"Role con ID: '{roleId}' no encontrado o ya se encuentra eliminado." });
         }
 
         [HttpPost]
@@ -106,7 +106,7 @@ namespace BackEndAje.Api.Presentation.Controllers
             var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
             {
-                throw new UnauthorizedAccessException("User ID not found or invalid in token.");
+                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
             }
 
             return userId;

@@ -45,16 +45,6 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById
 
         public string Reference { get; set; }
 
-        public int ProductTypeId { get; set; }
-
-        public ProductTypeDto ProductType { get; set; }
-
-        public int LogoId { get; set; }
-
-        public LogoDto Logo { get; set; }
-
-        public string Modelo { get; set; }
-
         public int ProductSizeId { get; set; }
 
         public ProductSizeDto ProductSize { get; set; }

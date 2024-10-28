@@ -69,7 +69,7 @@ namespace BackEndAje.Api.Presentation.Controllers
 
             if (result == null)
             {
-                return this.NotFound(new { Message = $"Order request with ID {orderRequestId} not found." });
+                return this.NotFound(new { Message = $"Solicitud con ID {orderRequestId} no encontrado." });
             }
 
             return this.Ok(result);
@@ -97,7 +97,7 @@ namespace BackEndAje.Api.Presentation.Controllers
 
             if (result == null)
             {
-                return this.NotFound(new { Message = $"Order request with ID {orderRequestId} not found." });
+                return this.NotFound(new { Message = $"Solicitud con ID {orderRequestId} no encontrado." });
             }
 
             return this.Ok(result);
@@ -149,7 +149,7 @@ namespace BackEndAje.Api.Presentation.Controllers
 
             if (result == null)
             {
-                return this.NotFound(new { Message = $"Order request with ID {documentId} not found." });
+                return this.NotFound(new { Message = $"Documento con ID: {documentId} no encontrado." });
             }
 
             return this.File(result.DocumentContent, result.ContentType, result.FileName);
@@ -160,7 +160,7 @@ namespace BackEndAje.Api.Presentation.Controllers
             var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
             {
-                throw new UnauthorizedAccessException("User ID not found or invalid in token.");
+                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
             }
 
             return userId;

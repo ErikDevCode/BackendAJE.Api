@@ -17,7 +17,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusDocument
             var existingDocument = await this._orderRequestRepository.GetOrderRequestDocumentById(request.DocumentId);
             if (existingDocument == null)
             {
-                throw new InvalidOperationException($"Document with Id '{request.DocumentId}' not exists.");
+                throw new InvalidOperationException($"Documento con ID '{request.DocumentId}' no existe.");
             }
 
             existingDocument.IsActive = existingDocument.IsActive is false;

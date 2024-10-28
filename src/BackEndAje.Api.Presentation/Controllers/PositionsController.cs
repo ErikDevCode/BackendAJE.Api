@@ -66,10 +66,10 @@ namespace BackEndAje.Api.Presentation.Controllers
             var result = await this._mediator.Send(command);
             if (result)
             {
-                return this.Ok(new { Message = $"PositionId '{positionId}' has been update status successfully." });
+                return this.Ok(new { Message = $"Cargo con ID: '{positionId}' fue actualizado correctamente." });
             }
 
-            return this.NotFound(new { Message = $"PositionId '{positionId}' not found or already deleted." });
+            return this.NotFound(new { Message = $"Cargo con ID: '{positionId}' no encontrado o ya se encuentra eliminado." });
         }
 
         private int GetUserId()
@@ -77,7 +77,7 @@ namespace BackEndAje.Api.Presentation.Controllers
             var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
             {
-                throw new UnauthorizedAccessException("User ID not found or invalid in token.");
+                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
             }
 
             return userId;
