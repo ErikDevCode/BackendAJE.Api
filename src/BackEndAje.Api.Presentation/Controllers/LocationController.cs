@@ -49,8 +49,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<GetZoneByCediIdResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [Route("GetZoneByCediId/{cediId}")]
-        public async Task<IActionResult> GetZoneByCediId(int cediId)
+        [Route("GetZoneByCediId")]
+        public async Task<IActionResult> GetZoneByCediId(int? cediId)
         {
             var query = new GetZoneByCediIdQuery
             {
