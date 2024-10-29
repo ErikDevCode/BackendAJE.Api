@@ -4,6 +4,6 @@ namespace BackEndAje.Api.Application.Locations.Queries.GetZoneByCediId
 
     public class GetZoneByCediIdQuery : IRequest<List<GetZoneByCediIdResult>>
     {
-        public int CediId { get; set; }
+        public int? CediId { get; set; }
     }
 }

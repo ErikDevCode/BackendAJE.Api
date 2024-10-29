@@ -17,7 +17,9 @@ namespace BackEndAje.Api.Application.Locations.Queries.GetZoneByCediId
 
         public async Task<List<GetZoneByCediIdResult>> Handle(GetZoneByCediIdQuery request, CancellationToken cancellationToken)
         {
-            var zones = await this._zoneRepository.GetZonesByCediIdAsync(request.CediId);
+            var zones = request.CediId.HasValue
+                ? await this._zoneRepository.GetZonesByCediIdAsync(request.CediId.Value)
+                : await this._zoneRepository.GetAllZones();
             var result = this._mapper.Map<List<GetZoneByCediIdResult>>(zones);
             return result;
         }
