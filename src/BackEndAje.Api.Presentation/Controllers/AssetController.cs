@@ -4,12 +4,13 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Asset.Command.CreateAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateStatusAsset;
+    using BackEndAje.Api.Application.Asset.Command.UploadAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAllAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAssetsByCodeAje;
     using BackEndAje.Api.Application.Dtos;
-    using BackEndAje.Api.Application.Exceptions;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
@@ -86,6 +87,30 @@ namespace BackEndAje.Api.Presentation.Controllers
             }
 
             return this.NotFound(new { Message = $"Activo con ID: '{command.AssetId}' no encontrado o ya se encuentra eliminado." });
+        }
+
+        [HttpPost]
+        [Route("upload")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> UploadAssets(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest("No hay Activos uploaded.");
+            }
+
+            var userId = this.GetUserId();
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            var command = new UploadAssetsCommand
+            {
+                FileBytes = memoryStream.ToArray(),
+                CreatedBy = userId,
+                UpdatedBy = userId,
+            };
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
         }
 
         private int GetUserId()
