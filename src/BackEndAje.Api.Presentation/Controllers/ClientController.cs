@@ -97,7 +97,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         {
             if (file == null || file.Length == 0)
             {
-                return this.BadRequest("No hay documento uploaded.");
+                return this.BadRequest("No hay Clientes uploaded.");
             }
 
             var userId = this.GetUserId();
