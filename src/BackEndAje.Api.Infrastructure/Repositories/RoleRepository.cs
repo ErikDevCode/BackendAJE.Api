@@ -99,5 +99,35 @@
             return await this._context.Roles
                 .ToListAsync();
         }
+
+        public async Task<List<PermissionsWithActions>> GetPermissionsWithActionByRoleIdAsync(int roleId)
+        {
+            var permissionsWithActions = await (
+                    from p in this._context.Permissions
+                    from a in this._context.Actions
+                    join mi in this._context.MenuItems on p.Label equals mi.Label into menuItems
+                    from mi in menuItems.DefaultIfEmpty()
+                    join mia in this._context.MenuItemActions on new { mi.MenuItemId, a.ActionId } equals new { mia.MenuItemId, mia.ActionId } into menuItemActions
+                    from mia in menuItemActions.DefaultIfEmpty()
+                    join rp in this._context.RolePermissions on new { PermissionId = p.PermissionId, RoleId = roleId } equals new { rp.PermissionId, rp.RoleId } into rolePermissions
+                    from rp in rolePermissions.DefaultIfEmpty()
+                    join rma in this._context.RoleMenuAccess on new { RolePermissionId = rp.RolePermissionId, MenuItemActionId = mia.MenuItemActionId } equals new { rma.RolePermissionId, rma.MenuItemActionId } into roleMenuAccess
+                    from rma in roleMenuAccess.DefaultIfEmpty()
+                    select new PermissionsWithActions
+                    {
+                        RoleId = roleId,
+                        PermissionId = p.PermissionId,
+                        Permission = p.Label,
+                        ActionId = a.ActionId,
+                        ActionName = a.ActionName,
+                        Status = rma != null,
+                    }
+                )
+                .OrderBy(pa => pa.PermissionId)
+                .ThenBy(pa => pa.ActionId)
+                .ToListAsync();
+
+            return permissionsWithActions;
+        }
     }
 }
