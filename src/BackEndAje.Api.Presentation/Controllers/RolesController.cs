@@ -3,12 +3,14 @@ namespace BackEndAje.Api.Presentation.Controllers
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Dtos.Roles;
+    using BackEndAje.Api.Application.Roles.Commands.AssignPermissionsWithActions;
     using BackEndAje.Api.Application.Roles.Commands.AssignPermissionToRole;
     using BackEndAje.Api.Application.Roles.Commands.CreateRole;
     using BackEndAje.Api.Application.Roles.Commands.UpdateRole;
     using BackEndAje.Api.Application.Roles.Commands.UpdateStatusRole;
     using BackEndAje.Api.Application.Roles.Queries.GetAllRoles;
     using BackEndAje.Api.Application.Roles.Queries.GetAllRolesWithPermissions;
+    using BackEndAje.Api.Application.Roles.Queries.GetPermissionsWithActionByRoleId;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -99,6 +101,30 @@ namespace BackEndAje.Api.Presentation.Controllers
             var query = new GetAllRolesWithPermissionsQuery();
             var roles = await this._mediator.Send(query);
             return this.Ok(new Response { Result = roles });
+        }
+
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("AssignPermissionsWithActions")]
+        public async Task<IActionResult> AssignPermissionsWithActions([FromBody] AssignPermissionsWithActionsCommand command)
+        {
+            var userId = this.GetUserId();
+            command.CreatedBy = userId;
+            command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<GetPermissionsWithActionByRoleIdResult>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("GetPermissionsWithActionByRoleId/{roleId}")]
+        public async Task<IActionResult> GetPermissionsWithActionByRoleId(int roleId)
+        {
+            var query = new GetPermissionsWithActionByRoleIdQuery(roleId);
+            var permissionsWithAction = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = permissionsWithAction });
         }
 
         private int GetUserId()

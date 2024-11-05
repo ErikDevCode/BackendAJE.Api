@@ -24,5 +24,7 @@
         Task<List<RolesWithPermissions>> GetRoleWithPermissionsAsync();
         
         Task<List<Role>> GetAllRolesAsync();
+        
+        Task<List<PermissionsWithActions>> GetPermissionsWithActionByRoleIdAsync(int roleId);
     }
 }

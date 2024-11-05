@@ -7,5 +7,8 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<RolePermission>> GetAllRolePermissionsAsync();
 
         Task RolePermissionAsync(int roleId, int permissionId, bool status, int createdBy, int updatedBy);
+
+        Task AssignOrRemovePermissionWithActionAsync(int roleId, int permissionId, int actionId, bool status,
+            int createdBy, int updatedBy);
     }
 }

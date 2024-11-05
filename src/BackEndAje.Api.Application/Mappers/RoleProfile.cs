@@ -4,6 +4,7 @@ namespace BackEndAje.Api.Application.Mappers
     using BackEndAje.Api.Application.Dtos.Roles;
     using BackEndAje.Api.Application.Roles.Queries.GetAllRoles;
     using BackEndAje.Api.Application.Roles.Queries.GetAllRolesWithPermissions;
+    using BackEndAje.Api.Application.Roles.Queries.GetPermissionsWithActionByRoleId;
     using BackEndAje.Api.Domain.Entities;
 
     public class RoleProfile : Profile
@@ -31,6 +32,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
 
             this.CreateMap<RolesWithPermissions, GetAllRolesWithPermissionsResult>();
+            this.CreateMap<PermissionsWithActions, GetPermissionsWithActionByRoleIdResult>();
         }
     }
 }
