@@ -26,6 +26,7 @@ namespace BackEndAje.Api.Application.Asset.Command.CreateAsset
             }
 
             var newAsset = this._mapper.Map<Asset>(request);
+            newAsset.AssetType = assetType;
             await this._assetRepository.AddAsset(newAsset);
             return Unit.Value;
         }

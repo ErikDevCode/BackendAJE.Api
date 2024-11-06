@@ -60,6 +60,69 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             return await this._context.Assets.AsNoTracking().FirstOrDefaultAsync(x => x.CodeAje == codeAje && x.Logo == logo && x.AssetType == assetType);
         }
+
+        public async Task AddClientAsset(ClientAssets clientAssets)
+        {
+            this._context.ClientAssets.Add(clientAssets);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task<List<ClientAssets>> GetClientAssetsByCodeAje(string codeAje)
+        {
+            return await this._context.ClientAssets.AsNoTracking().Where(x => x.CodeAje == codeAje && x.IsActive).ToListAsync();
+        }
+
+        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(string? codeAje, int? clientId)
+        {
+            var query = this._context.ClientAssets
+                .Include(ca => ca.Cedi)
+                .Include(ca => ca.Client)
+                .Include(ca => ca.Asset)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(codeAje))
+            {
+                query = query.Where(ca => ca.CodeAje == codeAje);
+            }
+
+            if (clientId.HasValue)
+            {
+                query = query.Where(ca => ca.ClientId == clientId.Value);
+            }
+
+            return await query.Select(ca => new ClientAssetsDto
+            {
+                ClientAssetId = ca.ClientAssetId,
+                AssetId = ca.AssetId,
+                CodeAje = ca.CodeAje,
+                Logo = ca.Asset.Logo,
+                Brand = ca.Asset.Brand,
+                Model = ca.Asset.Model,
+                AssetIsActive = ca.Asset.IsActive,
+                InstallationDate = ca.InstallationDate,
+                IsActive = ca.IsActive,
+                CediId = ca.CediId,
+                CediName = ca.Cedi != null ? ca.Cedi.CediName : null,
+                ClientId = ca.ClientId,
+                ClientCode = ca.Client.ClientCode,
+                ClientName = ca.Client.CompanyName,
+                Notes = ca.Notes,
+                CreatedAt = ca.CreatedAt,
+                UpdatedAt = ca.UpdatedAt,
+            }).ToListAsync();
+        }
+
+        public async Task<ClientAssets> GetClientAssetByIdAsync(int Id)
+        {
+            return (await this._context.ClientAssets.AsNoTracking().FirstOrDefaultAsync(x => x.ClientAssetId == Id))!;
+        }
+
+        public async Task UpdateClientAssetsAsync(ClientAssets clientAssets)
+        {
+            this._context.Entry(clientAssets).State = EntityState.Detached;
+            this._context.ClientAssets.Update(clientAssets);
+            await this._context.SaveChangesAsync();
+        }
     }
 }
 

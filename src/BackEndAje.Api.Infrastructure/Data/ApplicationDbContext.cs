@@ -74,6 +74,8 @@
 
         public DbSet<Asset> Assets { get; set; }
 
+        public DbSet<ClientAssets> ClientAssets { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -141,6 +143,8 @@
             modelBuilder.Entity<Position>().ToTable("positions");
 
             modelBuilder.Entity<Asset>().ToTable("assets");
+
+            modelBuilder.Entity<ClientAssets>().ToTable("clientassets");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -238,6 +242,10 @@
                 .WithMany()
                 .HasForeignKey(history => history.CreatedBy)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ClientAssets>()
+                .ToTable("clientassets")
+                .HasKey(pm => pm.ClientAssetId);
         }
     }
 }

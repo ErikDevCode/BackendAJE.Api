@@ -1,3 +1,8 @@
+using BackEndAje.Api.Application.Asset.Command.CreateClientAsset;
+using BackEndAje.Api.Application.Asset.Command.UpdateClientAsset;
+using BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset;
+using BackEndAje.Api.Application.Asset.Queries.GetClientAssets;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -111,6 +116,59 @@ namespace BackEndAje.Api.Presentation.Controllers
             };
             var result = await this._mediator.Send(command);
             return this.Ok(result);
+        }
+
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("client-asset/create-client-asset")]
+        public async Task<IActionResult> CreateClientAsset([FromBody] CreateClientAssetCommand command)
+        {
+            var userId = this.GetUserId();
+            command.CreatedBy = userId;
+            command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<GetClientAssetsResult>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("client-asset/all")]
+        public async Task<IActionResult> GetClientAssets([FromQuery] string? codeAje = null, [FromQuery] int? clientId = null)
+        {
+            var query = new GetClientAssetsQuery(codeAje, clientId);
+            var clientAsset = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = clientAsset });
+        }
+
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("client-asset/update")]
+        public async Task<IActionResult> UpdateClientAsset([FromBody] UpdateClientAssetCommand command)
+        {
+            var userId = this.GetUserId();
+            command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpPatch]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("client-asset/update-deactivate-clientasset")]
+        public async Task<IActionResult> UpdateDeactivateClientAsset([FromBody] UpdateDeactivateClientAssetCommand command)
+        {
+            var userId = this.GetUserId();
+            command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            if (result)
+            {
+                return this.Ok(new { Message = $"Se actualizó satisfactoriamente." });
+            }
+
+            return this.NotFound(new { Message = $"No se encuentra" });
         }
 
         private int GetUserId()
