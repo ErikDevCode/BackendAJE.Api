@@ -73,7 +73,7 @@
             await this._context.SaveChangesAsync();
         }
 
-        public async Task<List<RolesWithPermissions>> GetRoleWithPermissionsAsync()
+        public async Task<List<RolesWithPermissions>> GetRoleWithPermissionsAsync(int? roleId = null)
         {
             var rolesWithPermissions = await (
                 from r in this._context.Roles
@@ -81,6 +81,7 @@
                 join rp in this._context.RolePermissions
                     on new { r.RoleId, p.PermissionId } equals new { rp.RoleId, rp.PermissionId } into rolePermissions
                 from rp in rolePermissions.DefaultIfEmpty()
+                where !roleId.HasValue || r.RoleId == roleId.Value
                 select new RolesWithPermissions
                 {
                     RoleId = r.RoleId,

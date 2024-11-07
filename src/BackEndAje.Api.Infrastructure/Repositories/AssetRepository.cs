@@ -14,17 +14,31 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context = context;
         }
 
-        public async Task<List<Asset>> GetAssets(int pageNumber, int pageSize)
+        public async Task<List<Asset>> GetAssets(int pageNumber, int pageSize, string? codeAje)
         {
-            return await this._context.Assets
+            var query = this._context.Assets.AsQueryable();
+
+            if (!string.IsNullOrEmpty(codeAje))
+            {
+                query = query.Where(a => a.CodeAje.Contains(codeAje));
+            }
+
+            return await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
         }
 
-        public async Task<int> GetTotalAssets()
+        public async Task<int> GetTotalAssets(string? codeAje)
         {
-            return await this._context.Assets.CountAsync();
+            var query = this._context.Assets.AsQueryable();
+
+            if (!string.IsNullOrEmpty(codeAje))
+            {
+                query = query.Where(a => a.CodeAje.Contains(codeAje));
+            }
+
+            return await query.CountAsync();
         }
 
         public async Task<Asset> GetAssetById(int assetId)
@@ -110,6 +124,23 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 CreatedAt = ca.CreatedAt,
                 UpdatedAt = ca.UpdatedAt,
             }).ToListAsync();
+        }
+
+        public async Task<int> GetTotalClientAssets(string? codeAje, int? clientId)
+        {
+            var query = this._context.ClientAssets.AsQueryable();
+
+            if (!string.IsNullOrEmpty(codeAje))
+            {
+                query = query.Where(ca => ca.CodeAje == codeAje);
+            }
+
+            if (clientId.HasValue)
+            {
+                query = query.Where(ca => ca.ClientId == clientId.Value);
+            }
+
+            return await query.CountAsync();
         }
 
         public async Task<ClientAssets> GetClientAssetByIdAsync(int Id)
