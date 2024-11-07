@@ -18,10 +18,10 @@ namespace BackEndAje.Api.Application.Asset.Queries.GetAllAssets
 
         public async Task<PaginatedResult<GetAllAssetsResult>> Handle(GetAllAssetsQuery request, CancellationToken cancellationToken)
         {
-            var assets = await this._assetRepository.GetAssets(request.PageNumber, request.PageSize);
+            var assets = await this._assetRepository.GetAssets(request.PageNumber, request.PageSize, request.CodeAje);
 
             var result = this._mapper.Map<List<GetAllAssetsResult>>(assets);
-            var totalAssets = await this._assetRepository.GetTotalAssets();
+            var totalAssets = await this._assetRepository.GetTotalAssets(request.CodeAje);
 
             var paginatedResult = new PaginatedResult<GetAllAssetsResult>
             {

@@ -21,7 +21,7 @@
         Task<bool> RoleExistsAsync(string roleName);
         Task SaveChangesAsync();
         
-        Task<List<RolesWithPermissions>> GetRoleWithPermissionsAsync();
+        Task<List<RolesWithPermissions>> GetRoleWithPermissionsAsync(int? RoleId);
         
         Task<List<Role>> GetAllRolesAsync();
         

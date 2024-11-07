@@ -96,9 +96,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(List<GetAllRolesWithPermissionsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetRolesWithPermissions")]
-        public async Task<IActionResult> GetAllRolesWithPermissions()
+        public async Task<IActionResult> GetAllRolesWithPermissions(int? roleId)
         {
-            var query = new GetAllRolesWithPermissionsQuery();
+            var query = new GetAllRolesWithPermissionsQuery(roleId);
             var roles = await this._mediator.Send(query);
             return this.Ok(new Response { Result = roles });
         }

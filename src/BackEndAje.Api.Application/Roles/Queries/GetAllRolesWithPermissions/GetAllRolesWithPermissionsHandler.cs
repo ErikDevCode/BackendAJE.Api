@@ -17,7 +17,7 @@ namespace BackEndAje.Api.Application.Roles.Queries.GetAllRolesWithPermissions
 
         public async Task<List<GetAllRolesWithPermissionsResult>> Handle(GetAllRolesWithPermissionsQuery request, CancellationToken cancellationToken)
         {
-            var rolesWithPermissions = await this._roleRepository.GetRoleWithPermissionsAsync();
+            var rolesWithPermissions = await this._roleRepository.GetRoleWithPermissionsAsync(request.roleId);
 
             return this._mapper.Map<List<GetAllRolesWithPermissionsResult>>(rolesWithPermissions);
         }

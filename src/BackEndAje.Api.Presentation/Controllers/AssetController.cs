@@ -1,17 +1,16 @@
-using BackEndAje.Api.Application.Asset.Command.CreateClientAsset;
-using BackEndAje.Api.Application.Asset.Command.UpdateClientAsset;
-using BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset;
-using BackEndAje.Api.Application.Asset.Queries.GetClientAssets;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Asset.Command.CreateAsset;
+    using BackEndAje.Api.Application.Asset.Command.CreateClientAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateAsset;
+    using BackEndAje.Api.Application.Asset.Command.UpdateClientAsset;
+    using BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateStatusAsset;
     using BackEndAje.Api.Application.Asset.Command.UploadAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAllAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAssetsByCodeAje;
+    using BackEndAje.Api.Application.Asset.Queries.GetClientAssets;
     using BackEndAje.Api.Application.Dtos;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
@@ -47,9 +46,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(List<GetAllAssetsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("all")]
-        public async Task<IActionResult> GetAllAssets([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAllAssets([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? codeAje = null)
         {
-            var query = new GetAllAssetsQuery(pageNumber, pageSize);
+            var query = new GetAllAssetsQuery(pageNumber, pageSize, codeAje);
             var clients = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clients });
         }
@@ -135,9 +134,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(List<GetClientAssetsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("client-asset/all")]
-        public async Task<IActionResult> GetClientAssets([FromQuery] string? codeAje = null, [FromQuery] int? clientId = null)
+        public async Task<IActionResult> GetClientAssets([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? codeAje = null, [FromQuery] int? clientId = null)
         {
-            var query = new GetClientAssetsQuery(codeAje, clientId);
+            var query = new GetClientAssetsQuery(pageNumber, pageSize, codeAje, clientId);
             var clientAsset = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clientAsset });
         }
