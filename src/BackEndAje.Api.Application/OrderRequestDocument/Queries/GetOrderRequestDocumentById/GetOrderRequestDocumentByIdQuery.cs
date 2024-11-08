@@ -2,5 +2,5 @@ namespace BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderReques
 {
     using MediatR;
 
-    public record GetOrderRequestDocumentByIdQuery(int documentId) : IRequest<GetOrderRequestDocumentByIdResult>;
+    public record GetOrderRequestDocumentByIdQuery(int orderRequestId) : IRequest<List<GetOrderRequestDocumentByIdResult>>;
 }

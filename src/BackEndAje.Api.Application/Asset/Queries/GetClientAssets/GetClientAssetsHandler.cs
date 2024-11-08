@@ -1,8 +1,7 @@
-using BackEndAje.Api.Application.Abstractions.Common;
-
 namespace BackEndAje.Api.Application.Asset.Queries.GetClientAssets
 {
     using AutoMapper;
+    using BackEndAje.Api.Application.Abstractions.Common;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 

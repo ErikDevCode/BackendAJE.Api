@@ -4,7 +4,7 @@ namespace BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderReques
     {
         public int DocumentId { get; set; }
 
-        public Byte[] DocumentContent { get; set; }
+        public string Url { get; set; }
 
         public string ContentType { get; set; }
 

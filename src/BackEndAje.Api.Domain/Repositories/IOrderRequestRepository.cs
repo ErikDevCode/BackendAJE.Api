@@ -10,7 +10,11 @@ namespace BackEndAje.Api.Domain.Repositories
         
         Task<OrderRequest?> GetOrderRequestById(int id);
 
+        Task<List<OrderRequestDocument>> GetOrderRequestDocumentByOrderRequestId(int id);
+        
         Task<OrderRequestDocument> GetOrderRequestDocumentById(int id);
+        
+        Task DeleteOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument);
 
         Task<List<OrderRequest>> GetAllOrderRequestAsync(int pageNumber, int pageSize, int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null);
 

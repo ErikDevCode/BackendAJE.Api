@@ -51,9 +51,20 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return orderRequest;
         }
 
+        public async Task<List<OrderRequestDocument>> GetOrderRequestDocumentByOrderRequestId(int id)
+        {
+            return await this._context.OrderRequestDocuments.Where(x => x.OrderRequestId == id).ToListAsync();
+        }
+
         public async Task<OrderRequestDocument> GetOrderRequestDocumentById(int id)
         {
-            return (await this._context.OrderRequestDocuments.AsNoTracking().FirstOrDefaultAsync(r => r.DocumentId == id))!;
+            return (await this._context.OrderRequestDocuments.FirstOrDefaultAsync(x => x.DocumentId == id)) !;
+        }
+
+        public async Task DeleteOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument)
+        {
+            this._context.OrderRequestDocuments.Remove(orderRequestDocument);
+            await this._context.SaveChangesAsync();
         }
 
         public async Task<List<OrderRequest>> GetAllOrderRequestAsync(int pageNumber, int pageSize, int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
