@@ -4,10 +4,9 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderRequestDocumentById;
     using BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests;
-    using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusDocument;
     using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Documents.Commands.CreateDocumentByOrderRequest;
-    using BackEndAje.Api.Application.OrderRequests.Documents.Commands.UpdateDocumentByOrderRequest;
+    using BackEndAje.Api.Application.OrderRequests.Documents.Commands.DeleteDocumentByOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingByOrderRequestId;
@@ -107,7 +106,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("documents/create")]
-        public async Task<IActionResult> CreateDocumentByOrderRequest([FromBody] CreateDocumentByOrderRequestCommand command)
+        public async Task<IActionResult> CreateDocumentByOrderRequest([FromForm] CreateDocumentByOrderRequestCommand command)
         {
             var userId = this.GetUserId();
             command.CreatedBy = userId;
@@ -116,43 +115,27 @@ namespace BackEndAje.Api.Presentation.Controllers
             return this.Ok(result);
         }
 
-        [HttpPut]
+        [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
-        [Route("documents/update")]
-        public async Task<IActionResult> UpdateDocumentByOrderRequest([FromBody] UpdateDocumentByOrderRequestCommand command)
+        [Route("documents/delete")]
+        public async Task<IActionResult> DeleteDocumentByOrderRequest([FromBody] DeleteDocumentByOrderRequestCommand command)
         {
-            var userId = this.GetUserId();
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
 
-
-
-        [HttpPut]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
-        [Route("documents/updateStatusDocument/{documentId}")]
-        public async Task<IActionResult> UpdateStatusDocument(int documentId)
+        [HttpGet("documents/by-orderrequestid/{orderRequestId}")]
+        public async Task<IActionResult> DocumentsByOrderRequestId(int orderRequestId)
         {
-            var userId = this.GetUserId();
-            var command = new UpdateStatusDocumentCommand { DocumentId = documentId, UpdatedBy = userId };
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
-        }
+            var documents = await this._mediator.Send(new GetOrderRequestDocumentByIdQuery(orderRequestId));
 
-        [HttpGet("documents/{documentId}/download")]
-        public async Task<IActionResult> DownloadDocument(int documentId)
-        {
-            var result = await this._mediator.Send(new GetOrderRequestDocumentByIdQuery(documentId));
-
-            if (result == null)
+            if (documents == null)
             {
-                return this.NotFound(new { Message = $"Documento con ID: {documentId} no encontrado." });
+                return this.NotFound(new { Message = $"No se encontraron documentos para el OrderRequest con ID: {orderRequestId}." });
             }
 
-            return this.File(result.DocumentContent, result.ContentType, result.FileName);
+            return this.Ok(new Response { Result = documents });
         }
 
         private int GetUserId()
