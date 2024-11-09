@@ -88,7 +88,7 @@
                     Role = r.RoleName,
                     PermissionId = p.PermissionId,
                     Permission = p.Label,
-                    Status = rp != null,
+                    Status = rp != null && rp.Status,
                 })
             .OrderBy(rp => rp.Role).ThenBy(rp => rp.Permission).ToListAsync();
 

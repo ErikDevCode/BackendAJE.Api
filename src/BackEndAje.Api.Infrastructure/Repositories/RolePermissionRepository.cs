@@ -110,9 +110,50 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
                 await this._context.SaveChangesAsync();
 
+                // Nuevo paso: Verificar la existencia de MenuItemActionId
+
+                // Paso 2c: Buscar en MenuItems usando el campo Label en Permissions para obtener el MenuItemId
+                var permissionLabel = await this._context.Permissions
+                    .Where(p => p.PermissionId == permissionId)
+                    .Select(p => p.Label)
+                    .FirstOrDefaultAsync();
+
+                if (permissionLabel == null)
+                {
+                    throw new Exception("No se encontró el permiso correspondiente al PermissionId especificado.");
+                }
+
+                var menuItem = await this._context.MenuItems
+                    .FirstOrDefaultAsync(mi => mi.Label == permissionLabel);
+
+                if (menuItem == null)
+                {
+                    throw new Exception("No se encontró el MenuItem correspondiente al permiso.");
+                }
+
+                // Paso 2d: Buscar o crear el MenuItemActionId usando el MenuItemId y el ActionId
+                var menuItemAction = await this._context.MenuItemActions
+                    .FirstOrDefaultAsync(mia => mia.MenuItemId == menuItem.MenuItemId && mia.ActionId == actionId);
+
+                if (menuItemAction == null)
+                {
+                    // Crear nuevo MenuItemAction si no existe
+                    menuItemAction = new MenuItemAction
+                    {
+                        MenuItemId = menuItem.MenuItemId,
+                        ActionId = actionId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        CreatedBy = createdBy,
+                        UpdatedBy = createdBy,
+                    };
+                    await this._context.MenuItemActions.AddAsync(menuItemAction);
+                    await this._context.SaveChangesAsync();
+                }
+
                 // Paso 3: Verificar si ya existe la relación en RoleMenuAccess para este permiso y acción
                 var roleMenuAccess = await this._context.RoleMenuAccess
-                    .FirstOrDefaultAsync(rma => rma.RolePermissionId == rolePermission.RolePermissionId && rma.MenuItemActionId == actionId);
+                    .FirstOrDefaultAsync(rma => rma.RolePermissionId == rolePermission.RolePermissionId && rma.MenuItemActionId == menuItemAction.MenuItemActionId);
 
                 if (roleMenuAccess == null)
                 {
@@ -120,7 +161,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     roleMenuAccess = new RoleMenuAccess
                     {
                         RolePermissionId = rolePermission.RolePermissionId,
-                        MenuItemActionId = actionId,
+                        MenuItemActionId = menuItemAction.MenuItemActionId,
                     };
                     await this._context.RoleMenuAccess.AddAsync(roleMenuAccess);
                 }
@@ -133,16 +174,45 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             {
                 if (rolePermission != null)
                 {
-                    // Paso 5: Eliminar la relación en RoleMenuAccess si existe y status es false
-                    var roleMenuAccess = await this._context.RoleMenuAccess
-                        .FirstOrDefaultAsync(rma => rma.RolePermissionId == rolePermission.RolePermissionId && rma.MenuItemActionId == actionId);
+                    // Paso 5a: Obtener el Label del permiso
+                    var permissionLabel = await this._context.Permissions
+                        .Where(p => p.PermissionId == permissionId)
+                        .Select(p => p.Label)
+                        .FirstOrDefaultAsync();
 
-                    if (roleMenuAccess != null)
+                    if (permissionLabel == null)
                     {
-                        this._context.RoleMenuAccess.Remove(roleMenuAccess);
+                        throw new Exception("No se encontró el permiso correspondiente al PermissionId especificado.");
                     }
 
-                    // Verificar si el RolePermission debería quedar desactivado
+                    // Paso 5b: Usar el Label para obtener el MenuItemId en MenuItems
+                    var menuItemId = await this._context.MenuItems
+                        .Where(mi => mi.Label == permissionLabel)
+                        .Select(mi => mi.MenuItemId)
+                        .FirstOrDefaultAsync();
+
+                    if (menuItemId == 0) // Ajusta según el valor por defecto de MenuItemId si no se encuentra
+                    {
+                        throw new Exception("No se encontró el MenuItem correspondiente al permiso.");
+                    }
+
+                    // Paso 5c: Usar el MenuItemId y ActionId para obtener el MenuItemActionId en MenuItemActions
+                    var menuItemAction = await this._context.MenuItemActions
+                        .FirstOrDefaultAsync(mia => mia.MenuItemId == menuItemId && mia.ActionId == actionId);
+
+                    if (menuItemAction != null)
+                    {
+                        // Paso 5d: Eliminar la relación en RoleMenuAccess si existe
+                        var roleMenuAccess = await this._context.RoleMenuAccess
+                            .FirstOrDefaultAsync(rma => rma.RolePermissionId == rolePermission.RolePermissionId && rma.MenuItemActionId == menuItemAction.MenuItemActionId);
+
+                        if (roleMenuAccess != null)
+                        {
+                            this._context.RoleMenuAccess.Remove(roleMenuAccess);
+                        }
+                    }
+
+                    // Paso 5e: Desactivar RolePermission si no tiene relación activa
                     rolePermission.Status = false;
                     rolePermission.UpdatedAt = DateTime.Now;
                     rolePermission.UpdatedBy = updatedBy;
