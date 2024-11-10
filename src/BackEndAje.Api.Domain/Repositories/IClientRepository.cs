@@ -12,9 +12,9 @@ namespace BackEndAje.Api.Domain.Repositories
         
         Task<Client?> GetClientByClientCode(int clientCode, int cediId);
 
-        Task<List<Client>> GetClients(int pageNumber, int pageSize);
+        Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro);
         
-        Task<int> GetTotalClients();
+        Task<int> GetTotalClients(string? filtro);
         
         Task<Client?> GetClientById(int clientId);
         

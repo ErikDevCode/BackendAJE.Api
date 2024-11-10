@@ -61,15 +61,24 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return client;
         }
 
-        public async Task<List<Client>> GetClients(int pageNumber, int pageSize)
+        public async Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro)
         {
-            var clients = await this._context.Clients
+            var query = this._context.Clients
                 .Include(c => c.DocumentType)
                 .Include(c => c.PaymentMethod)
                 .Include(c => c.District)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(filtro))
+            {
+                query = query.Where(c =>
+                    c.ClientCode.ToString().Contains(filtro) ||
+                    c.CompanyName.Contains(filtro) ||
+                    c.DocumentNumber.Contains(filtro));
+            }
+
+            query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            var clients = await query.ToListAsync();
 
             foreach (var client in clients.Where(c => c.Route != null))
             {
@@ -82,9 +91,19 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return clients;
         }
 
-        public async Task<int> GetTotalClients()
+        public async Task<int> GetTotalClients(string? filtro)
         {
-            return await this._context.Clients.CountAsync();
+            var query = this._context.Clients.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filtro))
+            {
+                query = query.Where(c =>
+                    c.ClientCode.ToString().Contains(filtro) ||
+                    c.CompanyName.Contains(filtro) ||
+                    c.DocumentNumber.Contains(filtro));
+            }
+
+            return await query.CountAsync();
         }
 
         public async Task<Client?> GetClientById(int clientId)
