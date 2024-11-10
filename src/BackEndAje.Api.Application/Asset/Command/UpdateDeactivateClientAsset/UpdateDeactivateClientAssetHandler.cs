@@ -5,16 +5,16 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset
 
     public class UpdateDeactivateClientAssetHandler : IRequestHandler<UpdateDeactivateClientAssetCommand, bool>
     {
-        private readonly IAssetRepository _assetRepository;
+        private readonly IClientAssetRepository _clientAssetRepository;
 
-        public UpdateDeactivateClientAssetHandler(IAssetRepository assetRepository)
+        public UpdateDeactivateClientAssetHandler(IClientAssetRepository clientAssetRepository)
         {
-            this._assetRepository = assetRepository;
+            this._clientAssetRepository = clientAssetRepository;
         }
 
         public async Task<bool> Handle(UpdateDeactivateClientAssetCommand request, CancellationToken cancellationToken)
         {
-            var existingClientAsset = await this._assetRepository.GetClientAssetByIdAsync(request.ClientAssetId);
+            var existingClientAsset = await this._clientAssetRepository.GetClientAssetByIdAsync(request.ClientAssetId);
             if (existingClientAsset == null)
             {
                 throw new InvalidOperationException($"Cliente con Activo asociado no existe.");
@@ -22,7 +22,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset
 
             if (!existingClientAsset.IsActive)
             {
-                var existingActiveCodeAje = await this._assetRepository.GetClientAssetsByCodeAje(existingClientAsset.CodeAje);
+                var existingActiveCodeAje = await this._clientAssetRepository.GetClientAssetsByCodeAje(existingClientAsset.CodeAje);
                 var isCodeAjeActiveWithAnotherClient = existingActiveCodeAje.Any(ca => ca.IsActive && ca.CodeAje == existingClientAsset.CodeAje);
 
                 if (isCodeAjeActiveWithAnotherClient)
@@ -34,7 +34,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset
             existingClientAsset.IsActive = existingClientAsset.IsActive is false;
             existingClientAsset.UpdatedBy = request.UpdatedBy;
 
-            await this._assetRepository.UpdateClientAssetsAsync(existingClientAsset);
+            await this._clientAssetRepository.UpdateClientAssetsAsync(existingClientAsset);
             return true;
         }
     }

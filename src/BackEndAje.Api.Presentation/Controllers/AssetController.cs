@@ -1,3 +1,6 @@
+using BackEndAje.Api.Application.Asset.Command.UpdateClientAssetReassign;
+using BackEndAje.Api.Application.Asset.Queries.GetClientAssetsTrace;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -156,7 +159,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [HttpPatch]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
-        [Route("client-asset/update-deactivate-clientasset")]
+        [Route("client-asset/update-deactivate-activate-clientasset")]
         public async Task<IActionResult> UpdateDeactivateClientAsset([FromBody] UpdateDeactivateClientAssetCommand command)
         {
             var userId = this.GetUserId();
@@ -169,6 +172,30 @@ namespace BackEndAje.Api.Presentation.Controllers
 
             return this.NotFound(new { Message = $"No se encuentra" });
         }
+
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("client-asset/reassign")]
+        public async Task<IActionResult> UpdateClientAssetReassign([FromBody] UpdateClientAssetReassignCommand command)
+        {
+            var userId = this.GetUserId();
+            command.UpdatedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<GetClientAssetsTraceResult>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("client-asset-trace/by-asset-id")]
+        public async Task<IActionResult> GetClientAssetsTrace([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int? assetId = null)
+        {
+            var query = new GetClientAssetsTraceQuery(pageNumber, pageSize, assetId);
+            var clientAsset = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = clientAsset });
+        }
+
 
         private int GetUserId()
         {

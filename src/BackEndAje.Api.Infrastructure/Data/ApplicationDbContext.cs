@@ -76,6 +76,8 @@
 
         public DbSet<ClientAssets> ClientAssets { get; set; }
 
+        public DbSet<ClientAssetsTrace> ClientAssetsTrace { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -145,6 +147,8 @@
             modelBuilder.Entity<Asset>().ToTable("assets");
 
             modelBuilder.Entity<ClientAssets>().ToTable("clientassets");
+
+            modelBuilder.Entity<ClientAssetsTrace>().ToTable("clientassetstrace");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -246,6 +250,10 @@
             modelBuilder.Entity<ClientAssets>()
                 .ToTable("clientassets")
                 .HasKey(pm => pm.ClientAssetId);
+
+            modelBuilder.Entity<ClientAssetsTrace>()
+                .ToTable("clientassetstrace")
+                .HasKey(pm => pm.ClientAssetTraceId);
         }
     }
 }
