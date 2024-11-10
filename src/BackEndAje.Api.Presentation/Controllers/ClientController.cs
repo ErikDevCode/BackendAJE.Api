@@ -42,9 +42,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(List<GetAllClientsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("all")]
-        public async Task<IActionResult> GetAllClients([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAllClients([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? filtro = null)
         {
-            var query = new GetAllClientsQuery(pageNumber, pageSize);
+            var query = new GetAllClientsQuery(pageNumber, pageSize, filtro);
             var clients = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clients });
         }
