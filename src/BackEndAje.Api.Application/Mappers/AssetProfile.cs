@@ -8,6 +8,7 @@ namespace BackEndAje.Api.Application.Mappers
     using BackEndAje.Api.Application.Asset.Queries.GetAllAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAssetsByCodeAje;
     using BackEndAje.Api.Application.Asset.Queries.GetClientAssets;
+    using BackEndAje.Api.Application.Asset.Queries.GetClientAssetsTrace;
     using BackEndAje.Api.Domain.Entities;
 
     public class AssetProfile : Profile
@@ -35,6 +36,8 @@ namespace BackEndAje.Api.Application.Mappers
 
             this.CreateMap<UpdateClientAssetCommand, ClientAssets>()
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
+
+            this.CreateMap<ClientAssetsTrace, GetClientAssetsTraceResult>();
         }
     }
 }
