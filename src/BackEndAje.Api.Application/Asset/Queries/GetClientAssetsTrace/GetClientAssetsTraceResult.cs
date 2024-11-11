@@ -8,13 +8,15 @@ namespace BackEndAje.Api.Application.Asset.Queries.GetClientAssetsTrace
 
         public int? PreviousClientId { get; set; }
 
-        public int NewClientId { get; set; }
+        public int? NewClientId { get; set; }
 
         public int AssetId { get; set; }
 
         public string CodeAje { get; set; }
 
         public string? ChangeReason { get; set; }
+
+        public bool IsActive { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

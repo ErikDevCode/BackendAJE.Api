@@ -1,6 +1,3 @@
-using BackEndAje.Api.Application.Asset.Command.UpdateClientAssetReassign;
-using BackEndAje.Api.Application.Asset.Queries.GetClientAssetsTrace;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -8,12 +5,14 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Asset.Command.CreateClientAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateClientAsset;
+    using BackEndAje.Api.Application.Asset.Command.UpdateClientAssetReassign;
     using BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateStatusAsset;
     using BackEndAje.Api.Application.Asset.Command.UploadAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAllAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAssetsByCodeAje;
     using BackEndAje.Api.Application.Asset.Queries.GetClientAssets;
+    using BackEndAje.Api.Application.Asset.Queries.GetClientAssetsTrace;
     using BackEndAje.Api.Application.Dtos;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;

@@ -78,6 +78,10 @@
 
         public DbSet<ClientAssetsTrace> ClientAssetsTrace { get; set; }
 
+        public DbSet<CensusQuestion> CensusQuestions { get; set; }
+
+        public DbSet<CensusAnswer> CensusAnswer { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -149,6 +153,10 @@
             modelBuilder.Entity<ClientAssets>().ToTable("clientassets");
 
             modelBuilder.Entity<ClientAssetsTrace>().ToTable("clientassetstrace");
+
+            modelBuilder.Entity<CensusQuestion>().ToTable("censusquestions");
+
+            modelBuilder.Entity<CensusAnswer>().ToTable("censusanswer");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -254,6 +262,14 @@
             modelBuilder.Entity<ClientAssetsTrace>()
                 .ToTable("clientassetstrace")
                 .HasKey(pm => pm.ClientAssetTraceId);
+
+            modelBuilder.Entity<CensusQuestion>()
+                .ToTable("censusquestions")
+                .HasKey(pm => pm.CensusQuestionsId);
+
+            modelBuilder.Entity<CensusAnswer>()
+                .ToTable("censusanswer")
+                .HasKey(pm => pm.CensusAnswerId);
         }
     }
 }

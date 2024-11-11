@@ -34,6 +34,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateClientAssetReassign
                 AssetId = existingClientAsset.AssetId,
                 CodeAje = existingClientAsset.CodeAje,
                 ChangeReason = request.Notes,
+                IsActive = true,
                 CreatedAt = DateTime.Now,
                 CreatedBy = request.UpdatedBy,
             };

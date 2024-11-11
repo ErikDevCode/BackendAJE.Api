@@ -116,6 +116,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     AssetId = cat.AssetId,
                     CodeAje = cat.CodeAje,
                     ChangeReason = cat.ChangeReason,
+                    IsActive = cat.IsActive,
                     CreatedAt = cat.CreatedAt,
                     CreatedBy = cat.CreatedBy,
                 })

@@ -43,6 +43,12 @@ namespace BackEndAje.Api.Infrastructure.Services
             return await this.UploadToS3(fileStream, key);
         }
 
+        public async Task<string> UploadFileAsync(Stream fileStream, string fileFolder, string clientId, string monthPeriod, string fileName)
+        {
+            var key = $"{fileFolder}/{clientId}/{monthPeriod}/{fileName}";
+            return await this.UploadToS3(fileStream, key);
+        }
+
         public async Task<bool> DeleteFileAsync(string key)
         {
             try

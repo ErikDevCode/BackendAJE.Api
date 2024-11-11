@@ -1,3 +1,5 @@
+using BackEndAje.Api.Domain.Entities;
+
 namespace BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset
 {
     using BackEndAje.Api.Domain.Repositories;
@@ -31,7 +33,22 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset
                 }
             }
 
+            var traceabilityRecord = new ClientAssetsTrace
+            {
+                ClientAssetId = request.ClientAssetId,
+                PreviousClientId = existingClientAsset.ClientId,
+                NewClientId = null,
+                AssetId = existingClientAsset.AssetId,
+                CodeAje = existingClientAsset.CodeAje,
+                ChangeReason = request.Notes,
+                IsActive = existingClientAsset.IsActive is false,
+                CreatedAt = DateTime.Now,
+                CreatedBy = request.UpdatedBy,
+            };
+            await this._clientAssetRepository.AddTraceabilityRecordAsync(traceabilityRecord);
+
             existingClientAsset.IsActive = existingClientAsset.IsActive is false;
+            existingClientAsset.Notes = request.Notes;
             existingClientAsset.UpdatedBy = request.UpdatedBy;
 
             await this._clientAssetRepository.UpdateClientAssetsAsync(existingClientAsset);
