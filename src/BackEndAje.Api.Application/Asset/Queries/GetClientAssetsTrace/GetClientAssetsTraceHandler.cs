@@ -34,8 +34,11 @@ namespace BackEndAje.Api.Application.Asset.Queries.GetClientAssetsTrace
                     traceResult.PreviousClientName = previousClient?.CompanyName ?? "N/A";
                 }
 
-                var newClient = await this._clientRepository.GetClientById(trace.NewClientId);
-                traceResult.NewClientName = newClient?.CompanyName ?? "N/A";
+                if (trace.NewClientId.HasValue)
+                {
+                    var newClient = await this._clientRepository.GetClientById(trace.NewClientId!.Value);
+                    traceResult.NewClientName = newClient?.CompanyName ?? "N/A";
+                }
 
                 results.Add(traceResult);
             }

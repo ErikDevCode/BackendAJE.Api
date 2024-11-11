@@ -42,6 +42,7 @@
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IAssetRepository, AssetRepository>();
             services.AddScoped<IClientAssetRepository, ClientAssetRepository>();
+            services.AddScoped<ICensusRepository, CensusRepository>();
 
             return services;
         }
