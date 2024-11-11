@@ -12,6 +12,12 @@ namespace BackEndAje.Api.Application.Asset.Queries.GetClientAssets
 
         public int ClientId { get; set; }
 
+        public int? UserId { get; set; }
+
+        public int? Route { get; set; }
+
+        public string? Seller { get; set; }
+
         public string ClientCode { get; set; }
 
         public string ClientName { get; set; }

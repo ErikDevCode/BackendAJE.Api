@@ -15,6 +15,10 @@ namespace BackEndAje.Api.Domain.Entities
         public int CediId { get; set; }
         public string? CediName { get; set; }
         public int ClientId { get; set; }
+        
+        public int? UserId { get; set; }
+        public int? Route { get; set; }
+        public string? Seller { get; set; }
         public int ClientCode { get; set; }
         public string ClientName { get; set; }
         public string? Notes { get; set; }

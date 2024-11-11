@@ -25,11 +25,12 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await this._context.ClientAssets.AsNoTracking().Where(x => x.CodeAje == codeAje && x.IsActive).ToListAsync();
         }
 
-        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int pageNumber, int pageSize, string? codeAje, int? clientId)
+        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int pageNumber, int pageSize, string? codeAje, int? clientId, int? userId)
         {
             var query = this._context.ClientAssets
                 .Include(ca => ca.Cedi)
                 .Include(ca => ca.Client)
+                .ThenInclude(cli => cli.Seller)
                 .Include(ca => ca.Asset)
                 .AsQueryable();
 
@@ -41,6 +42,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             if (clientId.HasValue)
             {
                 query = query.Where(ca => ca.ClientId == clientId.Value);
+            }
+
+            if (userId.HasValue)
+            {
+                query = query.Where(ca => ca.Client.Seller!.UserId == userId.Value);
             }
 
             return await query.Select(ca => new ClientAssetsDto
@@ -57,6 +63,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 CediId = ca.CediId,
                 CediName = ca.Cedi != null ? ca.Cedi.CediName : null,
                 ClientId = ca.ClientId,
+                UserId = ca.Client.UserId,
+                Seller = (ca.Client.Seller != null
+                    ? $"{ca.Client.Seller.Names} {ca.Client.Seller.PaternalSurName} {ca.Client.Seller.MaternalSurName}"
+                    : null)!,
+                Route = ca.Client.Route,
                 ClientCode = ca.Client.ClientCode,
                 ClientName = ca.Client.CompanyName,
                 Notes = ca.Notes,

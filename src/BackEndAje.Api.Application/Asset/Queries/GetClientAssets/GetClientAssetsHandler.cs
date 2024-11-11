@@ -18,7 +18,7 @@ namespace BackEndAje.Api.Application.Asset.Queries.GetClientAssets
 
         public async Task<PaginatedResult<GetClientAssetsResult>> Handle(GetClientAssetsQuery request, CancellationToken cancellationToken)
         {
-            var clientAssets = await this._clientAssetRepository.GetClientAssetsAsync(request.PageNumber, request.PageSize, request.CodeAje, request.ClientId);
+            var clientAssets = await this._clientAssetRepository.GetClientAssetsAsync(request.PageNumber, request.PageSize, request.CodeAje, request.ClientId, request.userId);
             var result = this._mapper.Map<List<GetClientAssetsResult>>(clientAssets);
 
             var totalAssets = await this._clientAssetRepository.GetTotalClientAssets(request.CodeAje, request.ClientId);

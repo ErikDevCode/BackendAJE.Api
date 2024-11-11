@@ -17,7 +17,13 @@ namespace BackEndAje.Api.Application.Census.Queries.GetCensusQuestions
 
         public async Task<List<GetCensusQuestionsResult>> Handle(GetCensusQuestionsQuery request, CancellationToken cancellationToken)
         {
-            var censusQuestions = await this._censusRepository.GetCensusQuestions();
+            var censusQuestions = await this._censusRepository.GetCensusQuestions(request.clientId);
+
+            if (censusQuestions == null || !censusQuestions.Any())
+            {
+                throw new InvalidOperationException("El cliente ya fue censado para el período actual.");
+            }
+
             var result = this._mapper.Map<List<GetCensusQuestionsResult>>(censusQuestions);
             return result;
         }

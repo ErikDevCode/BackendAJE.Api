@@ -136,9 +136,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(List<GetClientAssetsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("client-asset/all")]
-        public async Task<IActionResult> GetClientAssets([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? codeAje = null, [FromQuery] int? clientId = null)
+        public async Task<IActionResult> GetClientAssets([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? codeAje = null, [FromQuery] int? clientId = null, [FromQuery] int? userId = null)
         {
-            var query = new GetClientAssetsQuery(pageNumber, pageSize, codeAje, clientId);
+            var query = new GetClientAssetsQuery(pageNumber, pageSize, codeAje, clientId, userId);
             var clientAsset = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clientAsset });
         }
