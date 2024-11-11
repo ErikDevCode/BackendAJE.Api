@@ -23,9 +23,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(List<GetCensusQuestionsResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("census-questions")]
-        public async Task<IActionResult> GetCensusQuestions()
+        public async Task<IActionResult> GetCensusQuestions(int clientId)
         {
-            var query = new GetCensusQuestionsQuery();
+            var query = new GetCensusQuestionsQuery(clientId);
             var censusQuestions = await this._mediator.Send(query);
             return this.Ok(new Response { Result = censusQuestions });
         }

@@ -14,8 +14,16 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context = context;
         }
 
-        public async Task<List<CensusQuestion>> GetCensusQuestions()
+        public async Task<List<CensusQuestion>> GetCensusQuestions(int clientId)
         {
+            var currentMonthPeriod = DateTime.Now.ToString("yyyyMM");
+            var hasCensusAnswers = await this._context.CensusAnswer
+                .AnyAsync(ca => ca.ClientId == clientId && ca.MonthPeriod == currentMonthPeriod);
+            if (hasCensusAnswers)
+            {
+                return null!;
+            }
+
             return await this._context.CensusQuestions.ToListAsync();
         }
 
