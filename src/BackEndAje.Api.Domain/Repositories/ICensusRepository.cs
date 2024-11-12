@@ -7,5 +7,8 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<CensusQuestion>> GetCensusQuestions(int clientId);
 
         Task AddCensusAnswer(CensusAnswer censusAnswer);
+        
+        Task<List<CensusAnswerDto>> GetCensusAnswers(int? pageNumber, int? pageSize, int? clientId, string? monthPeriod);
+        Task<int> GetTotalCensusAnswers(int? clientId, string? monthPeriod);
     }
 }

@@ -23,6 +23,8 @@ namespace BackEndAje.Api.Domain.Entities
         public string ClientName { get; set; }
         public string? Notes { get; set; }
         public bool? IsActive { get; set; }
+        
+        public bool IsCensus { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

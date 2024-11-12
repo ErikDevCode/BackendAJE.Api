@@ -82,6 +82,8 @@
 
         public DbSet<CensusAnswer> CensusAnswer { get; set; }
 
+        public DbSet<OrderStatusRoles> OrderStatusRoles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -157,6 +159,8 @@
             modelBuilder.Entity<CensusQuestion>().ToTable("censusquestions");
 
             modelBuilder.Entity<CensusAnswer>().ToTable("censusanswer");
+
+            modelBuilder.Entity<OrderStatusRoles>().ToTable("orderstatusroles");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -270,6 +274,10 @@
             modelBuilder.Entity<CensusAnswer>()
                 .ToTable("censusanswer")
                 .HasKey(pm => pm.CensusAnswerId);
+
+            modelBuilder.Entity<OrderStatusRoles>()
+                .ToTable("orderstatusroles")
+                .HasKey(pm => pm.OrderStatusRolesId);
         }
     }
 }

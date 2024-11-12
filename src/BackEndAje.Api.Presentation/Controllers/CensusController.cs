@@ -1,4 +1,5 @@
 using BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer;
+using BackEndAje.Api.Application.Census.Queries.GetAnswerByClientId;
 
 namespace BackEndAje.Api.Presentation.Controllers
 {
@@ -40,6 +41,17 @@ namespace BackEndAje.Api.Presentation.Controllers
             command.CreatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<GetAnswerByClientIdResult>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("get-answer-by-clientid")]
+        public async Task<IActionResult> GetAnswerByClientId(int? PageNumber = null, int? PageSize = null, int? clientId = null, string? monthPeriod = null)
+        {
+            var query = new GetAnswerByClientIdQuery(PageNumber, PageSize, clientId, monthPeriod);
+            var answer = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = answer });
         }
 
         private int GetUserId()

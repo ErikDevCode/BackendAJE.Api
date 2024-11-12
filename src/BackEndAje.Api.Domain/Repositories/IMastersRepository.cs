@@ -24,6 +24,6 @@ namespace BackEndAje.Api.Domain.Repositories
 
         Task<DocumentType?> GetDocumentTypeById(int documentTypeId);
         
-        Task<List<OrderStatus>> GetAllOrderStatus();
+        Task<List<OrderStatus>> GetAllOrderStatus(int? userId = null);
     }
 }

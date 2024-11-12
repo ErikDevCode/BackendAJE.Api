@@ -37,5 +37,7 @@ namespace BackEndAje.Api.Application.Asset.Queries.GetClientAssets
         public string Notes { get; set; }
 
         public bool IsActive { get; set; }
+
+        public bool IsCensus { get; set; }
     }
 }

@@ -11,6 +11,8 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
 
         public int ClientId { get; set; }
 
+        public int AssetId { get; set; }
+
         public int CreatedBy { get; set; }
 
         public IFormFile? ImageFile { get; set; }

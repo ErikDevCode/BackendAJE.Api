@@ -117,9 +117,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(GetAllOrderStatusResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetAllOrderRequestStatus")]
-        public async Task<IActionResult> GetAllOrderRequestStatus()
+        public async Task<IActionResult> GetAllOrderRequestStatus([FromQuery] int? userId = null)
         {
-            var query = new GetAllOrderStatusQuery();
+            var query = new GetAllOrderStatusQuery(userId);
             var results = await this._mediator.Send(query);
             return this.Ok(new Response { Result = results });
         }
