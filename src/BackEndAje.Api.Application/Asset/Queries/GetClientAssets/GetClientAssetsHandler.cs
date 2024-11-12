@@ -25,8 +25,8 @@ namespace BackEndAje.Api.Application.Asset.Queries.GetClientAssets
             var paginatedResult = new PaginatedResult<GetClientAssetsResult>
             {
                 TotalCount = totalAssets,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
+                PageNumber = request.PageNumber ?? 1,
+                PageSize = request.PageSize ?? totalAssets,
                 Items = result,
             };
 

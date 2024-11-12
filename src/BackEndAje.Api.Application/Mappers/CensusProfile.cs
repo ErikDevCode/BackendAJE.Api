@@ -1,6 +1,7 @@
 namespace BackEndAje.Api.Application.Mappers
 {
     using AutoMapper;
+    using BackEndAje.Api.Application.Census.Queries.GetAnswerByClientId;
     using BackEndAje.Api.Application.Census.Queries.GetCensusQuestions;
     using BackEndAje.Api.Domain.Entities;
 
@@ -9,6 +10,8 @@ namespace BackEndAje.Api.Application.Mappers
         public CensusProfile()
         {
             this.CreateMap<CensusQuestion, GetCensusQuestionsResult>();
+
+            this.CreateMap<CensusAnswerDto, GetAnswerByClientIdResult>();
         }
     }
 }

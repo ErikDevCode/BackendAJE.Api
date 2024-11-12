@@ -17,7 +17,7 @@ namespace BackEndAje.Api.Application.Masters.Queries.GetAllOrderStatus
 
         public async Task<List<GetAllOrderStatusResult>> Handle(GetAllOrderStatusQuery request, CancellationToken cancellationToken)
         {
-            var logos = await this._mastersRepository.GetAllOrderStatus();
+            var logos = await this._mastersRepository.GetAllOrderStatus(request.userId);
             var result = this._mapper.Map<List<GetAllOrderStatusResult>>(logos);
             return result;
         }

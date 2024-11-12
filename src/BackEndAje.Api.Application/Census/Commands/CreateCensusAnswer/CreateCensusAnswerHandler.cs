@@ -34,6 +34,7 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
                 CensusQuestionsId = request.CensusQuestionsId,
                 Answer = answer,
                 ClientId = request.ClientId,
+                AssetId = request.AssetId,
                 MonthPeriod = monthPeriod,
                 CreatedAt = DateTime.Now,
                 CreatedBy = request.CreatedBy,

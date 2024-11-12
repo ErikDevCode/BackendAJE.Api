@@ -66,9 +66,33 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await this._context.DocumentType.FirstOrDefaultAsync(x => x.DocumentTypeId == documentTypeId);
         }
 
-        public async Task<List<OrderStatus>> GetAllOrderStatus()
+        public async Task<List<OrderStatus>> GetAllOrderStatus(int? userId)
         {
-            return await this._context.OrderStatus.Where(x => x.IsActive).ToListAsync();
+            if (userId == null)
+            {
+                return await this._context.OrderStatus
+                    .Where(os => os.IsActive)
+                    .ToListAsync();
+            }
+            else
+            {
+                var userRoleId = await this._context.UserRoles
+                    .Where(ur => ur.UserId == userId.Value)
+                    .Select(ur => ur.RoleId)
+                    .FirstOrDefaultAsync();
+
+                if (userRoleId == 1)
+                {
+                    return await this._context.OrderStatus
+                        .Where(os => os.IsActive)
+                        .ToListAsync();
+                }
+
+                return await this._context.OrderStatus
+                    .Where(os => os.IsActive && this._context.OrderStatusRoles
+                        .Any(osr => osr.OrderStatusId == os.OrderStatusId && osr.RoleId == userRoleId))
+                    .ToListAsync();
+            }
         }
     }
 }

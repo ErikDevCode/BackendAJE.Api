@@ -25,8 +25,9 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await this._context.ClientAssets.AsNoTracking().Where(x => x.CodeAje == codeAje && x.IsActive).ToListAsync();
         }
 
-        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int pageNumber, int pageSize, string? codeAje, int? clientId, int? userId)
+        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId)
         {
+            var currentMonthPeriod = DateTime.Now.ToString("yyyyMM");
             var query = this._context.ClientAssets
                 .Include(ca => ca.Cedi)
                 .Include(ca => ca.Client)
@@ -49,7 +50,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 query = query.Where(ca => ca.Client.Seller!.UserId == userId.Value);
             }
 
-            return await query.Select(ca => new ClientAssetsDto
+            var clientAssets = query.Select(ca => new ClientAssetsDto
             {
                 ClientAssetId = ca.ClientAssetId,
                 AssetId = ca.AssetId,
@@ -71,12 +72,22 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 ClientCode = ca.Client.ClientCode,
                 ClientName = ca.Client.CompanyName,
                 Notes = ca.Notes,
+                IsCensus = this._context.CensusAnswer
+                    .Any(cs => cs.ClientId == ca.ClientId
+                               && cs.AssetId == ca.AssetId
+                               && cs.MonthPeriod == currentMonthPeriod),
                 CreatedAt = ca.CreatedAt,
                 UpdatedAt = ca.UpdatedAt,
-            })
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+            });
+
+            if (pageNumber.HasValue && pageSize.HasValue && pageNumber > 0 && pageSize > 0)
+            {
+                clientAssets = clientAssets
+                    .Skip((pageNumber.Value - 1) * pageSize.Value)
+                    .Take(pageSize.Value);
+            }
+
+            return await clientAssets.ToListAsync();
         }
 
         public async Task<int> GetTotalClientAssets(string? codeAje, int? clientId)
