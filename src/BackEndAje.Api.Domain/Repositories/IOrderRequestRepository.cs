@@ -49,5 +49,7 @@ namespace BackEndAje.Api.Domain.Repositories
             int? route = null,
             int? month = null,
             int? year = null);
+        
+        Task AssignAssetToOrder(int orderRequestId, int assetId, int assignedBy);
     }
 }

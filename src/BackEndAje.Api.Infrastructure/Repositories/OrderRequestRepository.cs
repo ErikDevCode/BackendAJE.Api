@@ -338,5 +338,22 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             return await query.CountAsync();
         }
+
+        public async Task AssignAssetToOrder(int orderRequestId, int assetId, int assignedBy)
+        {
+            var orderRequestAsset = new OrderRequestAssets
+            {
+                OrderRequestId = orderRequestId,
+                AssetId = assetId,
+                IsActive = true,
+                CreatedBy = assignedBy,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = assignedBy,
+            };
+
+            await this._context.OrderRequestAssets.AddAsync(orderRequestAsset);
+            await this._context.SaveChangesAsync();
+        }
     }
 }

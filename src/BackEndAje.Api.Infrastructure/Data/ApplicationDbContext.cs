@@ -84,6 +84,8 @@
 
         public DbSet<OrderStatusRoles> OrderStatusRoles { get; set; }
 
+        public DbSet<OrderRequestAssets> OrderRequestAssets { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -161,6 +163,8 @@
             modelBuilder.Entity<CensusAnswer>().ToTable("censusanswer");
 
             modelBuilder.Entity<OrderStatusRoles>().ToTable("orderstatusroles");
+
+            modelBuilder.Entity<OrderRequestAssets>().ToTable("orderrequestassets");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -278,6 +282,10 @@
             modelBuilder.Entity<OrderStatusRoles>()
                 .ToTable("orderstatusroles")
                 .HasKey(pm => pm.OrderStatusRolesId);
+
+            modelBuilder.Entity<OrderRequestAssets>()
+                .ToTable("orderrequestassets")
+                .HasKey(pm => pm.OrderRequestAssetId);
         }
     }
 }

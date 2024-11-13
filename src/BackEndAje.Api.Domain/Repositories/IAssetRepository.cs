@@ -13,6 +13,9 @@ namespace BackEndAje.Api.Domain.Repositories
         Task UpdateAssetAsync(Asset asset);
         
         Task<Asset?> GetAssetByCodeAjeAndLogoAndAssetType(string codeAje, string logo, string? assetType);
+        
+        Task<List<Asset>> GetAssetsWithOutClient(int pageNumber, int pageSize, string? codeAje);
+        Task<int> GetTotalAssetsWithOutClient(string? codeAje);
     }
 }
 

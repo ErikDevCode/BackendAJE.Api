@@ -74,6 +74,37 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             return await this._context.Assets.AsNoTracking().FirstOrDefaultAsync(x => x.CodeAje == codeAje && x.Logo == logo && x.AssetType == assetType);
         }
+
+        public async Task<List<Asset>> GetAssetsWithOutClient(int pageNumber, int pageSize, string? codeAje)
+        {
+            var query = this._context.Assets
+                .Where(a => !this._context.ClientAssets.Any(ca => ca.AssetId == a.AssetId) && a.IsActive)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(codeAje))
+            {
+                query = query.Where(a => a.CodeAje.Contains(codeAje));
+            }
+
+            return await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalAssetsWithOutClient(string? codeAje)
+        {
+            var query = this._context.Assets
+                .Where(a => !this._context.ClientAssets.Any(ca => ca.AssetId == a.AssetId) && a.IsActive)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(codeAje))
+            {
+                query = query.Where(a => a.CodeAje.Contains(codeAje));
+            }
+
+            return await query.CountAsync();
+        }
     }
 }
 

@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.OrderRequestAssets.Commands.AssignAssetsToOrderRequest;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -136,6 +138,18 @@ namespace BackEndAje.Api.Presentation.Controllers
             }
 
             return this.Ok(new Response { Result = documents });
+        }
+
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("assets/assign-assets")]
+        public async Task<IActionResult> AssignAssetsToOrderRequest([FromBody] AssignAssetsToOrderRequestCommand command)
+        {
+            var userId = this.GetUserId();
+            command.AssignedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
         }
 
         private int GetUserId()
