@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Asset.Queries.GetAssetWithOutClient;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -51,6 +53,17 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetAllAssets([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? codeAje = null)
         {
             var query = new GetAllAssetsQuery(pageNumber, pageSize, codeAje);
+            var clients = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = clients });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<GetAssetWithOutClientResult>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("asset-without-client")]
+        public async Task<IActionResult> GetAssetWithOutClient([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? codeAje = null)
+        {
+            var query = new GetAssetWithOutClientQuery(pageNumber, pageSize, codeAje);
             var clients = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clients });
         }
