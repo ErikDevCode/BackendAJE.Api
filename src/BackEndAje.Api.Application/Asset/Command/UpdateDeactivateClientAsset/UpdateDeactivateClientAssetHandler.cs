@@ -1,7 +1,6 @@
-using BackEndAje.Api.Domain.Entities;
-
 namespace BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset
 {
+    using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 
@@ -22,10 +21,10 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset
                 throw new InvalidOperationException($"Cliente con Activo asociado no existe.");
             }
 
-            if (!existingClientAsset.IsActive)
+            if (!existingClientAsset.IsActive != null)
             {
                 var existingActiveCodeAje = await this._clientAssetRepository.GetClientAssetsByCodeAje(existingClientAsset.CodeAje);
-                var isCodeAjeActiveWithAnotherClient = existingActiveCodeAje.Any(ca => ca.IsActive && ca.CodeAje == existingClientAsset.CodeAje);
+                var isCodeAjeActiveWithAnotherClient = existingActiveCodeAje.Any(ca => ca.IsActive == true && ca.CodeAje == existingClientAsset.CodeAje);
 
                 if (isCodeAjeActiveWithAnotherClient)
                 {

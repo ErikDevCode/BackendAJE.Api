@@ -10,6 +10,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
 
         public string ChangeReason { get; set; }
 
+        public DateTime? StatusDate { get; set; }
+
         public int CreatedBy { get; set; }
     }
 }

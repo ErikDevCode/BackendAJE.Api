@@ -11,7 +11,7 @@ namespace BackEndAje.Api.Domain.Entities
         public string Brand { get; set; }
         public string Model { get; set; }
         public bool AssetIsActive { get; set; }
-        public DateTime InstallationDate { get; set; }
+        public DateTime? InstallationDate { get; set; }
         public int CediId { get; set; }
         public string? CediName { get; set; }
         public int ClientId { get; set; }

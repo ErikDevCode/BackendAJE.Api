@@ -31,5 +31,6 @@ namespace BackEndAje.Api.Domain.Entities
         public OrderStatus OrderStatus { get; set; }
         
         public ICollection<OrderRequestDocument> OrderRequestDocuments { get; set; }
+        public ICollection<OrderRequestAssets> OrderRequestAssets { get; set; }
     }
 }

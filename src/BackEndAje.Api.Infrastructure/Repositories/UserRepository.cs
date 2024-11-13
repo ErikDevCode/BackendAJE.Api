@@ -182,6 +182,7 @@
                 .ToListAsync();
 
             var menuItems = await this._context.MenuItems
+                .Where(mi => mi.MenuItemActions.Any(mia => accessibleActions.Contains(mia.MenuItemActionId)))
                 .Select(mi => new MenuItemDto
                 {
                     MenuItemId = mi.MenuItemId,

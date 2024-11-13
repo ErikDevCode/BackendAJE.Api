@@ -19,5 +19,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<ClientAssetsTrace>> GetClientAssetTracesByAssetId(int pageNumber, int pageSize, int assetId);
 
         Task<int> GetTotalClientAssetsTrace(int? assetId);
+        
+        Task<ClientAssets> GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(int clientId, int assetId);
     }
 }
