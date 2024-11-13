@@ -211,12 +211,6 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                             this._context.RoleMenuAccess.Remove(roleMenuAccess);
                         }
                     }
-
-                    // Paso 5e: Desactivar RolePermission si no tiene relación activa
-                    rolePermission.Status = false;
-                    rolePermission.UpdatedAt = DateTime.Now;
-                    rolePermission.UpdatedBy = updatedBy;
-                    this._context.RolePermissions.Update(rolePermission);
                 }
             }
 
