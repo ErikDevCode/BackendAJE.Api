@@ -33,5 +33,22 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             return await this._context.Cedis.ToListAsync();
         }
+
+        public async Task<List<Cedi>> GetCedisByUserIdAsync(int userId)
+        {
+            var isAdmin = await this._context.UserRoles
+                .AnyAsync(ur => ur.UserId == userId && ur.Role.RoleName == "Administrador");
+
+            if (isAdmin)
+            {
+                return await this._context.Cedis.ToListAsync();
+            }
+
+            return (await this._context.Users
+                .Where(u => u.UserId == userId && u.CediId != null)
+                .Select(u => u.Cedi)
+                .Distinct()
+                .ToListAsync())!;
+        }
     }
 }
