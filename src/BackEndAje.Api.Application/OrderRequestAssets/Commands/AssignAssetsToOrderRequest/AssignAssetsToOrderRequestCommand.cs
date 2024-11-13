@@ -9,7 +9,5 @@ namespace BackEndAje.Api.Application.OrderRequestAssets.Commands.AssignAssetsToO
         public List<int> AssetIds { get; set; }
 
         public int AssignedBy { get; set; }
-
-        public DateTime InstallationDate { get; set; }
     }
 }

@@ -27,12 +27,12 @@ namespace BackEndAje.Api.Application.OrderRequestAssets.Commands.AssignAssetsToO
                 var newClientAsset = new ClientAssets()
                 {
                     CediId = orderRequest!.CediId,
-                    InstallationDate = request.InstallationDate,
+                    InstallationDate = null,
                     ClientId = orderRequest.ClientId,
                     AssetId = assetId,
                     CodeAje = asset.CodeAje,
-                    Notes = "Instalación Activo",
-                    IsActive = true,
+                    Notes = "Activo asignado a un cliente pero no Aprobado",
+                    IsActive = null,
                     CreatedAt = DateTime.Now,
                     CreatedBy = request.AssignedBy,
                     UpdatedAt = DateTime.Now,

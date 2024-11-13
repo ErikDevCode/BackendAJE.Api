@@ -29,6 +29,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<OrderRequest?> GetOrderRequestById(int id)
         {
             var orderRequest = await this._context.OrderRequests
+                .AsNoTracking()
                 .Include(o => o.Supervisor)
                 .Include(o => o.Sucursal)
                 .Include(o => o.ReasonRequest)
@@ -45,7 +46,9 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .ThenInclude(d => d.District)
                 .Include(o => o.Client)
                 .ThenInclude(t => t.DocumentType)
-                .Include(o => o.OrderRequestDocuments) 
+                .Include(o => o.OrderRequestDocuments)
+                .Include(oa => oa.OrderRequestAssets.Where(a => a.IsActive))
+                .ThenInclude(a => a.Asset)
                 .SingleOrDefaultAsync(o => o.OrderRequestId == id);
 
             return orderRequest;
@@ -188,7 +191,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task UpdateStatusOrderRequestAsync(int orderRequestId, int newStatusId, int createdBy)
         {
-            var orderRequest = new OrderRequest { OrderRequestId = orderRequestId, OrderStatusId = newStatusId, UpdatedBy = createdBy };
+            var orderRequest = new OrderRequest { OrderRequestId = orderRequestId, OrderStatusId = newStatusId, UpdatedBy = createdBy, UpdatedAt = DateTime.Now};
 
             this._context.OrderRequests.Attach(orderRequest);
             this._context.Entry(orderRequest).Property(o => o.OrderStatusId).IsModified = true;

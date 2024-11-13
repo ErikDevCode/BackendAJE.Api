@@ -21,7 +21,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateClientAssetReassign
                 throw new InvalidOperationException("El activo con el cliente asociado no existe.");
             }
 
-            if (existingClientAsset.IsActive)
+            if (existingClientAsset.IsActive != null)
             {
                 throw new InvalidOperationException("No se puede reasignar un Activo que está activo. Debe desactivarse primero.");
             }

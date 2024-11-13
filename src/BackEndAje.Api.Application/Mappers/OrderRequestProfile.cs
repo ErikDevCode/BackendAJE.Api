@@ -1,6 +1,7 @@
 namespace BackEndAje.Api.Application.Mappers
 {
     using AutoMapper;
+    using BackEndAje.Api.Application.Dtos.Asset;
     using BackEndAje.Api.Application.Dtos.Cedi;
     using BackEndAje.Api.Application.Dtos.Client;
     using BackEndAje.Api.Application.Dtos.OrderRequests;
@@ -33,10 +34,16 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
 
+            this.CreateMap<Asset, AssetDto>();
+
+            this.CreateMap<OrderRequestAssets, OrderRequestAssetDto>()
+                .ForMember(dest => dest.AssetDto, opt => opt.MapFrom(src => src.Asset));
+
             this.CreateMap<OrderRequest, GetOrderRequestByIdResult>()
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
                 .ForMember(dest => dest.Supervisor, opt => opt.MapFrom(src => src.Supervisor))
-                .ForMember(dest => dest.OrderRequestDocuments, opt => opt.MapFrom(src => src.OrderRequestDocuments));
+                .ForMember(dest => dest.OrderRequestDocuments, opt => opt.MapFrom(src => src.OrderRequestDocuments))
+                .ForMember(dest => dest.OrderRequestAssets, opt => opt.MapFrom(src => src.OrderRequestAssets));
 
             this.CreateMap<User, SupervisorDto>()
                 .ForMember(

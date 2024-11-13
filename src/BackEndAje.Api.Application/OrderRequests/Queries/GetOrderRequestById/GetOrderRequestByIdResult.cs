@@ -50,5 +50,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById
         public ProductSizeDto ProductSize { get; set; }
 
         public List<OrderRequestDocumentDto> OrderRequestDocuments { get; set; }
+
+        public List<OrderRequestAssetDto> OrderRequestAssets { get; set; }
     }
 }

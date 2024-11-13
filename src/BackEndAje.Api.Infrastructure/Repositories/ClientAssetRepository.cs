@@ -22,7 +22,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<ClientAssets>> GetClientAssetsByCodeAje(string codeAje)
         {
-            return await this._context.ClientAssets.AsNoTracking().Where(x => x.CodeAje == codeAje && x.IsActive).ToListAsync();
+            return await this._context.ClientAssets.AsNoTracking().Where(x => x.CodeAje == codeAje && x.IsActive == true).ToListAsync();
         }
 
         public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId)
@@ -157,6 +157,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             }
 
             return await query.CountAsync();
+        }
+
+        public async Task<ClientAssets> GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(int clientId, int assetId)
+        {
+            return (await this._context.ClientAssets.AsNoTracking().FirstOrDefaultAsync(x => x.ClientId == clientId && x.AssetId == assetId && x.IsActive == null))!;
         }
     }
 }
