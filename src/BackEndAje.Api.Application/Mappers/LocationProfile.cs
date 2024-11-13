@@ -3,6 +3,7 @@ namespace BackEndAje.Api.Application.Mappers
     using AutoMapper;
     using BackEndAje.Api.Application.Locations.Queries.GetCedisById;
     using BackEndAje.Api.Application.Locations.Queries.GetCedisByRegionId;
+    using BackEndAje.Api.Application.Locations.Queries.GetCedisByUserId;
     using BackEndAje.Api.Application.Locations.Queries.GetRegions;
     using BackEndAje.Api.Application.Locations.Queries.GetZoneByCediId;
     using BackEndAje.Api.Domain.Entities;
@@ -20,6 +21,8 @@ namespace BackEndAje.Api.Application.Mappers
             this.CreateMap<Cedi, GetCedisByIdResult>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CediId))
                 .ForMember(dest => dest.CediName, opt => opt.MapFrom(src => src.CediName));
+
+            this.CreateMap<Cedi, GetCedisByUserIdResult>();
         }
     }
 }

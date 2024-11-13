@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Locations.Queries.GetCedisByUserId;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -67,6 +69,17 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetCedisById(int cediId)
         {
             var query = new GetCedisByIdQuery(cediId);
+            var results = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = results });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetCedisByUserIdResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("GetCedisByUserId")]
+        public async Task<IActionResult> GetCedisByUserId(int userId)
+        {
+            var query = new GetCedisByUserIdQuery(userId);
             var results = await this._mediator.Send(query);
             return this.Ok(new Response { Result = results });
         }

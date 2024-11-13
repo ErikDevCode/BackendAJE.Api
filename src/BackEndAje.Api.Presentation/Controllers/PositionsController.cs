@@ -58,7 +58,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [Route("updateStatus/{roleId}")]
+        [Route("updateStatus")]
         public async Task<IActionResult> UpdateStatusPosition(int positionId)
         {
             var userId = this.GetUserId();

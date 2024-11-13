@@ -9,5 +9,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<Cedi>> GetCedisByRegionIdAsync(int regionId);
         
         Task<List<Cedi>> GetAllCedis();
+        
+        Task<List<Cedi>> GetCedisByUserIdAsync(int userId);
     }
 }
