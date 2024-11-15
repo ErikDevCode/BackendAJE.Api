@@ -1,4 +1,6 @@
-﻿namespace BackEndAje.Api.Infrastructure
+﻿using BackEndAje.Api.Application.Services;
+
+namespace BackEndAje.Api.Infrastructure
 {
     using BackEndAje.Api.Application.Interfaces;
     using BackEndAje.Api.Domain.Repositories;
@@ -21,6 +23,7 @@
                     new MySqlServerVersion(new Version(8, 0, 21)),
                     options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
+            services.AddSignalR();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IS3Service, S3Service>();
@@ -43,6 +46,7 @@
             services.AddScoped<IAssetRepository, AssetRepository>();
             services.AddScoped<IClientAssetRepository, ClientAssetRepository>();
             services.AddScoped<ICensusRepository, CensusRepository>();
+            services.AddScoped<NotificationService>();
 
             return services;
         }
