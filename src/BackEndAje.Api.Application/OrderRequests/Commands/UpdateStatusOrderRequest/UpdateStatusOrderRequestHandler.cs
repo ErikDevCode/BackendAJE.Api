@@ -20,10 +20,20 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
         {
             var orderRequest = await this._orderRequestRepository.GetOrderRequestById(request.OrderRequestId);
 
+            if (request.OrderStatusId == (int)OrderStatusConst.Aprobado && !orderRequest.OrderRequestDocuments.Any())
+            {
+                throw new InvalidOperationException("No se puede aprobar la solicitud sin documentos adjuntos.");
+            }
+
             foreach (var orderRequestAsset in orderRequest.OrderRequestAssets)
             {
                 var clientAssetDto = await this._clientAssetRepository
                     .GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(orderRequest.ClientId, orderRequestAsset.AssetId);
+
+                if (request.OrderStatusId == (int)OrderStatusConst.Rechazado && clientAssetDto == null)
+                {
+                    continue;
+                }
 
                 if (!IsValidOrderStatus(request.OrderStatusId))
                 {
