@@ -1,3 +1,6 @@
+using BackEndAje.Api.Application.Hubs;
+using Microsoft.AspNetCore.SignalR;
+
 namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest
 {
     using BackEndAje.Api.Application.Dtos.Const;
@@ -9,11 +12,13 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
     {
         private readonly IOrderRequestRepository _orderRequestRepository;
         private readonly IClientAssetRepository _clientAssetRepository;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public UpdateStatusOrderRequestHandler(IOrderRequestRepository orderRequestRepository, IClientAssetRepository clientAssetRepository)
+        public UpdateStatusOrderRequestHandler(IOrderRequestRepository orderRequestRepository, IClientAssetRepository clientAssetRepository, IHubContext<NotificationHub> hubContext)
         {
             this._orderRequestRepository = orderRequestRepository;
             this._clientAssetRepository = clientAssetRepository;
+            this._hubContext = hubContext;
         }
 
         public async Task<Unit> Handle(UpdateStatusOrderRequestCommand request, CancellationToken cancellationToken)
@@ -49,6 +54,12 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
             }
 
             await this.UpdateOrderRequestStatus(request);
+
+            if (orderRequest.Supervisor == null) return Unit.Value;
+            var notificationMessage = $"El estado de la orden del cliente: {orderRequest.ClientCode} ha sido actualizado de estado.";
+
+            await this._hubContext.Clients.User(orderRequest.Supervisor.UserId.ToString())
+                .SendAsync("ReceiveMessage", "Sistema", notificationMessage, cancellationToken: cancellationToken);
 
             return Unit.Value;
         }

@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using AssemblyReference = BackEndAje.Api.Application.AssemblyReference;
-
+using BackEndAje.Api.Application.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,6 +116,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<LoggingMiddleware>();
 
@@ -128,5 +129,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();
