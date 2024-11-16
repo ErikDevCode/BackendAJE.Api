@@ -86,6 +86,8 @@
 
         public DbSet<OrderRequestAssets> OrderRequestAssets { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -165,6 +167,8 @@
             modelBuilder.Entity<OrderStatusRoles>().ToTable("orderstatusroles");
 
             modelBuilder.Entity<OrderRequestAssets>().ToTable("orderrequestassets");
+
+            modelBuilder.Entity<Notification>().ToTable("notifications");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -286,6 +290,10 @@
             modelBuilder.Entity<OrderRequestAssets>()
                 .ToTable("orderrequestassets")
                 .HasKey(pm => pm.OrderRequestAssetId);
+
+            modelBuilder.Entity<Notification>()
+                .ToTable("notifications")
+                .HasKey(pm => pm.Id);
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using BackEndAje.Api.Application.Services;
-
-namespace BackEndAje.Api.Infrastructure
+﻿namespace BackEndAje.Api.Infrastructure
 {
     using BackEndAje.Api.Application.Interfaces;
+    using BackEndAje.Api.Application.Services;
     using BackEndAje.Api.Domain.Repositories;
     using BackEndAje.Api.Infrastructure.Data;
     using BackEndAje.Api.Infrastructure.Repositories;
@@ -47,6 +46,7 @@ namespace BackEndAje.Api.Infrastructure
             services.AddScoped<IClientAssetRepository, ClientAssetRepository>();
             services.AddScoped<ICensusRepository, CensusRepository>();
             services.AddScoped<NotificationService>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
 
             return services;
         }
