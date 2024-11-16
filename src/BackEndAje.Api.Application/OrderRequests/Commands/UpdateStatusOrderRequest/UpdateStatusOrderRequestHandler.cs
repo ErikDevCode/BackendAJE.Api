@@ -30,7 +30,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
         {
             var orderRequest = await this._orderRequestRepository.GetOrderRequestById(request.OrderRequestId);
 
-            // this.ValidateApproval(orderRequest, request.OrderStatusId);
+            this.ValidateApproval(orderRequest, request.OrderStatusId);
 
             await this.UpdateClientAssets(request, orderRequest);
 
