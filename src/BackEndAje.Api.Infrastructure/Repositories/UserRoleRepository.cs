@@ -25,5 +25,19 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .Where(ur => ur.UserId == userId)
                 .ToListAsync();
         }
+
+        public async Task<List<UserRole>> GetUserRolesByLogisticsProviderAsync()
+        {
+            return await this._context.UserRoles
+                .Where(ur => ur.RoleId == 3) // proveedor logistico
+                .ToListAsync();
+        }
+
+        public async Task<List<UserRole>> GetUserRolesByTradeAsync()
+        {
+            return await this._context.UserRoles
+                .Where(ur => ur.RoleId == 4) // trade
+                .ToListAsync();
+        }
     }
 }
