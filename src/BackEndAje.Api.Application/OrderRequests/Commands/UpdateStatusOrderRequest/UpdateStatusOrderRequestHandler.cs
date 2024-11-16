@@ -12,12 +12,16 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
         private readonly IOrderRequestRepository _orderRequestRepository;
         private readonly IClientAssetRepository _clientAssetRepository;
         private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly IMastersRepository _mastersRepository;
+        private readonly INotificationRepository _notificationRepository;
 
-        public UpdateStatusOrderRequestHandler(IOrderRequestRepository orderRequestRepository, IClientAssetRepository clientAssetRepository, IHubContext<NotificationHub> hubContext)
+        public UpdateStatusOrderRequestHandler(IOrderRequestRepository orderRequestRepository, IClientAssetRepository clientAssetRepository, IHubContext<NotificationHub> hubContext, IMastersRepository mastersRepository, INotificationRepository notificationRepository)
         {
             this._orderRequestRepository = orderRequestRepository;
             this._clientAssetRepository = clientAssetRepository;
             this._hubContext = hubContext;
+            this._mastersRepository = mastersRepository;
+            this._notificationRepository = notificationRepository;
         }
 
         public async Task<Unit> Handle(UpdateStatusOrderRequestCommand request, CancellationToken cancellationToken)
@@ -59,11 +63,22 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 return Unit.Value;
             }
 
-            var notificationMessage = $"El estado de la orden del cliente: {orderRequest.ClientCode} ha sido actualizado de estado.";
+            var orderStatus = await this._mastersRepository.GetAllOrderStatus();
+            var orderStatusName = orderStatus.FirstOrDefault(s => s.OrderStatusId == request.OrderStatusId);
+            var notificationMessage = $"La orden de Nro. {orderRequest.OrderRequestId} con código de cliente: {orderRequest.ClientCode} ha sido actualizado al estado {orderStatusName}.";
 
             await this._hubContext.Clients.User(orderRequest.Supervisor.UserId.ToString())
                 .SendAsync("ReceiveMessage", "Sistema", notificationMessage, cancellationToken: cancellationToken);
 
+            var notificationDto = new Notification()
+            {
+                UserId = orderRequest.Supervisor.UserId,
+                Message = notificationMessage,
+                IsRead = false,
+                CreatedAt = DateTime.Now,
+            };
+
+            await this._notificationRepository.AddNotificationAsync(notificationDto);
             return Unit.Value;
         }
 
