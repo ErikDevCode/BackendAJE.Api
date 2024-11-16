@@ -1,12 +1,11 @@
-using BackEndAje.Api.Application.Hubs;
-using Microsoft.AspNetCore.SignalR;
-
 namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest
 {
     using BackEndAje.Api.Application.Dtos.Const;
+    using BackEndAje.Api.Application.Hubs;
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
+    using Microsoft.AspNetCore.SignalR;
 
     public class UpdateStatusOrderRequestHandler : IRequestHandler<UpdateStatusOrderRequestCommand, Unit>
     {
@@ -55,7 +54,11 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
 
             await this.UpdateOrderRequestStatus(request);
 
-            if (orderRequest.Supervisor == null) return Unit.Value;
+            if (orderRequest.Supervisor == null)
+            {
+                return Unit.Value;
+            }
+
             var notificationMessage = $"El estado de la orden del cliente: {orderRequest.ClientCode} ha sido actualizado de estado.";
 
             await this._hubContext.Clients.User(orderRequest.Supervisor.UserId.ToString())

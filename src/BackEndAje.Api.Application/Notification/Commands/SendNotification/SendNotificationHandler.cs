@@ -15,7 +15,8 @@ namespace BackEndAje.Api.Application.Notification.Commands.SendNotification
 
         public async Task<Unit> Handle(SendNotificationCommand request, CancellationToken cancellationToken)
         {
-            await this._hubContext.Clients.All.SendAsync("ReceiveMessage", request.User, request.Message, cancellationToken: cancellationToken);
+            await this._hubContext.Clients.User(request.User)
+                .SendAsync("ReceiveMessage", "Sistema", request.Message, cancellationToken: cancellationToken);
             return Unit.Value;
         }
     }
