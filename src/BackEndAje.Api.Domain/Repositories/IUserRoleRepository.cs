@@ -7,5 +7,9 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<UserRole>> GetAllUserRolesAsync();
 
         Task<List<UserRole>> GetUserRolesAsync(int userId);
+        
+        Task<List<UserRole>> GetUserRolesByLogisticsProviderAsync();
+        
+        Task<List<UserRole>> GetUserRolesByTradeAsync();
     }
 }

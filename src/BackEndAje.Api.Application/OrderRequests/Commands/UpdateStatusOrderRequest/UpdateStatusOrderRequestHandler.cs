@@ -14,25 +14,53 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly IMastersRepository _mastersRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
 
-        public UpdateStatusOrderRequestHandler(IOrderRequestRepository orderRequestRepository, IClientAssetRepository clientAssetRepository, IHubContext<NotificationHub> hubContext, IMastersRepository mastersRepository, INotificationRepository notificationRepository)
+        public UpdateStatusOrderRequestHandler(IOrderRequestRepository orderRequestRepository, IClientAssetRepository clientAssetRepository, IHubContext<NotificationHub> hubContext, IMastersRepository mastersRepository, INotificationRepository notificationRepository, IUserRoleRepository userRoleRepository)
         {
             this._orderRequestRepository = orderRequestRepository;
             this._clientAssetRepository = clientAssetRepository;
             this._hubContext = hubContext;
             this._mastersRepository = mastersRepository;
             this._notificationRepository = notificationRepository;
+            this._userRoleRepository = userRoleRepository;
         }
 
         public async Task<Unit> Handle(UpdateStatusOrderRequestCommand request, CancellationToken cancellationToken)
         {
             var orderRequest = await this._orderRequestRepository.GetOrderRequestById(request.OrderRequestId);
 
-            if (request.OrderStatusId == (int)OrderStatusConst.Aprobado && !orderRequest.OrderRequestDocuments.Any())
+            // this.ValidateApproval(orderRequest, request.OrderStatusId);
+
+            await this.UpdateClientAssets(request, orderRequest);
+
+            await this.UpdateOrderRequestStatus(request);
+
+            if (request.OrderStatusId != (int)OrderStatusConst.Aprobado)
+            {
+                await this.NotifySupervisor(orderRequest, request.OrderStatusId, cancellationToken);
+            }
+
+            if (request.OrderStatusId == (int)OrderStatusConst.Aprobado)
+            {
+                await this.NotifyLogisticsProviders(orderRequest, request.OrderStatusId, cancellationToken);
+            }
+
+            return Unit.Value;
+        }
+
+        #region Private Methods
+
+        private void ValidateApproval(OrderRequest orderRequest, int orderStatusId)
+        {
+            if (orderStatusId == (int)OrderStatusConst.Aprobado && !orderRequest.OrderRequestDocuments.Any())
             {
                 throw new InvalidOperationException("No se puede aprobar la solicitud sin documentos adjuntos.");
             }
+        }
 
+        private async Task UpdateClientAssets(UpdateStatusOrderRequestCommand request, OrderRequest orderRequest)
+        {
             foreach (var orderRequestAsset in orderRequest.OrderRequestAssets)
             {
                 var clientAssetDto = await this._clientAssetRepository
@@ -49,37 +77,57 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 }
 
                 var clientAsset = this.CreateClientAssetFromDto(clientAssetDto, request);
-
                 clientAsset.IsActive = request.OrderStatusId == (int)OrderStatusConst.Atendido;
                 clientAsset.Notes = this.GetStatusNotes(request.OrderStatusId);
 
                 await this._clientAssetRepository.UpdateClientAssetsAsync(clientAsset);
             }
+        }
 
-            await this.UpdateOrderRequestStatus(request);
-
-            if (orderRequest.Supervisor == null)
-            {
-                return Unit.Value;
-            }
+        private async Task NotifySupervisor(OrderRequest orderRequest, int orderStatusId, CancellationToken cancellationToken)
+        {
+            if (orderRequest.Supervisor == null) return;
 
             var orderStatus = await this._mastersRepository.GetAllOrderStatus();
-            var orderStatusName = orderStatus.FirstOrDefault(s => s.OrderStatusId == request.OrderStatusId);
-            var notificationMessage = $"La orden de Nro. {orderRequest.OrderRequestId} con código de cliente: {orderRequest.ClientCode} ha sido actualizado al estado {orderStatusName}.";
+            var orderStatusName = orderStatus.FirstOrDefault(s => s.OrderStatusId == orderStatusId)?.StatusName;
+            var notificationMessage = $"Te informamos que la solicitud Nro. {orderRequest.OrderRequestId}, asociada al cliente con el código {orderRequest.ClientCode}, ha sido actualizada al estado: {orderStatusName}.";
 
+            // Notificar al supervisor a través de SignalR
             await this._hubContext.Clients.User(orderRequest.Supervisor.UserId.ToString())
-                .SendAsync("ReceiveMessage", "Sistema", notificationMessage, cancellationToken: cancellationToken);
+                .SendAsync("ReceiveMessage", "Sistema", notificationMessage, cancellationToken);
 
-            var notificationDto = new Notification()
+            var notification = new Notification
             {
                 UserId = orderRequest.Supervisor.UserId,
                 Message = notificationMessage,
                 IsRead = false,
                 CreatedAt = DateTime.Now,
             };
+            await this._notificationRepository.AddNotificationAsync(notification);
+        }
 
-            await this._notificationRepository.AddNotificationAsync(notificationDto);
-            return Unit.Value;
+        private async Task NotifyLogisticsProviders(OrderRequest orderRequest, int orderStatusId, CancellationToken cancellationToken)
+        {
+            var userRoles = await this._userRoleRepository.GetUserRolesByLogisticsProviderAsync();
+            var orderStatus = await this._mastersRepository.GetAllOrderStatus();
+            var orderStatusName = orderStatus.FirstOrDefault(s => s.OrderStatusId == orderStatusId)?.StatusName;
+            foreach (var user in userRoles)
+            {
+                var notificationMessage = $"Te informamos que la solicitud Nro. {orderRequest.OrderRequestId}, asociada al cliente con el código {orderRequest.ClientCode}, ha sido actualizada al estado: {orderStatusName}.";
+
+                // Notificar a través de SignalR
+                await this._hubContext.Clients.User(user.UserId.ToString())
+                    .SendAsync("ReceiveMessage", "Sistema", notificationMessage, cancellationToken);
+
+                var notification = new Notification
+                {
+                    UserId = user.UserId,
+                    Message = notificationMessage,
+                    IsRead = false,
+                    CreatedAt = DateTime.Now,
+                };
+                await this._notificationRepository.AddNotificationAsync(notification);
+            }
         }
 
         private ClientAssets CreateClientAssetFromDto(ClientAssets clientAssetDto, UpdateStatusOrderRequestCommand request)
@@ -115,7 +163,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 (int)OrderStatusConst.Rechazado => "Activo Rechazado",
                 (int)OrderStatusConst.FalsoFlete => "Activo tiene Falso Flete",
                 (int)OrderStatusConst.Anulado => "Activo está Anulado",
-                _ => throw new ArgumentOutOfRangeException(nameof(orderStatusId), orderStatusId, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(orderStatusId), orderStatusId, null),
             };
         }
 
@@ -134,5 +182,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
 
             await this._orderRequestRepository.AddOrderRequestStatusHistoryAsync(orderRequestStatusHistory);
         }
+
+        #endregion
     }
 }
