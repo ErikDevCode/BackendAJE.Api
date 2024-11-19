@@ -1,9 +1,11 @@
-using BackEndAje.Api.Application.OrderRequestAssets.Commands.AssignAssetsToOrderRequest;
+using BackEndAje.Api.Application.OrderRequestAssets.Commands.DeleteAssetToOrderRequest;
+using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingAssetsByOrderRequestId;
 
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.OrderRequestAssets.Commands.AssignAssetsToOrderRequest;
     using BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderRequestDocumentById;
     using BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest;
@@ -151,6 +153,35 @@ namespace BackEndAje.Api.Presentation.Controllers
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
+
+        [HttpPatch]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("assets/delete-asset")]
+        public async Task<IActionResult> DeleteAssetToOrderRequest([FromBody] DeleteAssetToOrderRequestCommand command)
+        {
+            var userId = this.GetUserId();
+            command.AssignedBy = userId;
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<GetTrackingAssetsByOrderRequestIdResult>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.NotFound)]
+        [Route("tracking/assets/{orderRequestId}")]
+        public async Task<IActionResult> GetTrackingAssetsByOrderRequestId(int orderRequestId)
+        {
+            var result = await this._mediator.Send(new GetTrackingAssetsByOrderRequestIdQuery(orderRequestId));
+
+            if (result == null)
+            {
+                return this.NotFound(new { Message = $"Solicitud con ID {orderRequestId} no encontrado." });
+            }
+
+            return this.Ok(result);
+        }
+
 
         private int GetUserId()
         {

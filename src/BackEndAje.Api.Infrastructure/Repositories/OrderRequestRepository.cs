@@ -61,7 +61,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<OrderRequestDocument> GetOrderRequestDocumentById(int id)
         {
-            return (await this._context.OrderRequestDocuments.FirstOrDefaultAsync(x => x.DocumentId == id)) !;
+            return (await this._context.OrderRequestDocuments.AsNoTracking().FirstOrDefaultAsync(x => x.DocumentId == id)) !;
         }
 
         public async Task DeleteOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument)
@@ -342,7 +342,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await query.CountAsync();
         }
 
-        public async Task AssignAssetToOrder(int orderRequestId, int assetId, int assignedBy)
+        public async Task<int> AssignAssetToOrder(int orderRequestId, int assetId, int assignedBy)
         {
             var orderRequestAsset = new OrderRequestAssets
             {
@@ -357,6 +357,38 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             await this._context.OrderRequestAssets.AddAsync(orderRequestAsset);
             await this._context.SaveChangesAsync();
+            return orderRequestAsset.OrderRequestAssetId;
+        }
+
+        public async Task AddOrderRequestAssetTrace(OrderRequestAssetsTrace orderRequestAssetsTrace)
+        {
+            this._context.OrderRequestAssetsTrace.Add(orderRequestAssetsTrace);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task<OrderRequestAssets> GetOrderRequestAssetsById(int orderRequestAssetId)
+        {
+            return (await this._context.OrderRequestAssets.AsNoTracking().FirstOrDefaultAsync(
+                x => x.OrderRequestAssetId == orderRequestAssetId))!;
+        }
+
+        public async Task UpdateAssetToOrderRequest(OrderRequestAssets orderRequestAssets)
+        {
+            this._context.Entry(orderRequestAssets).State = EntityState.Detached;
+            this._context.OrderRequestAssets.Update(orderRequestAssets);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task<List<OrderRequestAssetsTrace>> GetOrderRequestAssetsTraceByOrderRequestId(int orderRequestId)
+        {
+            return await this._context.OrderRequestAssetsTrace
+                .Include(x => x.Asset)
+                .Include(x => x.OrderRequest)
+                .Include(x => x.OrderRequestAssets)
+                .Include(x => x.User)
+                .Where(o => o.OrderRequestId == orderRequestId)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
         }
     }
 }

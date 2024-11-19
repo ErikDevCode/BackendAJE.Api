@@ -12,7 +12,11 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<int> GetTotalClientAssets(string? codeaje, int? clientId);
         Task<ClientAssets> GetClientAssetByIdAsync(int Id);
         
+        Task<ClientAssets> GetClientAssetByClientIdAndAssetIdAndIsNotActivateAsync(int clientId, int assetId);
+        
         Task UpdateClientAssetsAsync(ClientAssets clientAssets);
+
+        Task DeleteClientAssetAsync(ClientAssets clientAssets);
 
         Task AddTraceabilityRecordAsync(ClientAssetsTrace clientAssetsTrace);
         

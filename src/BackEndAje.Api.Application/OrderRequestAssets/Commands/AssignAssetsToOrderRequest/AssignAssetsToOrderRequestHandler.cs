@@ -23,7 +23,7 @@ namespace BackEndAje.Api.Application.OrderRequestAssets.Commands.AssignAssetsToO
             foreach (var assetId in request.AssetIds)
             {
                 var asset = await this._assetRepository.GetAssetById(assetId);
-                await this._orderRequestRepository.AssignAssetToOrder(request.OrderRequestId, assetId, request.AssignedBy);
+                var orderRequestAssetId = await this._orderRequestRepository.AssignAssetToOrder(request.OrderRequestId, assetId, request.AssignedBy);
                 var newClientAsset = new ClientAssets()
                 {
                     CediId = orderRequest!.CediId,
@@ -39,6 +39,18 @@ namespace BackEndAje.Api.Application.OrderRequestAssets.Commands.AssignAssetsToO
                     UpdatedBy = request.AssignedBy,
                 };
                 await this._clientAssetRepository.AddClientAsset(newClientAsset);
+
+                var traceEntry = new OrderRequestAssetsTrace
+                {
+                    OrderRequestAssetId = orderRequestAssetId,
+                    OrderRequestId = request.OrderRequestId,
+                    AssetId = assetId,
+                    IsActive = true,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = request.AssignedBy,
+                };
+
+                await this._orderRequestRepository.AddOrderRequestAssetTrace(traceEntry);
             }
 
             return Unit.Value;

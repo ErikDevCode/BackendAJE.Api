@@ -15,6 +15,7 @@ namespace BackEndAje.Api.Application.Mappers
     using BackEndAje.Api.Application.OrderRequests.Documents.Commands.CreateDocumentByOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById;
+    using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingAssetsByOrderRequestId;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingByOrderRequestId;
     using BackEndAje.Api.Domain.Entities;
 
@@ -74,7 +75,12 @@ namespace BackEndAje.Api.Application.Mappers
 
             this.CreateMap<OrderRequestStatusHistory, GetTrackingByOrderRequestIdResult>()
                 .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.OrderStatus.StatusName))
-                .ForMember(dest => dest.ResponsibleUser, opt => opt.MapFrom(src => $"{src.CreatedByUser .Names} {src.CreatedByUser .PaternalSurName} {src.CreatedByUser .MaternalSurName}"));
+                .ForMember(dest => dest.ResponsibleUser, opt => opt.MapFrom(src => $"{src.CreatedByUser.Names} {src.CreatedByUser.PaternalSurName} {src.CreatedByUser.MaternalSurName}"));
+
+            this.CreateMap<OrderRequestAssetsTrace, GetTrackingAssetsByOrderRequestIdResult>()
+                .ForMember(dest => dest.CodeAje, opt => opt.MapFrom(src => src.Asset.CodeAje))
+                .ForMember(dest => dest.AssetName, opt => opt.MapFrom(src => $"{src.Asset.Logo} {src.Asset.Brand} {src.Asset.Model}"))
+                .ForMember(dest => dest.ResponsibleUser, opt => opt.MapFrom(src => $"{src.User.Names} {src.User.PaternalSurName} {src.User.MaternalSurName}"));
         }
     }
 }
