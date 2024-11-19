@@ -112,10 +112,21 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return (await this._context.ClientAssets.AsNoTracking().FirstOrDefaultAsync(x => x.ClientAssetId == Id))!;
         }
 
+        public async Task<ClientAssets> GetClientAssetByClientIdAndAssetIdAndIsNotActivateAsync(int clientId, int assetId)
+        {
+            return (await this._context.ClientAssets.AsNoTracking().FirstOrDefaultAsync(x => x.ClientId == clientId && x.AssetId == assetId && x.IsActive == null))!;
+        }
+
         public async Task UpdateClientAssetsAsync(ClientAssets clientAssets)
         {
             this._context.Entry(clientAssets).State = EntityState.Detached;
             this._context.ClientAssets.Update(clientAssets);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task DeleteClientAssetAsync(ClientAssets clientAssets)
+        {
+            this._context.ClientAssets.Remove(clientAssets);
             await this._context.SaveChangesAsync();
         }
 

@@ -50,6 +50,13 @@ namespace BackEndAje.Api.Domain.Repositories
             int? month = null,
             int? year = null);
         
-        Task AssignAssetToOrder(int orderRequestId, int assetId, int assignedBy);
+        Task<int> AssignAssetToOrder(int orderRequestId, int assetId, int assignedBy);
+
+        Task AddOrderRequestAssetTrace(OrderRequestAssetsTrace orderRequestAssetsTrace);
+        Task<OrderRequestAssets> GetOrderRequestAssetsById(int orderRequestAssetId);
+        
+        Task UpdateAssetToOrderRequest(OrderRequestAssets orderRequestAssets);
+        
+        Task<List<OrderRequestAssetsTrace>> GetOrderRequestAssetsTraceByOrderRequestId(int orderRequestId);
     }
 }

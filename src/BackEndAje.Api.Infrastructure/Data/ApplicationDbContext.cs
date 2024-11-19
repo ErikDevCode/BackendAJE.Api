@@ -88,6 +88,8 @@
 
         public DbSet<Notification> Notifications { get; set; }
 
+        public DbSet<OrderRequestAssetsTrace> OrderRequestAssetsTrace { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -169,6 +171,8 @@
             modelBuilder.Entity<OrderRequestAssets>().ToTable("orderrequestassets");
 
             modelBuilder.Entity<Notification>().ToTable("notifications");
+
+            modelBuilder.Entity<OrderRequestAssetsTrace>().ToTable("orderrequestassetstrace");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -294,6 +298,33 @@
             modelBuilder.Entity<Notification>()
                 .ToTable("notifications")
                 .HasKey(pm => pm.Id);
+
+            modelBuilder.Entity<OrderRequestAssetsTrace>().ToTable("orderrequestassetstrace");
+
+            modelBuilder.Entity<OrderRequestAssetsTrace>(entity =>
+            {
+                entity.HasKey(e => e.OrderRequestAssetTraceId);
+
+                entity.HasOne(e => e.OrderRequestAssets)
+                    .WithMany()
+                    .HasForeignKey(e => e.OrderRequestAssetId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Asset)
+                    .WithMany()
+                    .HasForeignKey(e => e.AssetId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.OrderRequest)
+                    .WithMany()
+                    .HasForeignKey(e => e.OrderRequestId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.CreatedBy)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }
