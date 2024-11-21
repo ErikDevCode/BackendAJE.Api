@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.Positions.Commands.UpdatePosition
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class UpdatePositionCommand : IRequest<Unit>
+    public class UpdatePositionCommand : IRequest<Unit>, IHasUpdatedByInfo
     {
         public int PositionId { get; set; }
 

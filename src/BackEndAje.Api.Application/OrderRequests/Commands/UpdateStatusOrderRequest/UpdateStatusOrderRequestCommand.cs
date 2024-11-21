@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class UpdateStatusOrderRequestCommand : IRequest<Unit>
+    public class UpdateStatusOrderRequestCommand : IRequest<Unit>, IHasCreatedByInfo
     {
         public int OrderRequestId { get; set; }
 

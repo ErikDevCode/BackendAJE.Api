@@ -1,9 +1,11 @@
 namespace BackEndAje.Api.Application.Dtos.Roles
 {
-    public class UpdateStatusRoleDto
-    {
-        public int RoleId { get; set; }
+    using BackEndAje.Api.Application.Behaviors;
 
-        public int UpdatedBy { get; set; }
+    public class UpdateStatusRoleDto : IHasUpdatedByInfo
+    {
+         public int RoleId { get; set; }
+
+         public int UpdatedBy { get; set; }
     }
 }

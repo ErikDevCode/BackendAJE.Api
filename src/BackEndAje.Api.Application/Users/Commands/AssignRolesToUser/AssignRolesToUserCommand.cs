@@ -1,8 +1,9 @@
 ﻿namespace BackEndAje.Api.Application.Users.Commands.AssignRolesToUser
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class AssignRolesToUserCommand() : IRequest<AssingRolesToUserResult>
+    public class AssignRolesToUserCommand() : IRequest<AssingRolesToUserResult>, IHasAuditInfo
     {
         public int UserId { get; set; }
 

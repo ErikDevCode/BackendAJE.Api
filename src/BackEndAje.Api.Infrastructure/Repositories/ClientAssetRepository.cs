@@ -136,10 +136,10 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             await this._context.SaveChangesAsync();
         }
 
-        public async Task<List<ClientAssetsTrace>> GetClientAssetTracesByAssetId(int pageNumber, int pageSize, int assetId)
+        public async Task<List<ClientAssetsTrace>> GetClientAssetTracesByAssetId(int pageNumber, int pageSize, int? assetId)
         {
             return await this._context.ClientAssetsTrace
-                .Where(cat => cat.AssetId == assetId)
+                .Where(cat => !assetId.HasValue || cat.AssetId == assetId)
                 .Select(cat => new ClientAssetsTrace
                 {
                     ClientAssetTraceId = cat.ClientAssetTraceId,

@@ -21,10 +21,10 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
 
         public async Task<PaginatedResult<GetAllOrderRequestsResult>> Handle(GetAllOrderRequestsQuery request, CancellationToken cancellationToken)
         {
-            var user = await this._userRepository.GetUserByIdAsync(request.userId);
+            var user = await this._userRepository.GetUserByIdAsync(request.UserId);
             var role = user!.UserRoles.Select(x => x.Role.RoleName).FirstOrDefault();
 
-            var (supervisorId, vendedorId) = this.GetRoleFilters(role!, request.userId);
+            var (supervisorId, vendedorId) = this.GetRoleFilters(role!, request.UserId);
 
             var orderRequests = await this._orderRequestRepository.GetAllOrderRequestAsync(
                 request.PageNumber,

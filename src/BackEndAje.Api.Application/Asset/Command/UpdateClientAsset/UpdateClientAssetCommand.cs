@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.Asset.Command.UpdateClientAsset
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class UpdateClientAssetCommand : IRequest<Unit>
+    public class UpdateClientAssetCommand : IRequest<Unit>, IHasUpdatedByInfo
     {
         public int ClientAssetId { get; set; }
 

@@ -1,11 +1,11 @@
-using BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer;
-using BackEndAje.Api.Application.Census.Queries.GetAnswerByClientId;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
+    using BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer;
+    using BackEndAje.Api.Application.Census.Queries.GetAnswerByClientId;
     using BackEndAje.Api.Application.Census.Queries.GetCensusQuestions;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Dtos.Const;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
 
@@ -37,8 +37,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("create-answer")]
         public async Task<IActionResult> CreateCensusAnswer([FromForm] CreateCensusAnswerCommand command)
         {
-            var userId = this.GetUserId();
-            command.CreatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -52,17 +50,6 @@ namespace BackEndAje.Api.Presentation.Controllers
             var query = new GetAnswerByClientIdQuery(PageNumber, PageSize, clientId, monthPeriod);
             var answer = await this._mediator.Send(query);
             return this.Ok(new Response { Result = answer });
-        }
-
-        private int GetUserId()
-        {
-            var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
-            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
-            {
-                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
-            }
-
-            return userId;
         }
     }
 }

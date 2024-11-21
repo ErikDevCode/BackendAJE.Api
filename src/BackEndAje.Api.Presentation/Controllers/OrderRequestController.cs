@@ -1,11 +1,10 @@
-using BackEndAje.Api.Application.OrderRequestAssets.Commands.DeleteAssetToOrderRequest;
-using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingAssetsByOrderRequestId;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Dtos.Const;
     using BackEndAje.Api.Application.OrderRequestAssets.Commands.AssignAssetsToOrderRequest;
+    using BackEndAje.Api.Application.OrderRequestAssets.Commands.DeleteAssetToOrderRequest;
     using BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderRequestDocumentById;
     using BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest;
@@ -13,6 +12,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.OrderRequests.Documents.Commands.DeleteDocumentByOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById;
+    using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingAssetsByOrderRequestId;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingByOrderRequestId;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
@@ -37,9 +37,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateOrderRequest([FromBody] CreateOrderRequestsCommand command)
         {
-            var userId = this.GetUserId();
-            command.CreatedBy = userId;
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -57,8 +54,7 @@ namespace BackEndAje.Api.Presentation.Controllers
             [FromQuery] DateTime? StartDate = null,
             [FromQuery] DateTime? EndDate = null)
         {
-            var userId = this.GetUserId();
-            var query = new GetAllOrderRequestsQuery(userId, pageNumber ?? 1, pageSize ?? 10, ClientCode, StatusCode, ReasonRequestId, StartDate, EndDate);
+            var query = new GetAllOrderRequestsQuery(pageNumber ?? 1, pageSize ?? 10, ClientCode, StatusCode, ReasonRequestId, StartDate, EndDate);
             var roles = await this._mediator.Send(query);
             return this.Ok(new Response { Result = roles });
         }
@@ -84,8 +80,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("updateStatusOrderRequest")]
         public async Task<IActionResult> UpdateStatusOrderRequest([FromBody] UpdateStatusOrderRequestCommand command)
         {
-            var userId = this.GetUserId();
-            command.CreatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -112,9 +106,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("documents/create")]
         public async Task<IActionResult> CreateDocumentByOrderRequest([FromForm] CreateDocumentByOrderRequestCommand command)
         {
-            var userId = this.GetUserId();
-            command.CreatedBy = userId;
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -148,8 +139,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("assets/assign-assets")]
         public async Task<IActionResult> AssignAssetsToOrderRequest([FromBody] AssignAssetsToOrderRequestCommand command)
         {
-            var userId = this.GetUserId();
-            command.AssignedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -160,8 +149,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("assets/delete-asset")]
         public async Task<IActionResult> DeleteAssetToOrderRequest([FromBody] DeleteAssetToOrderRequestCommand command)
         {
-            var userId = this.GetUserId();
-            command.AssignedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -180,18 +167,6 @@ namespace BackEndAje.Api.Presentation.Controllers
             }
 
             return this.Ok(result);
-        }
-
-
-        private int GetUserId()
-        {
-            var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
-            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
-            {
-                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
-            }
-
-            return userId;
         }
     }
 }

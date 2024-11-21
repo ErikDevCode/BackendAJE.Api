@@ -5,10 +5,13 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Notification.Commands.SendNotification;
     using BackEndAje.Api.Application.Notification.Queries.GetNotificationByUserId;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+
     public class NotificationsController : ControllerBase
     {
         private readonly IMediator _mediator;

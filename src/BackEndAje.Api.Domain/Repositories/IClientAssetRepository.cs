@@ -20,7 +20,7 @@ namespace BackEndAje.Api.Domain.Repositories
 
         Task AddTraceabilityRecordAsync(ClientAssetsTrace clientAssetsTrace);
         
-        Task<List<ClientAssetsTrace>> GetClientAssetTracesByAssetId(int pageNumber, int pageSize, int assetId);
+        Task<List<ClientAssetsTrace>> GetClientAssetTracesByAssetId(int pageNumber, int pageSize, int? assetId);
 
         Task<int> GetTotalClientAssetsTrace(int? assetId);
         

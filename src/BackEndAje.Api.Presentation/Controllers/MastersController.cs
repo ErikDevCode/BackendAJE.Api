@@ -12,10 +12,13 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Masters.Queries.GetAllTimeWindows;
     using BackEndAje.Api.Application.Masters.Queries.GetWithDrawalReason;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+
     public class MastersController : ControllerBase
     {
         private readonly IMediator _mediator;

@@ -1,6 +1,8 @@
 namespace BackEndAje.Api.Application.Dtos.Users
 {
-    public class CreateUserDto
+    using BackEndAje.Api.Application.Behaviors;
+
+    public class CreateUserDto : IHasAuditInfo
     {
         public int? CediId { get; set; }
 

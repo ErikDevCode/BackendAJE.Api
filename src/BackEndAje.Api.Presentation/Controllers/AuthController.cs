@@ -5,6 +5,7 @@
     using BackEndAje.Api.Application.Users.Commands.LoginUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUserPassword;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
@@ -19,9 +20,8 @@
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(LoginUserResult),  (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [Route("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
             var result = await this._mediator.Send(command);

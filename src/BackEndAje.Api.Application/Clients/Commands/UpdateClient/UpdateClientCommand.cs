@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.Clients.Commands.UpdateClient
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class UpdateClientCommand : IRequest<Unit>
+    public class UpdateClientCommand : IRequest<Unit>, IHasUpdatedByInfo
     {
         public int ClientId { get; set; }
 

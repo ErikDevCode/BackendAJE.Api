@@ -1,5 +1,3 @@
-using BackEndAje.Api.Application.Asset.Queries.GetAssetWithOutClient;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -13,9 +11,11 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Asset.Command.UploadAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAllAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAssetsByCodeAje;
+    using BackEndAje.Api.Application.Asset.Queries.GetAssetWithOutClient;
     using BackEndAje.Api.Application.Asset.Queries.GetClientAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetClientAssetsTrace;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Dtos.Const;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -39,9 +39,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateAsset([FromBody] CreateAssetCommand command)
         {
-            var userId = this.GetUserId();
-            command.CreatedBy = userId;
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -74,8 +71,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("update")]
         public async Task<IActionResult> UpdateAsset([FromBody] UpdateAssetCommand command)
         {
-            var userId = this.GetUserId();
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -97,8 +92,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("updateStatusAsset")]
         public async Task<IActionResult> UpdateStatusAsset([FromBody] UpdateStatusAssetCommand command)
         {
-            var userId = this.GetUserId();
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             if (result)
             {
@@ -119,14 +112,11 @@ namespace BackEndAje.Api.Presentation.Controllers
                 return this.BadRequest("No hay Activos uploaded.");
             }
 
-            var userId = this.GetUserId();
             using var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
             var command = new UploadAssetsCommand
             {
                 FileBytes = memoryStream.ToArray(),
-                CreatedBy = userId,
-                UpdatedBy = userId,
             };
             var result = await this._mediator.Send(command);
             return this.Ok(result);
@@ -138,9 +128,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("client-asset/create-client-asset")]
         public async Task<IActionResult> CreateClientAsset([FromBody] CreateClientAssetCommand command)
         {
-            var userId = this.GetUserId();
-            command.CreatedBy = userId;
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -162,8 +149,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("client-asset/update")]
         public async Task<IActionResult> UpdateClientAsset([FromBody] UpdateClientAssetCommand command)
         {
-            var userId = this.GetUserId();
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -174,8 +159,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("client-asset/update-deactivate-activate-clientasset")]
         public async Task<IActionResult> UpdateDeactivateClientAsset([FromBody] UpdateDeactivateClientAssetCommand command)
         {
-            var userId = this.GetUserId();
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             if (result)
             {
@@ -191,8 +174,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("client-asset/reassign")]
         public async Task<IActionResult> UpdateClientAssetReassign([FromBody] UpdateClientAssetReassignCommand command)
         {
-            var userId = this.GetUserId();
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -206,18 +187,6 @@ namespace BackEndAje.Api.Presentation.Controllers
             var query = new GetClientAssetsTraceQuery(pageNumber, pageSize, assetId);
             var clientAsset = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clientAsset });
-        }
-
-
-        private int GetUserId()
-        {
-            var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
-            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
-            {
-                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
-            }
-
-            return userId;
         }
     }
 }

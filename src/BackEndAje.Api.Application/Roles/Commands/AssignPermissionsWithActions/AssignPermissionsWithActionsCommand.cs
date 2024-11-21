@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.Roles.Commands.AssignPermissionsWithActions
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class AssignPermissionsWithActionsCommand : IRequest<Unit>
+    public class AssignPermissionsWithActionsCommand : IRequest<Unit>, IHasAuditInfo
     {
         public int RoleId { get; set; }
 

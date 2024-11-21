@@ -1,6 +1,8 @@
 namespace BackEndAje.Api.Application.Dtos.Users
 {
-    public class UpdateUserDto
+    using BackEndAje.Api.Application.Behaviors;
+
+    public class UpdateUserDto : IHasUpdatedByInfo
     {
         public int? CediId { get; set; }
 
