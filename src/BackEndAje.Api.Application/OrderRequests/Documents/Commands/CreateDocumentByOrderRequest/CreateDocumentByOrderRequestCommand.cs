@@ -1,9 +1,10 @@
 namespace BackEndAje.Api.Application.OrderRequests.Documents.Commands.CreateDocumentByOrderRequest
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
     using Microsoft.AspNetCore.Http;
 
-    public class CreateDocumentByOrderRequestCommand : IRequest<Unit>
+    public class CreateDocumentByOrderRequestCommand : IRequest<Unit>, IHasAuditInfo
     {
         public int OrderRequestId { get; set; }
 

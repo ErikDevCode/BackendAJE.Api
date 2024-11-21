@@ -1,9 +1,10 @@
 namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 {
+    using BackEndAje.Api.Application.Behaviors;
     using BackEndAje.Api.Application.Dtos.OrderRequests;
     using MediatR;
 
-    public class CreateOrderRequestsCommand : IRequest<Unit>
+    public class CreateOrderRequestsCommand : IRequest<Unit>, IHasAuditInfo
     {
         public int SupervisorId { get; set; }
 

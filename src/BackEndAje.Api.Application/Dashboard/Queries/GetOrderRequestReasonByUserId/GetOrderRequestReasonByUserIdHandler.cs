@@ -17,10 +17,10 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetOrderRequestReasonByUs
 
         public async Task<List<GetOrderRequestReasonByUserIdResult>> Handle(GetOrderRequestReasonByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var user = await this._userRepository.GetUserByIdAsync(request.userId);
+            var user = await this._userRepository.GetUserByIdAsync(request.UserId);
             var role = user!.UserRoles.Select(x => x.Role.RoleName).FirstOrDefault();
 
-            var (supervisorId, vendedorId) = this.GetRoleFilters(role!, request.userId);
+            var (supervisorId, vendedorId) = this.GetRoleFilters(role!, request.UserId);
 
             var reasons = new Dictionary<string, int>
             {

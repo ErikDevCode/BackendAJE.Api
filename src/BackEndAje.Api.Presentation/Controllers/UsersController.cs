@@ -2,6 +2,7 @@
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Dtos.Const;
     using BackEndAje.Api.Application.Users.Commands.CreateUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUser;
     using BackEndAje.Api.Application.Users.Commands.UploadUsers;
@@ -19,6 +20,7 @@
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
+
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -34,9 +36,6 @@
         [Route("create")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
-            var userId = this.GetUserId();
-            command.User.CreatedBy = userId;
-            command.User.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -91,8 +90,6 @@
         [Route("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
         {
-            var userId = this.GetUserId();
-            command.User.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -103,8 +100,7 @@
         [Route("menu-for-user")]
         public async Task<IActionResult> GetMenuForUser()
         {
-            var userId = this.GetUserId();
-            var query = new GetMenuForUserByIdQuery(userId);
+            var query = new GetMenuForUserByIdQuery();
             var result = await this._mediator.Send(query);
             return this.Ok(result);
         }
@@ -120,14 +116,11 @@
                 return this.BadRequest("No file uploaded.");
             }
 
-            var userId = this.GetUserId();
             using var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
             var command = new UploadUsersCommand
             {
                 FileBytes = memoryStream.ToArray(),
-                CreatedBy = userId,
-                UpdatedBy = userId,
             };
             var result = await this._mediator.Send(command);
             return this.Ok(result);
@@ -142,17 +135,6 @@
             var query = new GetSupervisorByCediQuery(cediId);
             var result = await this._mediator.Send(query);
             return this.Ok(new Response { Result = result });
-        }
-
-        private int GetUserId()
-        {
-            var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
-            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
-            {
-                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
-            }
-
-            return userId;
         }
     }
 }

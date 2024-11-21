@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.Asset.Command.CreateClientAsset
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class CreateClientAssetCommand : IRequest<Unit>
+    public class CreateClientAssetCommand : IRequest<Unit>, IHasAuditInfo
     {
         public int CediId { get; set; }
 

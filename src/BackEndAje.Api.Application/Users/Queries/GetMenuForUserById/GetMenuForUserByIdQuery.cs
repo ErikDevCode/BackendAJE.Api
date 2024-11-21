@@ -1,6 +1,10 @@
 namespace BackEndAje.Api.Application.Users.Queries.GetMenuForUserById
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public record GetMenuForUserByIdQuery(int UserId) : IRequest<GetMenuForUserByIdResult>;
+    public record GetMenuForUserByIdQuery() : IRequest<GetMenuForUserByIdResult>, IHasUserId
+    {
+        public int UserId { get; set; }
+    }
 }

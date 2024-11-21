@@ -20,7 +20,7 @@ namespace BackEndAje.Api.Application.Asset.Queries.GetClientAssetsTrace
 
         public async Task<PaginatedResult<GetClientAssetsTraceResult>> Handle(GetClientAssetsTraceQuery request, CancellationToken cancellationToken)
         {
-            var traces = await this._clientAssetRepository.GetClientAssetTracesByAssetId(request.PageNumber, request.PageSize, request.AssetId!.Value);
+            var traces = await this._clientAssetRepository.GetClientAssetTracesByAssetId(request.PageNumber, request.PageSize, request.AssetId);
 
             var totalTrace = await this._clientAssetRepository.GetTotalClientAssetsTrace(request.AssetId);
             var results = new List<GetClientAssetsTraceResult>();

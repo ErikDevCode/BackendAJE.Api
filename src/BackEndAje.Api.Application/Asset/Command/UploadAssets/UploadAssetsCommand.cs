@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.Asset.Command.UploadAssets
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class UploadAssetsCommand : IRequest<UploadAssetsResult>
+    public class UploadAssetsCommand : IRequest<UploadAssetsResult>, IHasAuditInfo
     {
         public byte[] FileBytes { get; set; }
 

@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.OrderRequestAssets.Commands.DeleteAssetToOrderRequest
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class DeleteAssetToOrderRequestCommand : IRequest<Unit>
+    public class DeleteAssetToOrderRequestCommand : IRequest<Unit>, IHasAssignedBy
     {
         public int OrderRequestAssetId { get; set; }
 

@@ -1,6 +1,8 @@
 namespace BackEndAje.Api.Application.Dtos.Roles
 {
-    public class AssignPermissionToRoleDto
+    using BackEndAje.Api.Application.Behaviors;
+
+    public class AssignPermissionToRoleDto : IHasAuditInfo
     {
         public int RoleId { get; set; }
 

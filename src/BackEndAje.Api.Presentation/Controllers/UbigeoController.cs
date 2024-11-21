@@ -6,10 +6,12 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Ubigeo.Queries.GetDistrictsByProvinceId;
     using BackEndAje.Api.Application.Ubigeo.Queries.GetProvincesByDepartmentId;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
 
     public class UbigeoController : ControllerBase
     {

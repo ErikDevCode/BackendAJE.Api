@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.Clients.Commands.CreateClient
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class CreateClientCommand : IRequest<Unit>
+    public class CreateClientCommand : IRequest<Unit>, IHasAuditInfo
     {
         public int ClientCode { get; set; }
 

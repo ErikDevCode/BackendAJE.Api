@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.Asset.Command.CreateAsset
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class CreateAssetCommand : IRequest<Unit>
+    public class CreateAssetCommand : IRequest<Unit>, IHasAuditInfo
     {
         public string CodeAje { get; set; }
 

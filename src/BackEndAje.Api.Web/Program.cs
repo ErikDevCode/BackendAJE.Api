@@ -126,6 +126,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+app.UseMiddleware<UserIdMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

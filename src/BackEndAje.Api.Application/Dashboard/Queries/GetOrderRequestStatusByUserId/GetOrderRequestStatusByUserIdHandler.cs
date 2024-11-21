@@ -17,7 +17,7 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetOrderRequestStatusByUs
 
         public async Task<List<GetOrderRequestStatusByUserIdResult>> Handle(GetOrderRequestStatusByUserIdQuery requestStatus, CancellationToken cancellationToken)
         {
-            var user = await this._userRepository.GetUserByIdAsync(requestStatus.userId);
+            var user = await this._userRepository.GetUserByIdAsync(requestStatus.UserId);
             var role = user!.UserRoles.Select(x => x.Role.RoleName).FirstOrDefault();
 
             var statusIds = new Dictionary<string, int>
@@ -58,14 +58,14 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetOrderRequestStatusByUs
                 RolesConst.Supervisor =>
                     await this._orderRequestRepository.GetTotalOrderRequestStatusCount(
                         statusId: statusId,
-                        supervisorId: requestStatus.userId,
+                        supervisorId: requestStatus.UserId,
                         month: requestStatus.month,
                         year: requestStatus.year),
 
                 RolesConst.Vendedor =>
                     await this._orderRequestRepository.GetTotalOrderRequestStatusCount(
                         statusId: statusId,
-                        vendedorId: requestStatus.userId,
+                        vendedorId: requestStatus.UserId,
                         month: requestStatus.month,
                         year: requestStatus.year),
 

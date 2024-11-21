@@ -8,6 +8,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
     using BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Dtos.Const;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -31,9 +32,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateClient([FromBody] CreateClientCommand command)
         {
-            var userId = this.GetUserId();
-            command.CreatedBy = userId;
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -55,8 +53,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("update")]
         public async Task<IActionResult> UpdateClient([FromBody] UpdateClientCommand command)
         {
-            var userId = this.GetUserId();
-            command.UpdatedBy = userId;
             var result = await this._mediator.Send(command);
             return this.Ok(result);
         }
@@ -78,8 +74,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("updateStatusClient/{clientId}")]
         public async Task<IActionResult> DisableClient(int clientId)
         {
-            var userId = this.GetUserId();
-            var command = new DisableClientCommand { ClientId = clientId, UpdatedBy = userId };
+            var command = new DisableClientCommand { ClientId = clientId };
             var result = await this._mediator.Send(command);
             if (result)
             {
@@ -100,28 +95,14 @@ namespace BackEndAje.Api.Presentation.Controllers
                 return this.BadRequest("No hay Clientes uploaded.");
             }
 
-            var userId = this.GetUserId();
             using var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
             var command = new UploadClientsCommand
             {
                 FileBytes = memoryStream.ToArray(),
-                CreatedBy = userId,
-                UpdatedBy = userId,
             };
             var result = await this._mediator.Send(command);
             return this.Ok(result);
-        }
-
-        private int GetUserId()
-        {
-            var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
-            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
-            {
-                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
-            }
-
-            return userId;
         }
     }
 }

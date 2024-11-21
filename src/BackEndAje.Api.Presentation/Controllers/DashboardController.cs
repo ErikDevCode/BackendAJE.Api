@@ -4,6 +4,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Dashboard.Queries.GetOrderRequestReasonByUserId;
     using BackEndAje.Api.Application.Dashboard.Queries.GetOrderRequestStatusByUserId;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Dtos.Const;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
 
@@ -24,8 +25,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("order-request/status")]
         public async Task<IActionResult> GetOrderRequestStatusByUserId([FromQuery]int? regionId, [FromQuery]int? zoneId, [FromQuery]int? route, [FromQuery]int? month, [FromQuery]int? year)
         {
-            var userId = this.GetUserId();
-            var query = new GetOrderRequestStatusByUserIdQuery(userId, regionId, zoneId, route, month, year);
+            var query = new GetOrderRequestStatusByUserIdQuery(regionId, zoneId, route, month, year);
             var clients = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clients });
         }
@@ -36,22 +36,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("order-request/reason")]
         public async Task<IActionResult> GetOrderRequestReasonByUserId([FromQuery]int? regionId, [FromQuery]int? zoneId, [FromQuery]int? route, [FromQuery]int? month, [FromQuery]int? year)
         {
-            var userId = this.GetUserId();
-            var query = new GetOrderRequestReasonByUserIdQuery(userId, regionId, zoneId, route, month, year);
+            var query = new GetOrderRequestReasonByUserIdQuery(regionId, zoneId, route, month, year);
             var clients = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clients });
-        }
-
-
-        private int GetUserId()
-        {
-            var userIdClaim = this.User.FindFirst("UserId") ?? this.User.FindFirst("sub");
-            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
-            {
-                throw new UnauthorizedAccessException("Usuario ID no encontrado o token invalido.");
-            }
-
-            return userId;
         }
     }
 }

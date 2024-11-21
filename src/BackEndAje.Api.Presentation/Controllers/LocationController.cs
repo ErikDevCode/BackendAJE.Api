@@ -1,18 +1,19 @@
-using BackEndAje.Api.Application.Locations.Queries.GetCedisByUserId;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Locations.Queries.GetCedisById;
     using BackEndAje.Api.Application.Locations.Queries.GetCedisByRegionId;
+    using BackEndAje.Api.Application.Locations.Queries.GetCedisByUserId;
     using BackEndAje.Api.Application.Locations.Queries.GetRegions;
     using BackEndAje.Api.Application.Locations.Queries.GetZoneByCediId;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
 
     public class LocationController : ControllerBase
     {

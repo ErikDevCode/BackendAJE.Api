@@ -1,6 +1,8 @@
 namespace BackEndAje.Api.Application.Dtos.Roles
 {
-    public class CreateRoleDto
+    using BackEndAje.Api.Application.Behaviors;
+
+    public class CreateRoleDto : IHasAuditInfo
     {
         public string RoleName { get; set; }
 

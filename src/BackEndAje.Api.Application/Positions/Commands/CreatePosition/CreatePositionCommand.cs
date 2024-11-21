@@ -1,8 +1,9 @@
 namespace BackEndAje.Api.Application.Positions.Commands.CreatePosition
 {
+    using BackEndAje.Api.Application.Behaviors;
     using MediatR;
 
-    public class CreatePositionCommand : IRequest<Unit>
+    public class CreatePositionCommand : IRequest<Unit>, IHasAuditInfo
     {
         public string PositionName { get; set; }
 
