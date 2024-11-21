@@ -58,5 +58,9 @@ namespace BackEndAje.Api.Domain.Repositories
         Task UpdateAssetToOrderRequest(OrderRequestAssets orderRequestAssets);
         
         Task<List<OrderRequestAssetsTrace>> GetOrderRequestAssetsTraceByOrderRequestId(int orderRequestId);
+        
+        Task BulkInsertOrderRequestsAsync(IEnumerable<OrderRequest> orderRequests);
+        
+        Task<bool> ExistsAsync(int reasonRequestId, int clientId, DateTime negotiatedDate);
     }
 }

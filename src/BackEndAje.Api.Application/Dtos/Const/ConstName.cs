@@ -7,6 +7,8 @@ namespace BackEndAje.Api.Application.Dtos.Const
         public const string MessageOkUpdatedResult = "Se actualizó satisfactoriamente.";
         public const string MessageOkCreatedResult = "Se creó satisfactoriamente.";
         public const string MessageOkAssignResult = "Se asignó satisfactoriamente.";
+        public const string MessageOkBurkUploadResult = "Carga masiva completada satisfactoriamente.";
+        public const string MessageNotSelectFileResult = "El archivo es requerido.";
 
         public static string GetMessageUpdateStatusById(int id) =>
             $"Activo con ID: {id} fue actualizado satisfactoriamente.";

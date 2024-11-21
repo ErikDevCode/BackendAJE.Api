@@ -50,5 +50,12 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .Distinct()
                 .ToListAsync())!;
         }
+
+        public async Task<Cedi?> GetCediByNameAsync(string cediName)
+        {
+            return await this._context.Cedis
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.CediName == cediName);
+        }
     }
 }
