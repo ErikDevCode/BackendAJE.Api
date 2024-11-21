@@ -1,6 +1,7 @@
 ﻿namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
+    using BackEndAje.Api.Application.Dtos.Const;
     using BackEndAje.Api.Application.Users.Commands.CreateUser;
     using BackEndAje.Api.Application.Users.Commands.LoginUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUserPassword;
@@ -34,8 +35,8 @@
         [Route("update-password")]
         public async Task<IActionResult> UpdateUserPasswordByEmail([FromBody] UpdateUserPasswordByEmailCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
     }
 }
