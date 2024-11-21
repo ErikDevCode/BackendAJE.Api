@@ -17,9 +17,14 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingByOrderReq
 
         public async Task<List<GetTrackingByOrderRequestIdResult>> Handle(GetTrackingByOrderRequestIdQuery request, CancellationToken cancellationToken)
         {
-            var orderRequest = await this._orderRequestRepository.GetOrderRequestStatusHistoryByOrderRequestId(request.orderRequestId);
+            var orderRequestHistory = await this._orderRequestRepository.GetOrderRequestStatusHistoryByOrderRequestId(request.orderRequestId);
 
-            var result = this._mapper.Map<List<GetTrackingByOrderRequestIdResult>>(orderRequest);
+            if (orderRequestHistory == null || !orderRequestHistory.Any())
+            {
+                throw new KeyNotFoundException($"No se encontró historial para la solicitud con ID {request.orderRequestId}.");
+            }
+
+            var result = this._mapper.Map<List<GetTrackingByOrderRequestIdResult>>(orderRequestHistory);
             return result;
         }
     }

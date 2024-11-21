@@ -65,13 +65,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> UpdateStatusRole(int roleId)
         {
             var command = new UpdateStatusRoleCommand { RoleUpdateStatus = new UpdateStatusRoleDto() { RoleId = roleId } };
-            var result = await this._mediator.Send(command);
-            if (result)
-            {
-                return this.Ok(new { Message = $"Role con ID: '{roleId}' fue actualizado satisfactoriamente." });
-            }
-
-            return this.NotFound(new { Message = $"Role con ID: '{roleId}' no encontrado o ya se encuentra eliminado." });
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageUpdateRoleById(roleId) });
         }
 
         [HttpPost]
@@ -80,8 +75,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("AssignPermissionsToRole")]
         public async Task<IActionResult> AssignPermissionsToRole([FromBody] AssignPermissionToRoleCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkAssignResult });
         }
 
         [HttpGet]
@@ -101,8 +96,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("AssignPermissionsWithActions")]
         public async Task<IActionResult> AssignPermissionsWithActions([FromBody] AssignPermissionsWithActionsCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkAssignResult });
         }
 
         [HttpGet]

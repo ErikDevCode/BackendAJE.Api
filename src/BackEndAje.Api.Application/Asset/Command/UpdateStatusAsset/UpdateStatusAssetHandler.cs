@@ -17,7 +17,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateStatusAsset
             var existingAsset = await this._assetRepository.GetAssetById(request.AssetId);
             if (existingAsset == null)
             {
-                throw new InvalidOperationException($"Activo con ID '{request.AssetId}' no existe.");
+                throw new KeyNotFoundException($"Activo con ID '{request.AssetId}' no existe.");
             }
 
             existingAsset.IsActive = existingAsset.IsActive is false;

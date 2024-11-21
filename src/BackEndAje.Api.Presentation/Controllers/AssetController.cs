@@ -92,13 +92,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("updateStatusAsset")]
         public async Task<IActionResult> UpdateStatusAsset([FromBody] UpdateStatusAssetCommand command)
         {
-            var result = await this._mediator.Send(command);
-            if (result)
-            {
-                return this.Ok(new { Message = $"Activo con ID: '{command.AssetId}' fue actualizado satisfactoriamente." });
-            }
-
-            return this.NotFound(new { Message = $"Activo con ID: '{command.AssetId}' no encontrado o ya se encuentra eliminado." });
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.GetMessageUpdateStatusById(command.AssetId) });
         }
 
         [HttpPost]
@@ -128,8 +123,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("client-asset/create-client-asset")]
         public async Task<IActionResult> CreateClientAsset([FromBody] CreateClientAssetCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkCreatedResult });
         }
 
         [HttpGet]
@@ -149,8 +144,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("client-asset/update")]
         public async Task<IActionResult> UpdateClientAsset([FromBody] UpdateClientAssetCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpPatch]
@@ -159,13 +154,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("client-asset/update-deactivate-activate-clientasset")]
         public async Task<IActionResult> UpdateDeactivateClientAsset([FromBody] UpdateDeactivateClientAssetCommand command)
         {
-            var result = await this._mediator.Send(command);
-            if (result)
-            {
-                return this.Ok(new { Message = $"Se actualizó satisfactoriamente." });
-            }
-
-            return this.NotFound(new { Message = $"No se encuentra" });
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpPut]
@@ -174,8 +164,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("client-asset/reassign")]
         public async Task<IActionResult> UpdateClientAssetReassign([FromBody] UpdateClientAssetReassignCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpGet]

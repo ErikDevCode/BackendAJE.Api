@@ -18,6 +18,11 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingAssetsByOr
         public async Task<List<GetTrackingAssetsByOrderRequestIdResult>> Handle(GetTrackingAssetsByOrderRequestIdQuery request, CancellationToken cancellationToken)
         {
             var orderRequestAssetTrace = await this._orderRequestRepository.GetOrderRequestAssetsTraceByOrderRequestId(request.orderRequestId);
+            if (orderRequestAssetTrace == null || !orderRequestAssetTrace.Any())
+            {
+                throw new KeyNotFoundException($"Solicitud con ID {request.orderRequestId} no encontrado.");
+            }
+
             var result = this._mapper.Map<List<GetTrackingAssetsByOrderRequestIdResult>>(orderRequestAssetTrace);
             return result;
         }

@@ -21,7 +21,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateClientAsset
             var existingClientAsset = await this._clientAssetRepository.GetClientAssetByIdAsync(request.ClientAssetId);
             if (existingClientAsset == null)
             {
-                throw new InvalidOperationException($"Client con Activo asociado no existe.");
+                throw new KeyNotFoundException($"Client con Activo asociado no existe.");
             }
 
             var newClientAsset = this._mapper.Map<ClientAssets>(request);

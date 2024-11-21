@@ -37,8 +37,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateOrderRequest([FromBody] CreateOrderRequestsCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkCreatedResult });
         }
 
         [HttpGet]
@@ -65,12 +65,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetOrderRequestById(int orderRequestId)
         {
             var result = await this._mediator.Send(new GetOrderRequestByIdQuery(orderRequestId));
-
-            if (result == null)
-            {
-                return this.NotFound(new { Message = $"Solicitud con ID {orderRequestId} no encontrado." });
-            }
-
             return this.Ok(result);
         }
 
@@ -80,8 +74,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("updateStatusOrderRequest")]
         public async Task<IActionResult> UpdateStatusOrderRequest([FromBody] UpdateStatusOrderRequestCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpGet]
@@ -91,12 +85,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetTrackingByOrderRequestId(int orderRequestId)
         {
             var result = await this._mediator.Send(new GetTrackingByOrderRequestIdQuery(orderRequestId));
-
-            if (result == null)
-            {
-                return this.NotFound(new { Message = $"Solicitud con ID {orderRequestId} no encontrado." });
-            }
-
             return this.Ok(result);
         }
 
@@ -106,8 +94,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("documents/create")]
         public async Task<IActionResult> CreateDocumentByOrderRequest([FromForm] CreateDocumentByOrderRequestCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkCreatedResult });
         }
 
         [HttpDelete]
@@ -116,20 +104,14 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("documents/delete")]
         public async Task<IActionResult> DeleteDocumentByOrderRequest([FromBody] DeleteDocumentByOrderRequestCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpGet("documents/by-orderrequestid/{orderRequestId}")]
         public async Task<IActionResult> DocumentsByOrderRequestId(int orderRequestId)
         {
             var documents = await this._mediator.Send(new GetOrderRequestDocumentByIdQuery(orderRequestId));
-
-            if (documents == null)
-            {
-                return this.NotFound(new { Message = $"No se encontraron documentos para el OrderRequest con ID: {orderRequestId}." });
-            }
-
             return this.Ok(new Response { Result = documents });
         }
 
@@ -139,8 +121,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("assets/assign-assets")]
         public async Task<IActionResult> AssignAssetsToOrderRequest([FromBody] AssignAssetsToOrderRequestCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkAssignResult });
         }
 
         [HttpPatch]
@@ -149,8 +131,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("assets/delete-asset")]
         public async Task<IActionResult> DeleteAssetToOrderRequest([FromBody] DeleteAssetToOrderRequestCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpGet]
@@ -160,12 +142,6 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetTrackingAssetsByOrderRequestId(int orderRequestId)
         {
             var result = await this._mediator.Send(new GetTrackingAssetsByOrderRequestIdQuery(orderRequestId));
-
-            if (result == null)
-            {
-                return this.NotFound(new { Message = $"Solicitud con ID {orderRequestId} no encontrado." });
-            }
-
             return this.Ok(result);
         }
     }
