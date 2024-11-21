@@ -19,6 +19,11 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById
         {
             var orderRequest = await this._orderRequestRepository.GetOrderRequestById(request.orderRequestId);
 
+            if (orderRequest == null)
+            {
+                throw new KeyNotFoundException($"Solicitud con ID {request.orderRequestId} no encontrada.");
+            }
+
             var result = this._mapper.Map<GetOrderRequestByIdResult>(orderRequest);
             return result;
         }

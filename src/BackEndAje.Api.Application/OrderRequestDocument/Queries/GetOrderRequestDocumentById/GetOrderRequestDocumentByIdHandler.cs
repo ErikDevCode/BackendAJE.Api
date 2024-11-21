@@ -20,7 +20,7 @@ namespace BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderReques
             var documents = await this._orderRequestRepository.GetOrderRequestDocumentByOrderRequestId(request.orderRequestId);
             if (documents == null || !documents.Any())
             {
-                return new List<GetOrderRequestDocumentByIdResult>();
+                throw new KeyNotFoundException($"No se encontraron documentos para el OrderRequest con ID: {request.orderRequestId}.");
             }
 
             var documentResults = documents.Select(doc =>

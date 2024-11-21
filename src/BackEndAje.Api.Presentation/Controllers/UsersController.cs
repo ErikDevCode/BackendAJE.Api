@@ -36,8 +36,8 @@
         [Route("create")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkCreatedResult });
         }
 
         [HttpGet]
@@ -90,8 +90,8 @@
         [Route("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpGet]

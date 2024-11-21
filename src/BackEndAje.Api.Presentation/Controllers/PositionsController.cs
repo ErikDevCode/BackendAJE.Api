@@ -40,8 +40,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("create")]
         public async Task<IActionResult> CreatePosition([FromBody] CreatePositionCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkCreatedResult });
         }
 
         [HttpPut]
@@ -50,8 +50,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("update")]
         public async Task<IActionResult> UpdatePosition([FromBody] UpdatePositionCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpPut]
@@ -61,13 +61,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> UpdateStatusPosition(int positionId)
         {
             var command = new UpdateStatusPositionCommand { PositionId = positionId };
-            var result = await this._mediator.Send(command);
-            if (result)
-            {
-                return this.Ok(new { Message = $"Cargo con ID: '{positionId}' fue actualizado correctamente." });
-            }
-
-            return this.NotFound(new { Message = $"Cargo con ID: '{positionId}' no encontrado o ya se encuentra eliminado." });
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageUpdateStatusPositionById(positionId) });
         }
     }
 }

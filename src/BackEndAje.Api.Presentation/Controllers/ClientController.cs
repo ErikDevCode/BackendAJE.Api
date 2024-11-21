@@ -32,8 +32,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateClient([FromBody] CreateClientCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkCreatedResult });
         }
 
         [HttpGet]
@@ -53,8 +53,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("update")]
         public async Task<IActionResult> UpdateClient([FromBody] UpdateClientCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpGet]
@@ -75,13 +75,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> DisableClient(int clientId)
         {
             var command = new DisableClientCommand { ClientId = clientId };
-            var result = await this._mediator.Send(command);
-            if (result)
-            {
-                return this.Ok(new { Message = $"Cliente con ID: '{command.ClientId}' fue actualizado satisfactoriamente." });
-            }
-
-            return this.NotFound(new { Message = $"Cliente con ID: '{command.ClientId}' no encontrado o ya se encuentra eliminado." });
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.GetMessageUpdateClientStatusById(clientId) });
         }
 
         [HttpPost]

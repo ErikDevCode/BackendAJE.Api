@@ -37,8 +37,8 @@ namespace BackEndAje.Api.Presentation.Controllers
         [Route("create-answer")]
         public async Task<IActionResult> CreateCensusAnswer([FromForm] CreateCensusAnswerCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkCreatedResult });
         }
 
         [HttpGet]

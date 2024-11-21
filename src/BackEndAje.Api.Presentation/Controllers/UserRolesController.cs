@@ -29,8 +29,8 @@
         [Route("assign-role")]
         public async Task<IActionResult> AssignRoleToUser([FromBody] AssignRolesToUserCommand command)
         {
-            var result = await this._mediator.Send(command);
-            return this.Ok(result);
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkAssignResult });
         }
 
         [HttpGet]
@@ -41,11 +41,6 @@
         {
             var query = new GetUserRolesByIdQuery(userId);
             var roles = await this._mediator.Send(query);
-            if (roles.Count == 0)
-            {
-                return this.NotFound($"No roles found for user with ID {userId}.");
-            }
-
             return this.Ok(new Response { Result = roles });
         }
 
@@ -68,7 +63,7 @@
         {
             var command = new RemoveRolesToUserCommand(userId, roleId);
             await this._mediator.Send(command);
-            return this.Ok();
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
     }
 }

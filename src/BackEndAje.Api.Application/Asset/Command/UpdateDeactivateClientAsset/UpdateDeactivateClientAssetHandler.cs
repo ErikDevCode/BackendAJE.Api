@@ -18,7 +18,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset
             var existingClientAsset = await this._clientAssetRepository.GetClientAssetByIdAsync(request.ClientAssetId);
             if (existingClientAsset == null)
             {
-                throw new InvalidOperationException($"Cliente con Activo asociado no existe.");
+                throw new KeyNotFoundException($"Cliente con Activo asociado no existe.");
             }
 
             if (!existingClientAsset.IsActive != null)
