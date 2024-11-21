@@ -11,5 +11,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<Cedi>> GetAllCedis();
         
         Task<List<Cedi>> GetCedisByUserIdAsync(int userId);
+        
+        Task<Cedi?> GetCediByNameAsync(string cediName);
     }
 }

@@ -390,5 +390,20 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
         }
+
+        public async Task BulkInsertOrderRequestsAsync(IEnumerable<OrderRequest> orderRequests)
+        {
+            await this._context.OrderRequests.AddRangeAsync(orderRequests);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task<bool> ExistsAsync(int reasonRequestId, int clientId, DateTime negotiatedDate)
+        {
+            return await this._context.OrderRequests
+                .AnyAsync(o =>
+                    o.ReasonRequestId == reasonRequestId &&
+                    o.ClientId == clientId &&
+                    o.NegotiatedDate.Date == negotiatedDate.Date);
+        }
     }
 }

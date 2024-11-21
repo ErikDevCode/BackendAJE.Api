@@ -1,3 +1,6 @@
+using BackEndAje.Api.Application.OrderRequests.Commands.BulkInsertOrderRequests;
+using Microsoft.AspNetCore.Http;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -143,6 +146,28 @@ namespace BackEndAje.Api.Presentation.Controllers
         {
             var result = await this._mediator.Send(new GetTrackingAssetsByOrderRequestIdQuery(orderRequestId));
             return this.Ok(result);
+        }
+
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [Route("upload")]
+        public async Task<IActionResult> UploadExcel(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest(new { Message = ConstName.MessageNotSelectFileResult });
+            }
+
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            var command = new BulkInsertOrderRequestsCommand
+            {
+                File = memoryStream.ToArray(),
+            };
+            await this._mediator.Send(command);
+
+            return this.Ok(new { Message = ConstName.MessageOkBurkUploadResult });
         }
     }
 }

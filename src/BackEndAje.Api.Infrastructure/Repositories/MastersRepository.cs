@@ -19,6 +19,13 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await this._context.ReasonRequest.Where(x => x.IsActive).ToListAsync();
         }
 
+        public async Task<ReasonRequest?> GetReasonRequestByDescriptionAsync(string reasonDescription)
+        {
+            return await this._context.ReasonRequest
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.ReasonDescription == reasonDescription);
+        }
+
         public async Task<List<WithDrawalReason>> GetWithDrawalReasonsByReasonRequestId(int reasonRequestId)
         {
             return await this._context.WithDrawalReason.AsNoTracking()
@@ -26,9 +33,23 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<WithDrawalReason?> GetWithDrawalReasonsByDescriptionAsync(string description)
+        {
+            return await this._context.WithDrawalReason
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.WithDrawalReasonDescription == description);
+        }
+
         public async Task<List<TimeWindow>> GetAllTimeWindows()
         {
             return await this._context.TimeWindows.Where(x => x.IsActive).ToListAsync();
+        }
+
+        public async Task<TimeWindow?> GetTimeWindowsByTimeRangeAsync(string timeRange)
+        {
+            return await this._context.TimeWindows
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.TimeRange == timeRange);
         }
 
         public async Task<List<ProductType>> GetAllProductTypes()
@@ -44,6 +65,13 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<ProductSize>> GetAllProductSize()
         {
             return await this._context.ProductSize.Where(x => x.IsActive).ToListAsync();
+        }
+
+        public async Task<ProductSize?> GetProductSizeByDescriptionAsync(string description)
+        {
+            return await this._context.ProductSize
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.ProductSizeDescription == description);
         }
 
         public async Task<List<PaymentMethods>> GetAllPaymentMethods()
@@ -93,6 +121,13 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                         .Any(osr => osr.OrderStatusId == os.OrderStatusId && osr.RoleId == userRoleId))
                     .ToListAsync();
             }
+        }
+
+        public async Task<OrderStatus?> GetOrderStatusByNameAsync(string statusName)
+        {
+            return await this._context.OrderStatus
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.StatusName == statusName);
         }
     }
 }

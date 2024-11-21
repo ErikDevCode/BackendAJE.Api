@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using AssemblyReference = BackEndAje.Api.Application.AssemblyReference;
 using BackEndAje.Api.Application.Hubs;
+using BackEndAje.Api.Web.FileUpload;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,7 +62,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "BackEndAje.Api.Web", Version = "v1" });
 
-    // Definición del esquema de seguridad JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -72,8 +72,7 @@ builder.Services.AddSwaggerGen(c =>
         BearerFormat = "JWT",
     });
 
-    // Requiere el esquema de seguridad para cada operación
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
@@ -90,6 +89,8 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
         },
     });
+
+    c.OperationFilter<FileUploadOperationFilter>();
 });
 
 builder.Services.AddControllers();
