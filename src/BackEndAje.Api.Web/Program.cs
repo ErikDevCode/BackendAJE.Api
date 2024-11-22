@@ -90,6 +90,7 @@ builder.Services.AddSwaggerGen(c =>
         },
     });
 
+    
     c.OperationFilter<FileUploadOperationFilter>();
 });
 
