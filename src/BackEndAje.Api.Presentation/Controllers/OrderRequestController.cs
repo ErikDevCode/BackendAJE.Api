@@ -1,6 +1,3 @@
-using BackEndAje.Api.Application.OrderRequests.Commands.BulkInsertOrderRequests;
-using Microsoft.AspNetCore.Http;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -9,16 +6,19 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.OrderRequestAssets.Commands.AssignAssetsToOrderRequest;
     using BackEndAje.Api.Application.OrderRequestAssets.Commands.DeleteAssetToOrderRequest;
     using BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderRequestDocumentById;
+    using BackEndAje.Api.Application.OrderRequests.Commands.BulkInsertOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Documents.Commands.CreateDocumentByOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Documents.Commands.DeleteDocumentByOrderRequest;
+    using BackEndAje.Api.Application.OrderRequests.Queries.ExportOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetOrderRequestById;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingAssetsByOrderRequestId;
     using BackEndAje.Api.Application.OrderRequests.Queries.GetTrackingByOrderRequestId;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
@@ -168,6 +168,31 @@ namespace BackEndAje.Api.Presentation.Controllers
             await this._mediator.Send(command);
 
             return this.Ok(new { Message = ConstName.MessageOkBurkUploadResult });
+        }
+
+        [HttpGet]
+        [Route("export")]
+        [ProducesResponseType(typeof(FileContentResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ExportOrderRequests(
+            [FromQuery] int? ClientCode = null,
+            [FromQuery] int? StatusCode = null,
+            [FromQuery] int? ReasonRequestId = null,
+            [FromQuery] DateTime? StartDate = null,
+            [FromQuery] DateTime? EndDate = null)
+        {
+            try
+            {
+                var query = new ExportOrderRequestsQuery(ClientCode, StatusCode, ReasonRequestId, StartDate, EndDate);
+                var fileContent = await this._mediator.Send(query);
+                var fileName = $"Solicitudes_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+
+                return this.File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { Message = ex.Message });
+            }
         }
     }
 }

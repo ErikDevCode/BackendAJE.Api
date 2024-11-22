@@ -405,5 +405,66 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     o.ClientId == clientId &&
                     o.NegotiatedDate.Date == negotiatedDate.Date);
         }
+
+        public async Task<List<OrderRequest>> GetAllAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
+        {
+            var query = this._context.OrderRequests
+                .Include(o => o.Supervisor)
+                .Include(o => o.Sucursal)
+                .Include(o => o.ReasonRequest)
+                .Include(o => o.TimeWindow)
+                .Include(o => o.WithDrawalReason)
+                .Include(o => o.ProductSize)
+                .Include(o => o.Client)
+                .ThenInclude(c => c.Seller)
+                .ThenInclude(s => s.Cedi)
+                .Include(o => o.Client)
+                .ThenInclude(c => c.Seller)
+                .ThenInclude(s => s.Zone)
+                .Include(o => o.Client)
+                .ThenInclude(d => d.District)
+                .Include(o => o.Client)
+                .ThenInclude(t => t.DocumentType)
+                .Include(o => o.OrderRequestDocuments)
+                .Include(o => o.OrderStatus)
+                .AsQueryable();
+
+            if (supervisorId.HasValue)
+            {
+                query = query.Where(o => o.Supervisor.UserId == supervisorId.Value);
+            }
+
+            if (vendedorId.HasValue)
+            {
+                query = query.Where(o => o.Client.Seller!.UserId == vendedorId.Value);
+            }
+
+            if (clientCode.HasValue)
+            {
+                query = query.Where(o => o.Client.ClientCode == clientCode.Value);
+            }
+
+            if (orderStatusId.HasValue)
+            {
+                query = query.Where(o => o.OrderStatusId == orderStatusId.Value);
+            }
+
+            if (reasonRequestId.HasValue)
+            {
+                query = query.Where(o => o.ReasonRequestId == reasonRequestId.Value);
+            }
+
+            if (startDate.HasValue)
+            {
+                query = query.Where(o => o.CreatedAt >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                query = query.Where(o => o.CreatedAt <= endDate.Value);
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }
