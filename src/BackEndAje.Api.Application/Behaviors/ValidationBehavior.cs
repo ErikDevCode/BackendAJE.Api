@@ -32,7 +32,7 @@ namespace BackEndAje.Api.Application.Behaviors
             }
 
             // 2. Validar y asignar el UserId solo si el request lo necesita
-            if (request is IHasUserId || request is IHasAuditInfo || request is IHasAssignedBy || request is IHasCreatedByInfo)
+            if (request is IHasUserId || request is IHasAuditInfo || request is IHasAssignedBy || request is IHasCreatedByInfo || request is IHasUpdatedByInfo)
             {
                 if (this._httpContextAccessor.HttpContext?.Items["UserId"] is not int userId || userId <= 0)
                 {
