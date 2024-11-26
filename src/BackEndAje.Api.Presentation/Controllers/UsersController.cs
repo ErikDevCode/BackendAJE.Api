@@ -4,6 +4,7 @@
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Dtos.Const;
     using BackEndAje.Api.Application.Users.Commands.CreateUser;
+    using BackEndAje.Api.Application.Users.Commands.UpdateStatusUser;
     using BackEndAje.Api.Application.Users.Commands.UpdateUser;
     using BackEndAje.Api.Application.Users.Commands.UploadUsers;
     using BackEndAje.Api.Application.Users.Queries.GetAllUser;
@@ -92,6 +93,16 @@
         {
             await this._mediator.Send(command);
             return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
+        }
+
+        [HttpPatch]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("update-status-user")]
+        public async Task<IActionResult> UpdateStatusUser([FromBody] UpdateStatusUserCommand command)
+        {
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageUpdateUserById(command.UserId) });
         }
 
         [HttpGet]

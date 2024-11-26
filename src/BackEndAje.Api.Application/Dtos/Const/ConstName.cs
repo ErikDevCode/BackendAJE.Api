@@ -20,7 +20,10 @@ namespace BackEndAje.Api.Application.Dtos.Const
             $"Cargo con ID: '{id}' fue actualizado correctamente.";
 
         public static string MessageUpdateRoleById(int id) =>
-            $"Role con ID: '{id}' fue actualizado correctamente.";
+            $"Rol con ID: '{id}' fue actualizado correctamente.";
+
+        public static string MessageUpdateUserById(int id) =>
+            $"Usuario con ID: '{id}' fue actualizado correctamente.";
     }
 }
 

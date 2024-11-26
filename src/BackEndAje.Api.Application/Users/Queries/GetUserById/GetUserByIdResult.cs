@@ -32,7 +32,13 @@ namespace BackEndAje.Api.Application.Users.Queries.GetUserById
 
         public string Phone { get; set; }
 
+        public int PositionId { get; set; }
+
         public string PositionName { get; set; }
+
+        public int RoleId { get; set; }
+
+        public string RoleName { get; set; }
 
         public bool IsActive { get; set; }
 
