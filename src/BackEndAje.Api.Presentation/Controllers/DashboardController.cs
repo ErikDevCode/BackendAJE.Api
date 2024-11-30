@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Dashboard.Queries.GetAssetsFromOrderRequestStatusAttendedByUserId;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -37,6 +39,17 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetOrderRequestReasonByUserId([FromQuery]int? regionId, [FromQuery]int? zoneId, [FromQuery]int? route, [FromQuery]int? month, [FromQuery]int? year)
         {
             var query = new GetOrderRequestReasonByUserIdQuery(regionId, zoneId, route, month, year);
+            var clients = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = clients });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetAssetsFromOrderRequestStatusAttendedByUserIdResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("order-request/assets-attended")]
+        public async Task<IActionResult> GetAssetsFromOrderRequestStatusAttendedByUserId([FromQuery]int? regionId, [FromQuery]int? zoneId, [FromQuery]int? route, [FromQuery]int? month, [FromQuery]int? year)
+        {
+            var query = new GetAssetsFromOrderRequestStatusAttendedByUserIdQuery(regionId, zoneId, route, month, year);
             var clients = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clients });
         }

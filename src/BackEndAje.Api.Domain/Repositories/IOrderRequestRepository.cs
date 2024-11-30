@@ -50,6 +50,15 @@ namespace BackEndAje.Api.Domain.Repositories
             int? month = null,
             int? year = null);
         
+        Task<int> GetTotalAssetFromOrderRequestStatusAttendedCount(
+            int? supervisorId = null,
+            int? vendedorId = null,
+            int? regionId = null,
+            int? zoneId = null,
+            int? route = null,
+            int? month = null,
+            int? year = null);
+        
         Task<int> AssignAssetToOrder(int orderRequestId, int assetId, int assignedBy);
 
         Task AddOrderRequestAssetTrace(OrderRequestAssetsTrace orderRequestAssetsTrace);
