@@ -174,5 +174,15 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             return (await this._context.ClientAssets.AsNoTracking().FirstOrDefaultAsync(x => x.ClientId == clientId && x.AssetId == assetId && x.IsActive == null))!;
         }
+
+        public async Task<ClientAssets> GetClientAssetByClientIdAndAssetId(int clientId, int assetId)
+        {
+            return (await this._context.ClientAssets.AsNoTracking().FirstOrDefaultAsync(x => x.ClientId == clientId && x.AssetId == assetId))!;
+        }
+
+        public async Task<List<ClientAssets>> GetClientAssetByAssetId(int assetId)
+        {
+            return await this._context.ClientAssets.Where(x => x.AssetId == assetId).AsNoTracking().ToListAsync();
+        }
     }
 }
