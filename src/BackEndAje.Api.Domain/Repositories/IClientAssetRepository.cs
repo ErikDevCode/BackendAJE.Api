@@ -25,5 +25,9 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<int> GetTotalClientAssetsTrace(int? assetId);
         
         Task<ClientAssets> GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(int clientId, int assetId);
+
+        Task<ClientAssets> GetClientAssetByClientIdAndAssetId(int clientId, int assetId);
+        
+        Task<List<ClientAssets>> GetClientAssetByAssetId(int assetId);
     }
 }

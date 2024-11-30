@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Asset.Command.UploadClientAssets;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -177,6 +179,36 @@ namespace BackEndAje.Api.Presentation.Controllers
             var query = new GetClientAssetsTraceQuery(pageNumber, pageSize, assetId);
             var clientAsset = await this._mediator.Send(query);
             return this.Ok(new Response { Result = clientAsset });
+        }
+
+        [HttpPost]
+        [Route("client-asset/upload")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> UploadClientAssets(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest("No hay Activos uploaded.");
+            }
+
+            try
+            {
+                using var memoryStream = new MemoryStream();
+                await file.CopyToAsync(memoryStream);
+
+                var command = new UploadClientAssetsCommand
+                {
+                    FileBytes = memoryStream.ToArray(),
+                };
+
+                await this._mediator.Send(command);
+                return this.Ok("Carga de activos completada exitosamente.");
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
     }
 }
