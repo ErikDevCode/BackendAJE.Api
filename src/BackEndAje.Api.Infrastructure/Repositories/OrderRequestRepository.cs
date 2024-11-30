@@ -342,6 +342,62 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await query.CountAsync();
         }
 
+        public async Task<int> GetTotalAssetFromOrderRequestStatusAttendedCount(int? supervisorId = null, int? vendedorId = null,
+            int? regionId = null, int? zoneId = null, int? route = null, int? month = null, int? year = null)
+        {
+            var query = this._context.OrderRequestAssets
+                .Include(oa => oa.OrderRequest)
+                .ThenInclude(or => or.Client)
+                .ThenInclude(c => c.Seller)
+                .ThenInclude(s => s!.Cedi)
+                .ThenInclude(c => c.Region)
+                .Include(oa => oa.OrderRequest)
+                .ThenInclude(or => or.Client)
+                .ThenInclude(c => c.Seller)
+                .ThenInclude(s => s!.Zone)
+                .Include(oa => oa.OrderRequest)
+                .ThenInclude(or => or.Supervisor)
+                .Where(oa => oa.OrderRequest.OrderStatusId == 5)
+                .AsQueryable();
+
+            if (supervisorId.HasValue)
+            {
+                query = query.Where(oa => oa.OrderRequest.Supervisor.UserId == supervisorId.Value);
+            }
+
+            if (vendedorId.HasValue)
+            {
+                query = query.Where(oa => oa.OrderRequest.Client.Seller!.UserId == vendedorId.Value);
+            }
+
+            if (regionId.HasValue)
+            {
+                query = query.Where(oa => oa.OrderRequest.Client.Seller!.Cedi!.Region!.RegionId == regionId.Value);
+            }
+
+            if (zoneId.HasValue)
+            {
+                query = query.Where(oa => oa.OrderRequest.Client.Seller!.Zone!.ZoneId == zoneId.Value);
+            }
+
+            if (route.HasValue)
+            {
+                query = query.Where(oa => oa.OrderRequest.Client.Seller!.Route == route.Value);
+            }
+
+            if (month.HasValue && year.HasValue)
+            {
+                query = query.Where(oa => oa.OrderRequest.CreatedAt.Month == month.Value &&
+                                          oa.OrderRequest.CreatedAt.Year == year.Value);
+            }
+            else if (year.HasValue)
+            {
+                query = query.Where(oa => oa.OrderRequest.CreatedAt.Year == year.Value);
+            }
+
+            return await query.CountAsync();
+        }
+
         public async Task<int> AssignAssetToOrder(int orderRequestId, int assetId, int assignedBy)
         {
             var orderRequestAsset = new OrderRequestAssets
