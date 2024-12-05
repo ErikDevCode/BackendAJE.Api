@@ -4,6 +4,8 @@ namespace BackEndAje.Api.Application.Dtos.OrderRequests
 
     public class OrderRequestAssetDto
     {
+        public int OrderRequestAssetId { get; set; }
+
         public int OrderRequestId { get; set; }
 
         public int AssetId { get; set; }
