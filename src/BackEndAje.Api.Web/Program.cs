@@ -72,6 +72,7 @@ builder.Services.AddSwaggerGen(c =>
         BearerFormat = "JWT",
     });
 
+    // Requiere el esquema de seguridad para cada operación
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -89,9 +90,6 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
         },
     });
-
-    
-    c.OperationFilter<FileUploadOperationFilter>();
 });
 
 builder.Services.AddControllers();
