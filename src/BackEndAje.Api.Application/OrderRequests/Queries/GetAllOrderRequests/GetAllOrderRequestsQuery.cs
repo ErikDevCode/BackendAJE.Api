@@ -5,11 +5,13 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
     using MediatR;
 
     public record GetAllOrderRequestsQuery(
-        int PageNumber = 1,
-        int PageSize = 10,
+        int? PageNumber = null,
+        int? PageSize = null,
         int? ClientCode = null,
         int? OrderStatusId = null,
         int? ReasonRequestId = null,
+        int? CediId = null,
+        int? RegionId = null,
         DateTime? StartDate = null,
         DateTime? EndDate = null) : IRequest<PaginatedResult<GetAllOrderRequestsResult>>, IHasUserId
     {

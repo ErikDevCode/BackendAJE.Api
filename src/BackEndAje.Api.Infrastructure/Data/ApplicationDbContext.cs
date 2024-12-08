@@ -326,5 +326,13 @@
                     .OnDelete(DeleteBehavior.Restrict);
             });
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            // Habilitar Sensitive Data Logging (solo en desarrollo, no en producción)
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
     }
 }

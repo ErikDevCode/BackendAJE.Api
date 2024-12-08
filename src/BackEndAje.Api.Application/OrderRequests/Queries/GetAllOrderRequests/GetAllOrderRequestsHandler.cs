@@ -32,6 +32,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
                 request.ClientCode,
                 request.OrderStatusId,
                 request.ReasonRequestId,
+                request.CediId,
+                request.RegionId,
                 request.StartDate,
                 request.EndDate,
                 supervisorId,
@@ -41,6 +43,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
                 request.ClientCode,
                 request.OrderStatusId,
                 request.ReasonRequestId,
+                request.CediId,
+                request.RegionId,
                 request.StartDate,
                 request.EndDate,
                 supervisorId,
@@ -50,8 +54,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
             var paginatedResult = new PaginatedResult<GetAllOrderRequestsResult>
             {
                 TotalCount = totalOrderRequests,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
+                PageNumber = request.PageNumber ?? 1,
+                PageSize = request.PageSize ?? totalOrderRequests,
                 Items = result,
             };
 
