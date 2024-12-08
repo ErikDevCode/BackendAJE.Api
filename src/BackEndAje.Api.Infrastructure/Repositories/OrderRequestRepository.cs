@@ -70,25 +70,26 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             await this._context.SaveChangesAsync();
         }
 
-        public async Task<List<OrderRequest>> GetAllOrderRequestAsync(int pageNumber, int pageSize, int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
+        public async Task<List<OrderRequest>> GetAllOrderRequestAsync(int? pageNumber, int? pageSize, int? clientCode, int? orderStatusId, int? reasonRequestId, int? cediId, int? regionId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
         {
             var query = this._context.OrderRequests
                 .Include(o => o.Supervisor)
                 .Include(o => o.Sucursal)
+                    .ThenInclude(s => s.Region)
                 .Include(o => o.ReasonRequest)
                 .Include(o => o.TimeWindow)
                 .Include(o => o.WithDrawalReason)
                 .Include(o => o.ProductSize)
                 .Include(o => o.Client)
-                .ThenInclude(c => c.Seller)
-                .ThenInclude(s => s.Cedi)
+                    .ThenInclude(c => c.Seller)
+                    .ThenInclude(s => s.Cedi)
                 .Include(o => o.Client)
-                .ThenInclude(c => c.Seller)
-                .ThenInclude(s => s.Zone)
+                    .ThenInclude(c => c.Seller)
+                    .ThenInclude(s => s.Zone)
                 .Include(o => o.Client)
-                .ThenInclude(d => d.District)
+                    .ThenInclude(d => d.District)
                 .Include(o => o.Client)
-                .ThenInclude(t => t.DocumentType)
+                    .ThenInclude(t => t.DocumentType)
                 .Include(o => o.OrderRequestDocuments)
                 .Include(o => o.OrderStatus)
                 .AsQueryable();
@@ -118,6 +119,16 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 query = query.Where(o => o.ReasonRequestId == reasonRequestId.Value);
             }
 
+            if (cediId.HasValue)
+            {
+                query = query.Where(or => or.CediId == cediId.Value);
+            }
+
+            if (regionId.HasValue)
+            {
+                query = query.Where(o => o.Sucursal.RegionId == regionId!.Value);
+            }
+
             if (startDate.HasValue)
             {
                 query = query.Where(o => o.CreatedAt >= startDate.Value);
@@ -128,13 +139,18 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 query = query.Where(o => o.CreatedAt <= endDate.Value);
             }
 
-            return await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            if (pageNumber.HasValue && pageSize.HasValue && pageNumber > 0 && pageSize > 0)
+            {
+                query = query
+                    .OrderBy(ca => ca.CreatedAt)
+                    .Skip((pageNumber.Value - 1) * pageSize.Value)
+                    .Take(pageSize.Value);
+            }
+
+            return await query.ToListAsync();
         }
 
-        public async Task<int> GetTotalOrderRequestCountAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
+        public async Task<int> GetTotalOrderRequestCountAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, int? cediId, int? regionId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
         {
             var query = this._context.OrderRequests.AsQueryable();
 
@@ -162,6 +178,17 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             {
                 query = query.Where(o => o.ReasonRequestId == reasonRequestId.Value);
             }
+
+            if (cediId.HasValue)
+            {
+                query = query.Where(o => o.CediId == cediId.Value);
+            }
+
+            if (regionId.HasValue)
+            {
+                query = query.Where(o => o.Sucursal.RegionId == regionId!.Value);
+            }
+
 
             if (startDate.HasValue)
             {

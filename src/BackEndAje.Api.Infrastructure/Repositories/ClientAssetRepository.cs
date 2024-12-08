@@ -25,16 +25,17 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await this._context.ClientAssets.AsNoTracking().Where(x => x.CodeAje == codeAje && x.IsActive == true).ToListAsync();
         }
 
-        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId)
+        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId, int? cediId, int? route, int? clientCode)
         {
             var currentMonthPeriod = DateTime.Now.ToString("yyyyMM");
             var query = this._context.ClientAssets
                 .Include(ca => ca.Cedi)
                 .Include(ca => ca.Client)
-                .ThenInclude(cli => cli.Seller)
+                    .ThenInclude(cli => cli.Seller)
                 .Include(ca => ca.Asset)
                 .AsQueryable();
 
+            // Aplicar filtros
             if (!string.IsNullOrEmpty(codeAje))
             {
                 query = query.Where(ca => ca.CodeAje == codeAje);
@@ -50,6 +51,22 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 query = query.Where(ca => ca.Client.Seller!.UserId == userId.Value);
             }
 
+            if (cediId.HasValue)
+            {
+                query = query.Where(ca => ca.CediId == cediId.Value);
+            }
+
+            if (route.HasValue)
+            {
+                query = query.Where(ca => ca.Client.Route == route.Value);
+            }
+
+            if (clientCode.HasValue)
+            {
+                query = query.Where(ca => ca.Client.ClientCode == clientCode.Value);
+            }
+
+            // Proyección a DTO
             var clientAssets = query.Select(ca => new ClientAssetsDto
             {
                 ClientAssetId = ca.ClientAssetId,
@@ -80,9 +97,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 UpdatedAt = ca.UpdatedAt,
             });
 
+            // Paginación
             if (pageNumber.HasValue && pageSize.HasValue && pageNumber > 0 && pageSize > 0)
             {
                 clientAssets = clientAssets
+                    .OrderBy(ca => ca.CreatedAt)
                     .Skip((pageNumber.Value - 1) * pageSize.Value)
                     .Take(pageSize.Value);
             }
@@ -90,7 +109,8 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await clientAssets.ToListAsync();
         }
 
-        public async Task<int> GetTotalClientAssets(string? codeAje, int? clientId)
+
+        public async Task<int> GetTotalClientAssets(string? codeAje, int? clientId, int? userId, int? cediId, int? route, int? clientCode)
         {
             var query = this._context.ClientAssets.AsQueryable();
 
@@ -102,6 +122,26 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             if (clientId.HasValue)
             {
                 query = query.Where(ca => ca.ClientId == clientId.Value);
+            }
+
+            if (userId.HasValue)
+            {
+                query = query.Where(ca => ca.Client.Seller!.UserId == userId.Value);
+            }
+
+            if (cediId.HasValue)
+            {
+                query = query.Where(ca => ca.CediId == cediId.Value);
+            }
+
+            if (route.HasValue)
+            {
+                query = query.Where(ca => ca.Client.Route == route.Value);
+            }
+
+            if (clientCode.HasValue)
+            {
+                query = query.Where(ca => ca.Client.ClientCode == clientCode.Value);
             }
 
             return await query.CountAsync();

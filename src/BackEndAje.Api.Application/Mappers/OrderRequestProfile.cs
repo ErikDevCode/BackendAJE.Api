@@ -71,6 +71,10 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.ClientCode, opt => opt.MapFrom(src => src.Client.ClientCode))
                 .ForMember(dest => dest.Zone, opt => opt.MapFrom(src => src.Client.Seller!.Zone!.ZoneCode))
                 .ForMember(dest => dest.Route, opt => opt.MapFrom(src => src.Client.Route))
+                .ForMember(dest => dest.CediId, opt => opt.MapFrom(src => src.Sucursal.CediId))
+                .ForMember(dest => dest.CediName, opt => opt.MapFrom(src => src.Sucursal.CediName))
+                .ForMember(dest => dest.RegionId, opt => opt.MapFrom(src => src.Sucursal.RegionId))
+                .ForMember(dest => dest.RegionName, opt => opt.MapFrom(src => src.Sucursal.Region!.RegionName))
                 .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.OrderStatus.StatusName));
 
             this.CreateMap<OrderRequestStatusHistory, GetTrackingByOrderRequestIdResult>()
