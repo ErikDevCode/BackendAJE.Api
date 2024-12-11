@@ -18,8 +18,20 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
 
         public async Task<Unit> Handle(CreateCensusAnswerCommand request, CancellationToken cancellationToken)
         {
-            var answer = request.Answer;
             var monthPeriod = DateTime.Now.ToString("yyyyMM");
+
+            var existingAnswer = await this._censusRepository.GetCensusAnswerAsync(
+                request.CensusQuestionsId,
+                request.ClientId,
+                request.AssetId,
+                monthPeriod);
+
+            if (existingAnswer != null)
+            {
+                throw new InvalidOperationException("Ya se ha registrado una respuesta para esta pregunta en este período.");
+            }
+
+            var answer = request.Answer;
 
             if (request.ImageFile != null)
             {

@@ -10,5 +10,14 @@ namespace BackEndAje.Api.Domain.Repositories
         
         Task<List<CensusAnswerDto>> GetCensusAnswers(int? pageNumber, int? pageSize, int? clientId, string? monthPeriod);
         Task<int> GetTotalCensusAnswers(int? clientId, string? monthPeriod);
+
+        Task<(List<ClientAssetWithCensusAnswersDto> Items, int TotalCount)> GetClientAssetsWithCensusAnswersAsync(int? pageNumber,
+            int? pageSize, int? AssetId, int? clientId, string? monthPeriod);
+
+        Task<CensusAnswer?> GetCensusAnswerAsync(int censusQuestionsId, int clientId, int assetId, string monthPeriod);
+
+        Task<CensusAnswer?> GetCensusAnswerById(int censusAnswerId);
+        
+        Task UpdateCensusAnswer(CensusAnswer censusAnswer);
     }
 }

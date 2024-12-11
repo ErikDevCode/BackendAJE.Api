@@ -2,6 +2,7 @@ namespace BackEndAje.Api.Domain.Entities
 {
     public class CensusAnswerDto
     {
+        public int CensusAnswerId { get; set; }
         public int CensusQuestionsId { get; set; }
 
         public string Question { get; set; }
