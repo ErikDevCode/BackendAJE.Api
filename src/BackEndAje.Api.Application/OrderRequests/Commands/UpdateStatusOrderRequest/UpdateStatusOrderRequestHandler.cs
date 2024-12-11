@@ -29,7 +29,12 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
         public async Task<Unit> Handle(UpdateStatusOrderRequestCommand request, CancellationToken cancellationToken)
         {
             var orderRequest = await this._orderRequestRepository.GetOrderRequestById(request.OrderRequestId);
+            if (orderRequest!.OrderStatusId == (int)OrderStatusConst.Generado && request.OrderStatusId == (int)OrderStatusConst.Atendido)
+            {
+                throw new InvalidOperationException("La solicitud no se puede atender porque no ha sido aprobada");
+            }
 
+            this.ValidateApprovalAsset(orderRequest);
             this.ValidateApproval(orderRequest, request.OrderStatusId);
 
             await this.UpdateClientAssets(request, orderRequest);
@@ -50,6 +55,14 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
         }
 
         #region Private Methods
+
+        private void ValidateApprovalAsset(OrderRequest orderRequest)
+        {
+            if (orderRequest.OrderRequestAssets == null || orderRequest.OrderRequestAssets.Count == 0)
+            {
+                throw new InvalidOperationException("No se puede aprobar la solicitud sin Activos");
+            }
+        }
 
         private void ValidateApproval(OrderRequest orderRequest, int orderStatusId)
         {

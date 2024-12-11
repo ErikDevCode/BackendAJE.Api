@@ -16,7 +16,6 @@ namespace BackEndAje.Api.Domain.Entities
         public Client Client { get; set; }
 
         public Asset Asset { get; set; }
-        public Zone Zone { get; set; }
     }
 }
 
