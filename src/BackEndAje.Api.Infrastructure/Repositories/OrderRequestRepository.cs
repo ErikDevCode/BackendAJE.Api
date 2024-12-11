@@ -73,6 +73,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<OrderRequest>> GetAllOrderRequestAsync(int? pageNumber, int? pageSize, int? clientCode, int? orderStatusId, int? reasonRequestId, int? cediId, int? regionId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
         {
             var query = this._context.OrderRequests
+                .Where(x => x.IsActive == true)
                 .Include(o => o.Supervisor)
                 .Include(o => o.Sucursal)
                     .ThenInclude(s => s.Region)
@@ -152,7 +153,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<int> GetTotalOrderRequestCountAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, int? cediId, int? regionId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
         {
-            var query = this._context.OrderRequests.AsQueryable();
+            var query = this._context.OrderRequests.Where(x => x.IsActive == true).AsQueryable();
 
             if (supervisorId.HasValue)
             {
