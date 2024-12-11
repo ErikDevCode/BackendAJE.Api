@@ -1,5 +1,3 @@
-using BackEndAje.Api.Application.Dtos.OrderRequests;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -10,6 +8,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.OrderRequestDocument.Queries.GetOrderRequestDocumentById;
     using BackEndAje.Api.Application.OrderRequests.Commands.BulkInsertOrderRequests;
     using BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests;
+    using BackEndAje.Api.Application.OrderRequests.Commands.DeleteOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Documents.Commands.CreateDocumentByOrderRequest;
     using BackEndAje.Api.Application.OrderRequests.Documents.Commands.DeleteDocumentByOrderRequest;
@@ -73,6 +72,16 @@ namespace BackEndAje.Api.Presentation.Controllers
         {
             var result = await this._mediator.Send(new GetOrderRequestByIdQuery(orderRequestId));
             return this.Ok(result);
+        }
+
+        [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("delete")]
+        public async Task<IActionResult> DeleteOrderRequest([FromBody] DeleteOrderRequestCommand command)
+        {
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
 
         [HttpPatch]
