@@ -11,12 +11,14 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.DeleteOrderRequest
         private readonly IOrderRequestRepository _orderRequestRepository;
         private readonly INotificationRepository _notificationRepository;
         private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly IClientAssetRepository _clientAssetRepository;
 
-        public DeleteOrderRequestHandler(IOrderRequestRepository orderRequestRepository, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext)
+        public DeleteOrderRequestHandler(IOrderRequestRepository orderRequestRepository, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IClientAssetRepository clientAssetRepository)
         {
             this._orderRequestRepository = orderRequestRepository;
             this._notificationRepository = notificationRepository;
             this._hubContext = hubContext;
+            this._clientAssetRepository = clientAssetRepository;
         }
 
         public async Task<Unit> Handle(DeleteOrderRequestCommand request, CancellationToken cancellationToken)
@@ -28,13 +30,61 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.DeleteOrderRequest
                 throw new KeyNotFoundException($"Solicitud con ID {request.OrderRequestId} no encontrada.");
             }
 
-            orderRequest.IsActive = false;
-            orderRequest.UpdatedAt = DateTime.Now;
-            orderRequest.UpdatedBy = request.UpdatedBy;
+            // Marcar la solicitud como inactiva
+            this.MarkOrderRequestAsInactive(orderRequest, request.UpdatedBy);
             await this._orderRequestRepository.DeleteOrderRequestAsync(orderRequest);
+
+
+            // Procesar los activos relacionados
+            if (orderRequest.OrderRequestAssets != null && orderRequest.OrderRequestAssets.Any())
+            {
+                await this.ProcessOrderRequestAssets(orderRequest, request.UpdatedBy);
+            }
+
+            // Enviar notificación al supervisor
             var notificationMessage = this.GenerateNotificationMessage(orderRequest);
             await this.NotifySupervisor(orderRequest.SupervisorId, notificationMessage.Result, cancellationToken);
             return Unit.Value;
+        }
+
+        private async Task ProcessOrderRequestAssets(OrderRequest orderRequest, int updatedBy)
+        {
+            foreach (var requestAsset in orderRequest.OrderRequestAssets)
+            {
+                // Marcar el activo de la solicitud como inactivo
+                var orderRequestAsset = new OrderRequestAssets
+                {
+                    OrderRequestAssetId = requestAsset.OrderRequestAssetId,
+                    OrderRequestId = requestAsset.OrderRequestId,
+                    AssetId = requestAsset.AssetId,
+                    IsActive = false,
+                };
+
+                await this._orderRequestRepository.UpdateAssetToOrderRequest(orderRequestAsset);
+
+                // Verificar si el activo está relacionado con un cliente
+                var clientAsset = await this._clientAssetRepository.GetClientAssetByClientIdAndAssetId(orderRequest.ClientId, requestAsset.AssetId);
+                if (clientAsset != null)
+                {
+                    this.UpdateClientAssetProperties(clientAsset, "Solicitud eliminada", updatedBy);
+                    await this._clientAssetRepository.UpdateClientAssetsAsync(clientAsset);
+                }
+            }
+        }
+
+        private void MarkOrderRequestAsInactive(OrderRequest orderRequest, int updatedBy)
+        {
+            orderRequest.IsActive = false;
+            orderRequest.UpdatedAt = DateTime.Now;
+            orderRequest.UpdatedBy = updatedBy;
+        }
+
+        private void UpdateClientAssetProperties(ClientAssets clientAsset, string notes, int updatedBy)
+        {
+            clientAsset.IsActive = false;
+            clientAsset.Notes = notes;
+            clientAsset.UpdatedAt = DateTime.Now;
+            clientAsset.UpdatedBy = updatedBy;
         }
 
         private async Task NotifySupervisor(int supervisorUserId, string message, CancellationToken cancellationToken)
