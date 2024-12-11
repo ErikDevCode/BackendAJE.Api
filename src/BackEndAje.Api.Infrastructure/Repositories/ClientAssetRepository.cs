@@ -25,7 +25,16 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await this._context.ClientAssets.AsNoTracking().Where(x => x.CodeAje == codeAje && x.IsActive == true).ToListAsync();
         }
 
-        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode)
+        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(
+            int? pageNumber,
+            int? pageSize,
+            string? codeAje,
+            int? clientId,
+            int? userId,
+            int? cediId,
+            int? regionId,
+            int? route,
+            int? clientCode)
         {
             var currentMonthPeriod = DateTime.Now.ToString("yyyyMM");
             var query = this._context.ClientAssets
