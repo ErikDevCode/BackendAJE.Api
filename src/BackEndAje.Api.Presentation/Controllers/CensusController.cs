@@ -1,18 +1,19 @@
-using BackEndAje.Api.Application.Census.Commands.UpdateCensusAnswer;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer;
+    using BackEndAje.Api.Application.Census.Commands.UpdateCensusAnswer;
     using BackEndAje.Api.Application.Census.Queries.GetAnswerByClientId;
     using BackEndAje.Api.Application.Census.Queries.GetCensusQuestions;
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Dtos.Const;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CensusController : ControllerBase
     {
         private readonly IMediator _mediator;

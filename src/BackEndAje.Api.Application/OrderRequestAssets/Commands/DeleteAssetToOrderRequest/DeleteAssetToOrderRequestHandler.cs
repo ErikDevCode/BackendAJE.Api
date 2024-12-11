@@ -37,6 +37,11 @@ namespace BackEndAje.Api.Application.OrderRequestAssets.Commands.DeleteAssetToOr
             var clientAsset = await this._clientAssetRepository.GetClientAssetByClientIdAndAssetIdAndIsNotActivateAsync(
                     orderRequest!.ClientId, orderRequestAsset.AssetId);
 
+            if (clientAsset != null)
+            {
+                throw new InvalidOperationException("No se puede eliminar el Activo porque ya esta atendido.");
+            }
+
             await this._clientAssetRepository.DeleteClientAssetAsync(clientAsset);
 
             return Unit.Value;

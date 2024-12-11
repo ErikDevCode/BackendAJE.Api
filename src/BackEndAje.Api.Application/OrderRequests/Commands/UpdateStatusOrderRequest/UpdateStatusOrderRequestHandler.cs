@@ -113,11 +113,6 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
             foreach (var user in userRoles)
             {
                 var notificationMessage = $"Te informamos que la solicitud Nro. {orderRequest.OrderRequestId}, asociada al cliente con el código {orderRequest.ClientCode}, ha sido actualizada al estado: {orderStatusName}.";
-
-                // Notificar a través de SignalR
-                await this._hubContext.Clients.User(user.UserId.ToString())
-                    .SendAsync("ReceiveMessage", "Sistema", notificationMessage, cancellationToken);
-
                 var notification = new Notification
                 {
                     UserId = user.UserId,
@@ -126,6 +121,11 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                     CreatedAt = DateTime.Now,
                 };
                 await this._notificationRepository.AddNotificationAsync(notification);
+                var notificationId = notification.Id;
+
+                // Notificar a través de SignalR
+                await this._hubContext.Clients.User(user.UserId.ToString())
+                    .SendAsync("ReceiveMessage", notificationId, notificationMessage, cancellationToken);
             }
         }
 
