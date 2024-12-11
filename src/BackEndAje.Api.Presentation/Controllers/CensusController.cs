@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Census.Commands.UpdateCensusAnswer;
+
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
@@ -45,11 +47,21 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(List<GetAnswerByClientIdResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("get-answer-by-clientid")]
-        public async Task<IActionResult> GetAnswerByClientId(int? PageNumber = null, int? PageSize = null, int? clientId = null, string? monthPeriod = null)
+        public async Task<IActionResult> GetAnswerByClientId(int? PageNumber = null, int? PageSize = null, int? AssetId = null, int? clientId = null, string? monthPeriod = null)
         {
-            var query = new GetAnswerByClientIdQuery(PageNumber, PageSize, clientId, monthPeriod);
+            var query = new GetAnswerByClientIdQuery(PageNumber, PageSize, AssetId, clientId, monthPeriod);
             var answer = await this._mediator.Send(query);
             return this.Ok(new Response { Result = answer });
+        }
+
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("update-answer")]
+        public async Task<IActionResult> UpdateCensusAnswer([FromForm] UpdateCensusAnswerCommand command)
+        {
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
     }
 }

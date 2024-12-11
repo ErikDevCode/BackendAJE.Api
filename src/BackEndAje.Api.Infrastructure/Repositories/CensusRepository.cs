@@ -47,6 +47,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 where (!clientId.HasValue || ca.ClientId == clientId.Value) && ca.MonthPeriod == currentMonthPeriod
                 select new CensusAnswerDto
                 {
+                    CensusAnswerId = ca.CensusAnswerId,
                     CensusQuestionsId = ca.CensusQuestionsId,
                     Question = cq.Question,
                     Answer = ca.Answer,
@@ -68,6 +69,115 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             }
 
             return await query.ToListAsync();
+        }
+
+        public async Task<(List<ClientAssetWithCensusAnswersDto> Items, int TotalCount)> GetClientAssetsWithCensusAnswersAsync(
+            int? pageNumber,
+            int? pageSize,
+            int? assetId,
+            int? clientId,
+            string? monthPeriod)
+        {
+            var currentMonthPeriod = monthPeriod ?? DateTime.Now.ToString("yyyyMM");
+
+            var query =
+                from ca in this._context.CensusAnswer
+                join cq in this._context.CensusQuestions on ca.CensusQuestionsId equals cq.CensusQuestionsId
+                join cl in this._context.Clients on ca.ClientId equals cl.ClientId
+                join a in this._context.Assets on ca.AssetId equals a.AssetId
+                join clientAsset in this._context.ClientAssets on new { ca.ClientId, ca.AssetId } equals new { clientAsset.ClientId, clientAsset.AssetId }
+                join u in this._context.Users on ca.CreatedBy equals u.UserId into interviewer
+                from intv in interviewer.DefaultIfEmpty()
+                where
+                    (!clientId.HasValue || ca.ClientId == clientId.Value) &&
+                    (!assetId.HasValue || ca.AssetId == assetId.Value) &&
+                    ca.MonthPeriod == currentMonthPeriod &&
+                    clientAsset.IsActive == true
+                select new
+                {
+                    clientAsset.ClientAssetId,
+                    clientAsset.CediId,
+                    clientAsset.Notes,
+                    clientAsset.InstallationDate,
+                    ClientAsset = new
+                    {
+                        clientAsset.ClientAssetId,
+                        clientAsset.ClientId,
+                        clientAsset.AssetId,
+                        clientAsset.CediId,
+                        clientAsset.IsActive,
+                        clientAsset.CodeAje,
+                        clientAsset.Notes,
+                    },
+                    CensusAnswer = new CensusAnswerDto
+                    {
+                        CensusAnswerId = ca.CensusAnswerId,
+                        CensusQuestionsId = ca.CensusQuestionsId,
+                        Question = cq.Question,
+                        Answer = ca.Answer,
+                        ClientId = ca.ClientId,
+                        ClientName = cl.CompanyName,
+                        AssetId = ca.AssetId,
+                        AssetName = $"{a.Logo} {a.Brand} {a.Model}",
+                        MonthPeriod = ca.MonthPeriod,
+                        CreatedBy = ca.CreatedBy,
+                        InterviewerName = intv != null ? $"{intv.Names} {intv.PaternalSurName} {intv.MaternalSurName}" : null,
+                        CreatedAt = ca.CreatedAt,
+                    },
+                };
+
+            // Calcular total antes de aplicar la paginación
+            var totalCount = await query
+                .GroupBy(x => x.ClientAsset)
+                .CountAsync();
+
+            var groupedQuery = query
+                .GroupBy(x => x.ClientAsset)
+                .Select(g => new ClientAssetWithCensusAnswersDto
+                {
+                    ClientAssetId = g.Key.ClientAssetId,
+                    ClientId = g.Key.ClientId,
+                    AssetId = g.Key.AssetId,
+                    CediId = g.Key.CediId,
+                    IsActive = g.Key.IsActive,
+                    CodeAje = g.Key.CodeAje,
+                    Notes = g.Key.Notes,
+                    CensusAnswers = g.Select(x => x.CensusAnswer).ToList(),
+                });
+
+            // Aplicar paginación
+            if (pageNumber.HasValue && pageSize.HasValue && pageNumber > 0 && pageSize > 0)
+            {
+                groupedQuery = groupedQuery
+                    .Skip((pageNumber.Value - 1) * pageSize.Value)
+                    .Take(pageSize.Value);
+            }
+
+            var items = await groupedQuery.ToListAsync();
+
+            return (items, totalCount);
+        }
+
+        public async Task<CensusAnswer?> GetCensusAnswerAsync(int censusQuestionsId, int clientId, int assetId, string monthPeriod)
+        {
+            return await this._context.CensusAnswer
+                .FirstOrDefaultAsync(ca =>
+                    ca.CensusQuestionsId == censusQuestionsId &&
+                    ca.ClientId == clientId &&
+                    ca.AssetId == assetId &&
+                    ca.MonthPeriod == monthPeriod);
+        }
+
+        public async Task<CensusAnswer?> GetCensusAnswerById(int censusAnswerId)
+        {
+            return await this._context.CensusAnswer.AsNoTracking().FirstOrDefaultAsync(x => x.CensusAnswerId == censusAnswerId);
+        }
+
+        public async Task UpdateCensusAnswer(CensusAnswer censusAnswer)
+        {
+            this._context.Entry(censusAnswer).State = EntityState.Detached;
+            this._context.CensusAnswer.Update(censusAnswer);
+            await this._context.SaveChangesAsync();
         }
 
         public async Task<int> GetTotalCensusAnswers(int? clientId, string? monthPeriod)
