@@ -1,7 +1,9 @@
 namespace BackEndAje.Api.Application.Hubs
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
 
+    [Authorize]
     public class NotificationHub : Hub
     {
         private readonly IHubContext<NotificationHub> _hubContext;
@@ -34,14 +36,14 @@ namespace BackEndAje.Api.Application.Hubs
             this._hubContext = hubContext;
         }
 
-        public async Task ForwardMessage(string userId, string message)
+        public async Task ForwardMessage(string userId, string message, string notificationId)
         {
-            await SendMessage(this._hubContext, userId, message);
+            await SendMessage(this._hubContext, userId, message, notificationId);
         }
 
-        private static async Task SendMessage(IHubContext<NotificationHub> hubContext, string userId, string message)
+        private static async Task SendMessage(IHubContext<NotificationHub> hubContext, string userId, string message, string notificationId)
         {
-            await hubContext.Clients.User(userId).SendAsync("ReceiveMessage", "Sistema", message);
+            await hubContext.Clients.User(userId).SendAsync("ReceiveMessage", message, notificationId);
         }
     }
 }

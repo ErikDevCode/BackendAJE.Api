@@ -25,7 +25,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await this._context.ClientAssets.AsNoTracking().Where(x => x.CodeAje == codeAje && x.IsActive == true).ToListAsync();
         }
 
-        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId, int? cediId, int? route, int? clientCode)
+        public async Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode)
         {
             var currentMonthPeriod = DateTime.Now.ToString("yyyyMM");
             var query = this._context.ClientAssets
@@ -54,6 +54,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             if (cediId.HasValue)
             {
                 query = query.Where(ca => ca.CediId == cediId.Value);
+            }
+
+            if (regionId.HasValue)
+            {
+                query = query.Where(ca => ca.Cedi.RegionId == regionId.Value);
             }
 
             if (route.HasValue)
@@ -110,7 +115,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         }
 
 
-        public async Task<int> GetTotalClientAssets(string? codeAje, int? clientId, int? userId, int? cediId, int? route, int? clientCode)
+        public async Task<int> GetTotalClientAssets(string? codeAje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode)
         {
             var query = this._context.ClientAssets.AsQueryable();
 
@@ -132,6 +137,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             if (cediId.HasValue)
             {
                 query = query.Where(ca => ca.CediId == cediId.Value);
+            }
+
+            if (regionId.HasValue)
+            {
+                query = query.Where(ca => ca.Cedi.RegionId == regionId.Value);
             }
 
             if (route.HasValue)

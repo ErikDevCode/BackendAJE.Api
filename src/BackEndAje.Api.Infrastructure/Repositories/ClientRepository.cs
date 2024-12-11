@@ -61,6 +61,35 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return client;
         }
 
+        public async Task<Client?> GetClientByClientCodeAndRoute(int clientCode, int cediId, int route)
+        {
+            var client = await this._context.Clients
+                .Where(c => c.ClientCode == clientCode && c.Route == route)
+                .Include(c => c.DocumentType)
+                .Include(c => c.PaymentMethod)
+                .Include(c => c.District)
+                .FirstOrDefaultAsync();
+
+            if (client?.Route == null)
+            {
+                return null;
+            }
+
+            var seller = await this._context.Users
+                .Include(u => u.Cedi)
+                .Include(u => u.Zone)
+                .SingleOrDefaultAsync(u => u.Route == client.Route && u.CediId == cediId);
+
+            if (seller == null)
+            {
+                return null;
+            }
+
+            client.Seller = seller;
+
+            return client;
+        }
+
         public async Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro)
         {
             var query = this._context.Clients

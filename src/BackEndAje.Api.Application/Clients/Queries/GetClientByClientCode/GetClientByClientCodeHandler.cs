@@ -17,7 +17,7 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode
 
         public async Task<GetClientByClientCodeResult> Handle(GetClientByClientCodeQuery request, CancellationToken cancellationToken)
         {
-            var clients = await this._clientRepository.GetClientByClientCode(request.ClientCode, request.CediId);
+            var clients = await this._clientRepository.GetClientByClientCodeAndRoute(request.ClientCode, request.CediId, request.route);
             if (clients == null)
             {
                 throw new KeyNotFoundException($"Cliente con código {request.ClientCode} no encontrado en la sucursal");

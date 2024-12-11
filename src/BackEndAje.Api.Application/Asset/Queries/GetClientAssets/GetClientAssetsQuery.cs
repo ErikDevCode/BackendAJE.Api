@@ -10,6 +10,7 @@ namespace BackEndAje.Api.Application.Asset.Queries.GetClientAssets
         int? ClientId = null,
         int? userId = null,
         int? CediId = null,
+        int? RegionId = null,
         int? Route = null,
         int? ClientCode = null) : IRequest<PaginatedResult<GetClientAssetsResult>>;
 }
