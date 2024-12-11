@@ -32,8 +32,8 @@
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CreateUserResult), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [Route("create")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {

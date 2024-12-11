@@ -92,10 +92,6 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
             var orderStatusName = orderStatus.FirstOrDefault(s => s.OrderStatusId == orderStatusId)?.StatusName;
             var notificationMessage = $"Te informamos que la solicitud Nro. {orderRequest.OrderRequestId}, asociada al cliente con el código {orderRequest.ClientCode}, ha sido actualizada al estado: {orderStatusName}.";
 
-            // Notificar al supervisor a través de SignalR
-            await this._hubContext.Clients.User(orderRequest.Supervisor.UserId.ToString())
-                .SendAsync("ReceiveMessage", "Sistema", notificationMessage, cancellationToken);
-
             var notification = new Notification
             {
                 UserId = orderRequest.Supervisor.UserId,
@@ -104,6 +100,9 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 CreatedAt = DateTime.Now,
             };
             await this._notificationRepository.AddNotificationAsync(notification);
+            var notificationId = notification.Id;
+            await this._hubContext.Clients.User(orderRequest.Supervisor.UserId.ToString())
+                .SendAsync("ReceiveMessage", notificationId, notificationMessage, cancellationToken);
         }
 
         private async Task NotifyLogisticsProviders(OrderRequest orderRequest, int orderStatusId, CancellationToken cancellationToken)

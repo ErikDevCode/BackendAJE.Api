@@ -103,9 +103,6 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
         private async Task NotifySupervisor(int supervisorUserId, string message, CancellationToken cancellationToken)
         {
-            await this._hubContext.Clients.User(supervisorUserId.ToString())
-                .SendAsync("ReceiveMessage", "Sistema", message, cancellationToken: cancellationToken);
-
             var notification = new Notification
             {
                 UserId = supervisorUserId,
@@ -115,6 +112,9 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
             };
 
             await this._notificationRepository.AddNotificationAsync(notification);
+            var notificationId = notification.Id;
+            await this._hubContext.Clients.User(supervisorUserId.ToString())
+                .SendAsync("ReceiveMessage", notificationId, message, cancellationToken: cancellationToken);
         }
 
         private async Task NotifyTrade(OrderRequest orderRequest, CancellationToken cancellationToken)

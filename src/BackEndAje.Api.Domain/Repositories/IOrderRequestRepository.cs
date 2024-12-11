@@ -34,7 +34,7 @@ namespace BackEndAje.Api.Domain.Repositories
             int? RegionId,
             DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null);
         
-        Task UpdateStatusOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument);
+        Task DeleteOrderRequestAsync(OrderRequest orderRequest);
         
         Task AddOrderRequestStatusHistoryAsync(OrderRequestStatusHistory orderRequestStatusHistory);
 

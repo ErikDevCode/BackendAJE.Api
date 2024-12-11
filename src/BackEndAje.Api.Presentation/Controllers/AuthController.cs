@@ -30,8 +30,8 @@
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(CreateUserResult), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [Route("update-password")]
         public async Task<IActionResult> UpdateUserPasswordByEmail([FromBody] UpdateUserPasswordByEmailCommand command)
         {

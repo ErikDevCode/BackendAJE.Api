@@ -203,10 +203,10 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await query.CountAsync();
         }
 
-        public async Task UpdateStatusOrderRequestDocumentAsync(OrderRequestDocument orderRequestDocument)
+        public async Task DeleteOrderRequestAsync(OrderRequest orderRequest)
         {
-            this._context.Entry(orderRequestDocument).State = EntityState.Detached;
-            this._context.OrderRequestDocuments.Update(orderRequestDocument);
+            this._context.Entry(orderRequest).State = EntityState.Detached;
+            this._context.OrderRequests.Update(orderRequest);
             await this._context.SaveChangesAsync();
         }
 
