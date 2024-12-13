@@ -48,5 +48,7 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode
         public int CreatedBy { get; set; }
 
         public int UpdatedBy { get; set; }
+
+        public List<ClientAssets>? ClientAssets { get; set; }
     }
 }

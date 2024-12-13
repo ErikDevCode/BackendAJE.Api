@@ -44,7 +44,15 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType))
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
                 .ForMember(dest => dest.Seller, opt => opt.MapFrom(src => src.Seller))
-                .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.District));
+                .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.District))
+                .ForMember(dest => dest.ClientAssets, opt => opt.MapFrom(src => src.ClientAssets ?? new List<ClientAssets>()));
+
+            this.CreateMap<ClientWithAssetDto, GetClientByClientCodeResult>()
+                .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType))
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
+                .ForMember(dest => dest.Seller, opt => opt.MapFrom(src => src.Seller))
+                .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.District))
+                .ForMember(dest => dest.ClientAssets, opt => opt.MapFrom(src => src.ClientAssets ?? new List<ClientAssets>()));
 
             this.CreateMap<DisableClientCommand, Client>()
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));

@@ -1,6 +1,6 @@
 namespace BackEndAje.Api.Domain.Entities
 {
-    public class Client : AuditableEntity
+    public class ClientWithAssetDto
     {
         public int ClientId { get; set; }
         public int ClientCode { get; set; }
@@ -27,3 +27,4 @@ namespace BackEndAje.Api.Domain.Entities
         public List<ClientAssets> ClientAssets { get; set; } = new List<ClientAssets>();
     }
 }
+
