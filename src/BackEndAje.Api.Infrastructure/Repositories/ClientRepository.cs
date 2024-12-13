@@ -90,6 +90,79 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return client;
         }
 
+        public async Task<ClientWithAssetDto?> GetClientByClientCodeAndRouteWithAsset(int clientCode, int cediId, int? route)
+        {
+            var client = await this._context.Clients
+                .Where(c => c.ClientCode == clientCode && (!route.HasValue || c.Route == route))
+                .Include(c => c.DocumentType)
+                .Include(c => c.PaymentMethod)
+                .Include(c => c.District)
+                .Include(c => c.ClientAssets)
+                    .ThenInclude(clientAssets => clientAssets.Cedi)
+                .Include(c => c.ClientAssets)
+                    .ThenInclude(clientAssets => clientAssets.Asset)
+                .FirstOrDefaultAsync();
+
+            if (client == null)
+            {
+                return null;
+            }
+
+            var seller = await this._context.Users
+                .Include(u => u.Cedi)
+                .Include(u => u.Zone)
+                .SingleOrDefaultAsync(u => (!client.Route.HasValue || u.Route == client.Route) && u.CediId == cediId);
+
+            if (seller == null)
+            {
+                return null;
+            }
+
+            client.Seller = seller;
+
+            var clientWithAssetDto = new ClientWithAssetDto
+            {
+                ClientId = client.ClientId,
+                ClientCode = client.ClientCode,
+                CompanyName = client.CompanyName,
+                DocumentTypeId = client.DocumentTypeId,
+                DocumentType = client.DocumentType,
+                DocumentNumber = client.DocumentNumber,
+                Email = client.Email,
+                EffectiveDate = client.EffectiveDate,
+                PaymentMethodId = client.PaymentMethodId,
+                PaymentMethod = client.PaymentMethod,
+                UserId = seller?.UserId ?? 0,
+                Route = client.Route,
+                Seller = seller,
+                Phone = client.Phone,
+                Address = client.Address,
+                DistrictId = client.DistrictId,
+                District = client.District,
+                CoordX = client.CoordX,
+                CoordY = client.CoordY,
+                Segmentation = client.Segmentation,
+                IsActive = client.IsActive,
+
+                // Mapea cada entidad ClientAssets a ClientAssetForClientDto
+                ClientAssets = client.ClientAssets.Select(clientAsset => new ClientAssets
+                {
+                    ClientAssetId = clientAsset.ClientAssetId,
+                    CediId = clientAsset.CediId,
+                    InstallationDate = clientAsset.InstallationDate,
+                    ClientId = clientAsset.ClientId,
+                    AssetId = clientAsset.AssetId,
+                    CodeAje = clientAsset.CodeAje,
+                    Notes = clientAsset.Notes,
+                    IsActive = clientAsset.IsActive,
+                    Cedi = clientAsset.Cedi,
+                    Asset = clientAsset.Asset,
+                }).ToList(),
+            };
+
+            return clientWithAssetDto;
+        }
+
         public async Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro)
         {
             var query = this._context.Clients

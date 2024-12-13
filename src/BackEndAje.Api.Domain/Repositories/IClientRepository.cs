@@ -13,6 +13,8 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<Client?> GetClientByClientCode(int clientCode, int cediId);
         
         Task<Client?> GetClientByClientCodeAndRoute(int clientCode, int cediId, int? route);
+        
+        Task<ClientWithAssetDto?> GetClientByClientCodeAndRouteWithAsset(int clientCode, int cediId, int? route);
 
         Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro);
         

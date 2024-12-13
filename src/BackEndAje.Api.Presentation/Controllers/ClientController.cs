@@ -61,9 +61,9 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType(typeof(List<GetClientByClientCodeResult>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("clientCode/{clientCode}/cediId/{cediId}")]
-        public async Task<IActionResult> GetClientByClientCode(int clientCode, int cediId, int? route = null)
+        public async Task<IActionResult> GetClientByClientCode(int clientCode, int cediId, int? route = null, int? reasonRequestId = null)
         {
-            var query = new GetClientByClientCodeQuery(clientCode, cediId, route);
+            var query = new GetClientByClientCodeQuery(clientCode, cediId, route, reasonRequestId);
             var client = await this._mediator.Send(query);
             return this.Ok(new Response { Result = client });
         }
