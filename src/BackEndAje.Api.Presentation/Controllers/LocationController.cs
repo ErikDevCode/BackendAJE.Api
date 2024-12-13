@@ -2,6 +2,7 @@ namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Dtos;
+    using BackEndAje.Api.Application.Locations.Queries.GetCedis;
     using BackEndAje.Api.Application.Locations.Queries.GetCedisById;
     using BackEndAje.Api.Application.Locations.Queries.GetCedisByRegionId;
     using BackEndAje.Api.Application.Locations.Queries.GetCedisByUserId;
@@ -64,7 +65,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(GetCedisByRegionIdResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetCedisByIdResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [Route("GetCediById/{cediId}")]
         public async Task<IActionResult> GetCedisById(int cediId)
@@ -81,6 +82,17 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetCedisByUserId(int userId)
         {
             var query = new GetCedisByUserIdQuery(userId);
+            var results = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = results });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetCedisResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("GetCedis")]
+        public async Task<IActionResult> GetCedis()
+        {
+            var query = new GetCedisQuery();
             var results = await this._mediator.Send(query);
             return this.Ok(new Response { Result = results });
         }
