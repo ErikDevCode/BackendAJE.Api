@@ -51,6 +51,16 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 await this.NotifyLogisticsProviders(orderRequest, request.OrderStatusId, cancellationToken);
             }
 
+            var relocationRequest = await this._orderRequestRepository.GetRelocationRequestByOrderRequestId(request.OrderRequestId);
+
+            if (relocationRequest != null)
+            {
+                relocationRequest.OrderStatusId = request.OrderStatusId;
+                relocationRequest.UpdatedAt = DateTime.Now;
+                relocationRequest.UpdatedBy = request.CreatedBy;
+                await this._orderRequestRepository.UpdateRelocationRequest(relocationRequest);
+            }
+
             return Unit.Value;
         }
 

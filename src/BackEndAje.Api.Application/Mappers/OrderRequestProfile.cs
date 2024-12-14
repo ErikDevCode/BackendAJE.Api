@@ -75,7 +75,9 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.CediName, opt => opt.MapFrom(src => src.Sucursal.CediName))
                 .ForMember(dest => dest.RegionId, opt => opt.MapFrom(src => src.Sucursal.RegionId))
                 .ForMember(dest => dest.RegionName, opt => opt.MapFrom(src => src.Sucursal.Region!.RegionName))
-                .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.OrderStatus.StatusName));
+                .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.OrderStatus.StatusName))
+                .ForMember(dest => dest.IsRelocation, opt => opt.MapFrom(src => src.RelocationRequests != null && src.RelocationRequests.Any()))
+                .ForMember(dest => dest.RelocationRequest, opt => opt.MapFrom(src => src.RelocationRequests));
 
             this.CreateMap<OrderRequestStatusHistory, GetTrackingByOrderRequestIdResult>()
                 .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.OrderStatus.StatusName))

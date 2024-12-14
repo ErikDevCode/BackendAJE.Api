@@ -20,6 +20,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
         public int ClientId { get; set; }
 
+        public int? DestinationClientId { get; set; }
+
         public int ClientCode { get; set; }
 
         public string Observations { get; set; }
@@ -27,6 +29,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
         public string Reference { get; set; }
 
         public int ProductSizeId { get; set; }
+
+        public int? AssetId { get; set; }
 
         public List<CreateOrderRequestDocumentDto> Documents { get; set; }
 

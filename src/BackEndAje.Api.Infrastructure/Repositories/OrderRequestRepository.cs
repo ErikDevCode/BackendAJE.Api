@@ -93,6 +93,12 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     .ThenInclude(t => t.DocumentType)
                 .Include(o => o.OrderRequestDocuments)
                 .Include(o => o.OrderStatus)
+                .Include(x => x.RelocationRequests)
+                    .ThenInclude(x => x.OrderStatus)
+                .Include(x => x.RelocationRequests)
+                    .ThenInclude(x => x.Relocation)
+                .Include(x => x.RelocationRequests)
+                    .ThenInclude(x => x.ReasonRequest)
                 .AsQueryable();
 
             if (supervisorId.HasValue)
@@ -549,6 +555,31 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             }
 
             return await query.ToListAsync();
+        }
+
+        public async Task AddRelocation(Relocation relocation)
+        {
+            this._context.Relocation.Add(relocation);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task AddRelocationRequests(RelocationRequest relocationRequest)
+        {
+            this._context.RelocationRequests.Add(relocationRequest);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task<RelocationRequest> GetRelocationRequestByOrderRequestId(int orderRequestId)
+        {
+            return (await this._context.RelocationRequests.AsNoTracking().FirstOrDefaultAsync(
+                x => x.OrderRequestId == orderRequestId))!;
+        }
+
+        public async Task UpdateRelocationRequest(RelocationRequest relocationRequest)
+        {
+            this._context.Entry(relocationRequest).State = EntityState.Detached;
+            this._context.RelocationRequests.Update(relocationRequest);
+            await this._context.SaveChangesAsync();
         }
     }
 }

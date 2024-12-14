@@ -9,7 +9,7 @@ namespace BackEndAje.Api.Domain.Entities
         public DateTime NegotiatedDate { get; set; }
         public int TimeWindowId { get; set; }
         public int? WithDrawalReasonId { get; set; }
-        
+
         public int ClientId { get; set; }
         public int ClientCode { get; set; }
         public string Observations { get; set; }
@@ -25,12 +25,13 @@ namespace BackEndAje.Api.Domain.Entities
 
         public ProductSize ProductSize { get; set; }
         public WithDrawalReason? WithDrawalReason { get; set; }
-        
+
         public Client Client { get; set; }
-        
+
         public OrderStatus OrderStatus { get; set; }
-        
+
         public ICollection<OrderRequestDocument> OrderRequestDocuments { get; set; }
         public ICollection<OrderRequestAssets> OrderRequestAssets { get; set; }
+        public ICollection<RelocationRequest> RelocationRequests { get; set; }
     }
 }

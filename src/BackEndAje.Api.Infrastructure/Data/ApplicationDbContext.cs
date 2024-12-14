@@ -90,6 +90,10 @@
 
         public DbSet<OrderRequestAssetsTrace> OrderRequestAssetsTrace { get; set; }
 
+        public DbSet<Relocation> Relocation { get; set; }
+
+        public DbSet<RelocationRequest> RelocationRequests { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -173,6 +177,10 @@
             modelBuilder.Entity<Notification>().ToTable("notifications");
 
             modelBuilder.Entity<OrderRequestAssetsTrace>().ToTable("orderrequestassetstrace");
+
+            modelBuilder.Entity<Relocation>().ToTable("relocation");
+
+            modelBuilder.Entity<RelocationRequest>().ToTable("relocationrequests");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)
@@ -325,6 +333,14 @@
                     .HasForeignKey(e => e.CreatedBy)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            modelBuilder.Entity<Relocation>()
+                .ToTable("relocation")
+                .HasKey(pm => pm.RelocationId);
+
+            modelBuilder.Entity<RelocationRequest>()
+                .ToTable("relocationrequests")
+                .HasKey(pm => pm.Id);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
