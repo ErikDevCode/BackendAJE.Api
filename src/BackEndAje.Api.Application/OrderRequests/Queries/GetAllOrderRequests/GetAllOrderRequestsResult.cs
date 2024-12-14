@@ -1,3 +1,5 @@
+using BackEndAje.Api.Domain.Entities;
+
 namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
 {
     public class GetAllOrderRequestsResult
@@ -31,5 +33,9 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
         public string RegionName { get; set; }
 
         public bool? IsActive { get; set; }
+
+        public bool IsRelocation { get; set; }
+
+        public ICollection<RelocationRequest> RelocationRequest { get; set; }
     }
 }
