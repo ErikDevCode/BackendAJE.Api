@@ -145,7 +145,9 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 IsActive = client.IsActive,
 
                 // Mapea cada entidad ClientAssets a ClientAssetForClientDto
-                ClientAssets = client.ClientAssets.Select(clientAsset => new ClientAssets
+                ClientAssets = client.ClientAssets
+                    .Where(clientAsset => clientAsset.IsActive == true)
+                    .Select(clientAsset => new ClientAssets
                 {
                     ClientAssetId = clientAsset.ClientAssetId,
                     CediId = clientAsset.CediId,
@@ -157,6 +159,10 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     IsActive = clientAsset.IsActive,
                     Cedi = clientAsset.Cedi,
                     Asset = clientAsset.Asset,
+                    CreatedAt = clientAsset.CreatedAt,
+                    UpdatedAt = clientAsset.UpdatedAt,
+                    CreatedBy = clientAsset.CreatedBy,
+                    UpdatedBy = clientAsset.UpdatedBy,
                 }).ToList(),
             };
 

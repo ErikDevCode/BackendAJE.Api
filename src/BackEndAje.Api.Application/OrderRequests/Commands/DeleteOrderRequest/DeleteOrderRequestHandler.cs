@@ -30,6 +30,24 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.DeleteOrderRequest
                 throw new KeyNotFoundException($"Solicitud con ID {request.OrderRequestId} no encontrada.");
             }
 
+            var relocationRequest = await this._orderRequestRepository.GetListRelocationRequestByOrderRequestId(orderRequest.OrderRequestId);
+            if (relocationRequest?.Any() == true)
+            {
+                foreach (var relocationReq in relocationRequest)
+                {
+                    var relocation = await this._orderRequestRepository.GetRelocationById(relocationReq.RelocationId);
+                    relocation.IsActive = false;
+                    relocation.UpdatedAt = DateTime.Now;
+                    relocation.UpdatedBy = request.UpdatedBy;
+                    await this._orderRequestRepository.DeleteRelocationAsync(relocation);
+
+                    relocationReq.IsActive = false;
+                    relocationReq.UpdatedAt = DateTime.Now;
+                    relocationReq.UpdatedBy = request.UpdatedBy;
+                    await this._orderRequestRepository.DeleteRelocationRequestAsync(relocationReq);
+                }
+            }
+
             // Marcar la solicitud como inactiva
             this.MarkOrderRequestAsInactive(orderRequest, request.UpdatedBy);
             await this._orderRequestRepository.DeleteOrderRequestAsync(orderRequest);

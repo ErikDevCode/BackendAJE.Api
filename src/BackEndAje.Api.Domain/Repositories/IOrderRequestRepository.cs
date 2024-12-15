@@ -94,5 +94,12 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<RelocationRequest> GetRelocationRequestByOrderRequestId(int orderRequestId);
         
         Task UpdateRelocationRequest(RelocationRequest relocationRequest);
+        
+        Task<List<RelocationRequest>> GetListRelocationRequestByOrderRequestId(int orderRequestId);
+        
+        Task DeleteRelocationAsync(Relocation relocation);
+        Task DeleteRelocationRequestAsync(RelocationRequest relocationRequest);
+        
+        Task<Relocation> GetRelocationById(int relocationId);
     }
 }
