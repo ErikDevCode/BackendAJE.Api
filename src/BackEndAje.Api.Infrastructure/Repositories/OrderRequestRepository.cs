@@ -496,27 +496,35 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     o.NegotiatedDate.Date == negotiatedDate.Date);
         }
 
-        public async Task<List<OrderRequest>> GetAllAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
+        public async Task<List<OrderRequest>> GetAllAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, int? cediId, int? regionId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null)
         {
             var query = this._context.OrderRequests
+                .Where(x => x.IsActive == true)
                 .Include(o => o.Supervisor)
                 .Include(o => o.Sucursal)
+                    .ThenInclude(s => s.Region)
                 .Include(o => o.ReasonRequest)
                 .Include(o => o.TimeWindow)
                 .Include(o => o.WithDrawalReason)
                 .Include(o => o.ProductSize)
                 .Include(o => o.Client)
-                .ThenInclude(c => c.Seller)
-                .ThenInclude(s => s.Cedi)
+                    .ThenInclude(c => c.Seller)
+                    .ThenInclude(s => s.Cedi)
                 .Include(o => o.Client)
-                .ThenInclude(c => c.Seller)
-                .ThenInclude(s => s.Zone)
+                    .ThenInclude(c => c.Seller)
+                    .ThenInclude(s => s.Zone)
                 .Include(o => o.Client)
-                .ThenInclude(d => d.District)
+                    .ThenInclude(d => d.District)
                 .Include(o => o.Client)
-                .ThenInclude(t => t.DocumentType)
+                    .ThenInclude(t => t.DocumentType)
                 .Include(o => o.OrderRequestDocuments)
                 .Include(o => o.OrderStatus)
+                .Include(x => x.RelocationRequests.Where(r => r.IsActive == true))
+                    .ThenInclude(x => x.OrderStatus)
+                .Include(x => x.RelocationRequests.Where(r => r.IsActive == true))
+                    .ThenInclude(x => x.Relocation)
+                .Include(x => x.RelocationRequests.Where(r => r.IsActive == true))
+                    .ThenInclude(x => x.ReasonRequest)
                 .AsQueryable();
 
             if (supervisorId.HasValue)
@@ -542,6 +550,16 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             if (reasonRequestId.HasValue)
             {
                 query = query.Where(o => o.ReasonRequestId == reasonRequestId.Value);
+            }
+
+            if (cediId.HasValue)
+            {
+                query = query.Where(or => or.CediId == cediId.Value);
+            }
+
+            if (regionId.HasValue)
+            {
+                query = query.Where(o => o.Sucursal.RegionId == regionId!.Value);
             }
 
             if (startDate.HasValue)

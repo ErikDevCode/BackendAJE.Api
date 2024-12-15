@@ -86,7 +86,16 @@ namespace BackEndAje.Api.Domain.Repositories
         
         Task<bool> ExistsAsync(int reasonRequestId, int clientId, DateTime negotiatedDate);
         
-        Task<List<OrderRequest>> GetAllAsync(int? clientCode, int? orderStatusId, int? reasonRequestId, DateTime? startDate, DateTime? endDate, int? supervisorId = null, int? vendedorId = null);
+        Task<List<OrderRequest>> GetAllAsync(
+            int? clientCode,
+            int? orderStatusId,
+            int? reasonRequestId,
+            int? CediId,
+            int? RegionId,
+            DateTime? startDate,
+            DateTime? endDate,
+            int? supervisorId = null,
+            int? vendedorId = null);
 
         Task AddRelocation(Relocation relocation);
         Task AddRelocationRequests(RelocationRequest relocationRequest);

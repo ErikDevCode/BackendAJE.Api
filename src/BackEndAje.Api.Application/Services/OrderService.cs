@@ -61,6 +61,37 @@ namespace BackEndAje.Api.Application.Services
                 await this._orderRequestRepository.AddOrderRequestDocumentAsync(document);
             }
         }
+
+        public async Task SaveOrderRequestAssetsAsync(
+            int orderRequestId,
+            int assetId,
+            int createdBy)
+        {
+            // Crear el registro en OrderRequestAssets
+            var orderRequestAsset = new OrderRequestAssets
+            {
+                OrderRequestId = orderRequestId,
+                AssetId = assetId,
+                IsActive = true,
+                CreatedAt = DateTime.Now,
+                CreatedBy = createdBy
+            };
+
+            var orderRequestAssetId = await this._orderRequestRepository.AssignAssetToOrder(orderRequestId, assetId, createdBy);
+
+            // Crear el registro en OrderRequestAssetsTrace
+            var orderRequestAssetTrace = new OrderRequestAssetsTrace
+            {
+                OrderRequestAssetId = orderRequestAssetId,
+                OrderRequestId = orderRequestId,
+                AssetId = assetId,
+                IsActive = true,
+                CreatedAt = DateTime.Now,
+                CreatedBy = createdBy,
+            };
+
+            await this._orderRequestRepository.AddOrderRequestAssetTrace(orderRequestAssetTrace);
+        }
     }
 }
 

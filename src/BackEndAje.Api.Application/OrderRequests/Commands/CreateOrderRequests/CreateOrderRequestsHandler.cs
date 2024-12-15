@@ -36,12 +36,16 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
                     cancellationToken
                 );
 
+                await this._orderService.SaveOrderRequestAssetsAsync(withdrawalOrderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy);
+
                 // Crear orden de instalación
                 var client = await this._clientRepository.GetClientById(request.DestinationClientId!.Value);
                 var installationOrderRequest = await this.CreateOrderAndNotifyAsync(
                     request with { ReasonRequestId = 1, ClientId = client.ClientId, ClientCode = client.ClientCode },
                     cancellationToken
                 );
+
+                await this._orderService.SaveOrderRequestAssetsAsync(installationOrderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy);
 
                 // Crear Relocation y asociar RelocationRequests
                 var relocation = await this._relocationService.CreateRelocationAsync(request, request.AssetId!.Value);
@@ -88,6 +92,12 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
             // Notificar al trade
             await this._notificationNewService.NotifyTradeAsync(orderRequest, notificationMessage, cancellationToken);
+
+            var validReasonRequestIds = new List<int> { 2, 3, 4 };
+            if (validReasonRequestIds.Contains(request.ReasonRequestId))
+            {
+                await this._orderService.SaveOrderRequestAssetsAsync(orderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy);
+            }
 
             return orderRequest;
         }

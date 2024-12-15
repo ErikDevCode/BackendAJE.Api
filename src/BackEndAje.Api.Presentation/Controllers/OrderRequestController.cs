@@ -191,12 +191,14 @@ namespace BackEndAje.Api.Presentation.Controllers
             [FromQuery] int? ClientCode = null,
             [FromQuery] int? StatusCode = null,
             [FromQuery] int? ReasonRequestId = null,
+            [FromQuery] int? CediId = null,
+            [FromQuery] int? RegionId = null,
             [FromQuery] DateTime? StartDate = null,
             [FromQuery] DateTime? EndDate = null)
         {
             try
             {
-                var query = new ExportOrderRequestsQuery(ClientCode, StatusCode, ReasonRequestId, StartDate, EndDate);
+                var query = new ExportOrderRequestsQuery(ClientCode, StatusCode, ReasonRequestId, CediId, RegionId, StartDate, EndDate);
                 var fileContent = await this._mediator.Send(query);
                 var fileName = $"Solicitudes_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
 

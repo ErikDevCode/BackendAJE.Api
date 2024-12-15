@@ -30,6 +30,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.ExportOrderRequests
                 request.ClientCode,
                 request.OrderStatusId,
                 request.ReasonRequestId,
+                request.CediId,
+                request.RegionId,
                 request.StartDate,
                 request.EndDate,
                 supervisorId,

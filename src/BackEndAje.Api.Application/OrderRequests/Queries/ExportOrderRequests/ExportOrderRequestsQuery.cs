@@ -7,6 +7,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.ExportOrderRequests
         int? ClientCode = null,
         int? OrderStatusId = null,
         int? ReasonRequestId = null,
+        int? CediId = null,
+        int? RegionId = null,
         DateTime? StartDate = null,
         DateTime? EndDate = null) : IRequest<byte[]>, IHasUserId
     {
