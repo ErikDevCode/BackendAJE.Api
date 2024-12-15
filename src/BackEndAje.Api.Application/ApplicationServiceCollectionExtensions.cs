@@ -9,6 +9,9 @@
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IUserLoginService, UserLoginService>();
+            services.AddTransient<NotificationNewService>();
+            services.AddTransient<RelocationService>();
+            services.AddTransient<OrderService>();
             return services;
         }
     }

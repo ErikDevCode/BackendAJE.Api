@@ -93,11 +93,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     .ThenInclude(t => t.DocumentType)
                 .Include(o => o.OrderRequestDocuments)
                 .Include(o => o.OrderStatus)
-                .Include(x => x.RelocationRequests)
+                .Include(x => x.RelocationRequests.Where(r => r.IsActive == true))
                     .ThenInclude(x => x.OrderStatus)
-                .Include(x => x.RelocationRequests)
+                .Include(x => x.RelocationRequests.Where(r => r.IsActive == true))
                     .ThenInclude(x => x.Relocation)
-                .Include(x => x.RelocationRequests)
+                .Include(x => x.RelocationRequests.Where(r => r.IsActive == true))
                     .ThenInclude(x => x.ReasonRequest)
                 .AsQueryable();
 
@@ -580,6 +580,43 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context.Entry(relocationRequest).State = EntityState.Detached;
             this._context.RelocationRequests.Update(relocationRequest);
             await this._context.SaveChangesAsync();
+        }
+
+        public async Task<List<RelocationRequest>> GetListRelocationRequestByOrderRequestId(int orderRequestId)
+        {
+            var relocationId = await this._context.RelocationRequests
+                .Where(rr => rr.OrderRequestId == orderRequestId)
+                .Select(rr => rr.RelocationId)
+                .FirstOrDefaultAsync();
+
+            if (relocationId == 0)
+            {
+                return new List<RelocationRequest>();
+            }
+
+            return await this._context.RelocationRequests
+                .Where(rr => rr.RelocationId == relocationId)
+                .ToListAsync();
+        }
+
+        public async Task DeleteRelocationAsync(Relocation relocation)
+        {
+            this._context.Entry(relocation).State = EntityState.Detached;
+            this._context.Relocation.Update(relocation);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task DeleteRelocationRequestAsync(RelocationRequest relocationRequest)
+        {
+            this._context.Entry(relocationRequest).State = EntityState.Detached;
+            this._context.RelocationRequests.Update(relocationRequest);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task<Relocation> GetRelocationById(int relocationId)
+        {
+            return (await this._context.Relocation.AsNoTracking().FirstOrDefaultAsync(
+                x => x.RelocationId == relocationId)) !;
         }
     }
 }
