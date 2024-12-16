@@ -58,7 +58,14 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
                 {
                     var listRelocationRequest = await this._orderRequestRepository.GetRelocationRequestByRelocationId(relocation.RelocationId);
                     var withdraw = listRelocationRequest.Find(x => x.ReasonRequestId == 2);
-                    resultFirst.IsContinue = withdraw!.OrderStatusId == 5;
+                    if (withdraw!.OrderStatusId == 5 && resultFirst.Reason == "Retiro")
+                    {
+                        resultFirst.IsContinue = false;
+                    }
+                    else if (withdraw!.OrderStatusId != 5 && resultFirst.Reason == "Instalación")
+                    {
+                        resultFirst.IsContinue = false;
+                    }
                 }
             }
 
