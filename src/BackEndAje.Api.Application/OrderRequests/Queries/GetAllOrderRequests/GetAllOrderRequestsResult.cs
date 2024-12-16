@@ -36,7 +36,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
 
         public bool IsRelocation { get; set; }
 
-        public bool IsContinue { get; set; }
+        public bool IsContinue { get; set; } = true;
 
         public ICollection<RelocationRequest> RelocationRequest { get; set; }
     }
