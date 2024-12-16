@@ -93,7 +93,6 @@ namespace BackEndAje.Api.Application.Services
 
             if (orderRequest.ReasonRequestId == 1)
             {
-                var clientAsset = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(orderRequest!.ClientId, assetId);
                 var client = await this._clientRepository.GetClientById(orderRequest.ClientId);
                 var user = await this._userRepository.GetUserByRouteAsync(client!.Route);
                 var asset = await this._assetRepository.GetAssetById(assetId);
@@ -101,7 +100,7 @@ namespace BackEndAje.Api.Application.Services
                 var clientAssetDto = new ClientAssets
                 {
                     CediId = user!.CediId!.Value,
-                    InstallationDate = clientAsset.InstallationDate,
+                    InstallationDate = DateTime.Now,
                     ClientId = orderRequest.ClientId,
                     AssetId = assetId,
                     CodeAje = asset.CodeAje,
