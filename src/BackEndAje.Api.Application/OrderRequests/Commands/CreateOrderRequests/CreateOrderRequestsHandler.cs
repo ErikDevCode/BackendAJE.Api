@@ -93,12 +93,6 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
             // Notificar al trade
             await this._notificationNewService.NotifyTradeAsync(orderRequest, notificationMessage, cancellationToken);
 
-            var validReasonRequestIds = new List<int> { 2, 3, 4 };
-            if (validReasonRequestIds.Contains(request.ReasonRequestId))
-            {
-                await this._orderService.SaveOrderRequestAssetsAsync(orderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy);
-            }
-
             return orderRequest;
         }
     }
