@@ -100,8 +100,16 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 }
 
                 var clientAsset = this.CreateClientAssetFromDto(clientAssetDto, request);
-                clientAsset.IsActive = request.OrderStatusId == (int)OrderStatusConst.Atendido;
-                clientAsset.Notes = this.GetStatusNotes(request.OrderStatusId);
+                if (orderRequest.ReasonRequestId == 2 && request.OrderStatusId == (int)OrderStatusConst.Atendido)
+                {
+                    clientAsset.IsActive = false;
+                    clientAsset.Notes = "Activo con Retiro completado";
+                }
+                else
+                {
+                    clientAsset.IsActive = request.OrderStatusId == (int)OrderStatusConst.Atendido;
+                    clientAsset.Notes = this.GetStatusNotes(request.OrderStatusId);
+                }
 
                 await this._clientAssetRepository.UpdateClientAssetsAsync(clientAsset);
             }

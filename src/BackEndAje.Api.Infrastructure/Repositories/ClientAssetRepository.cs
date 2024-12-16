@@ -231,7 +231,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<ClientAssets> GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(int clientId, int assetId)
         {
-            return (await this._context.ClientAssets.AsNoTracking().FirstOrDefaultAsync(x => x.ClientId == clientId && x.AssetId == assetId && x.IsActive == null))!;
+            return (await this._context.ClientAssets.AsNoTracking().FirstOrDefaultAsync(x => x.ClientId == clientId && x.AssetId == assetId))!;
         }
 
         public async Task<ClientAssets> GetClientAssetByClientIdAndAssetId(int clientId, int assetId)
