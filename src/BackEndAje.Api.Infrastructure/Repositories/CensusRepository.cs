@@ -91,8 +91,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 where
                     (!clientId.HasValue || ca.ClientId == clientId.Value) &&
                     (!assetId.HasValue || ca.AssetId == assetId.Value) &&
-                    ca.MonthPeriod == currentMonthPeriod &&
-                    clientAsset.IsActive == true
+                    ca.MonthPeriod == currentMonthPeriod
                 select new
                 {
                     clientAsset.ClientAssetId,

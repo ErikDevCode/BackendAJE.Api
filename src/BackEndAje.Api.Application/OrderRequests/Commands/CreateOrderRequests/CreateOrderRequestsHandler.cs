@@ -36,7 +36,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
                     cancellationToken
                 );
 
-                await this._orderService.SaveOrderRequestAssetsAsync(withdrawalOrderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy);
+                await this._orderService.SaveOrderRequestAssetsAsync(withdrawalOrderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy, withdrawalOrderRequest);
 
                 // Crear orden de instalación
                 var client = await this._clientRepository.GetClientById(request.DestinationClientId!.Value);
@@ -45,7 +45,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
                     cancellationToken
                 );
 
-                await this._orderService.SaveOrderRequestAssetsAsync(installationOrderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy);
+                await this._orderService.SaveOrderRequestAssetsAsync(installationOrderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy, installationOrderRequest);
 
                 // Crear Relocation y asociar RelocationRequests
                 var relocation = await this._relocationService.CreateRelocationAsync(request, request.AssetId!.Value);
