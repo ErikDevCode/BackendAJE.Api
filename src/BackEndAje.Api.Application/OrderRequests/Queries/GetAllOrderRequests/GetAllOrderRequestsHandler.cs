@@ -51,6 +51,17 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
                 vendedorId);
 
             var result = this._mapper.Map<List<GetAllOrderRequestsResult>>(orderRequests);
+
+            foreach (var resultFirst in result)
+            {
+                foreach (var relocation in resultFirst.RelocationRequest)
+                {
+                    var listRelocationRequest = await this._orderRequestRepository.GetRelocationRequestByRelocationId(relocation.RelocationId);
+                    var withdraw = listRelocationRequest.Find(x => x.ReasonRequestId == 2);
+                    resultFirst.IsContinue = withdraw!.OrderStatusId == 5;
+                }
+            }
+
             var paginatedResult = new PaginatedResult<GetAllOrderRequestsResult>
             {
                 TotalCount = totalOrderRequests,

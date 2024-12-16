@@ -16,13 +16,18 @@ using BackEndAje.Api.Web.FileUpload;
 var builder = WebApplication.CreateBuilder(args);
 
 
+var allowedOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>();
+
+// Eliminar duplicados
+allowedOrigins = allowedOrigins.Distinct().ToArray();
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigins", builder =>
+    options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        builder.WithOrigins("https://localhost:7001", "https://localhost:2001/", "http://localhost:4200")
-            .AllowAnyHeader()
+        policy.WithOrigins(allowedOrigins)
             .AllowAnyMethod()
+            .AllowAnyHeader()
             .AllowCredentials();
     });
 });

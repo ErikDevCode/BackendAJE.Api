@@ -636,5 +636,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return (await this._context.Relocation.AsNoTracking().FirstOrDefaultAsync(
                 x => x.RelocationId == relocationId)) !;
         }
+
+        public async Task<List<RelocationRequest>> GetRelocationRequestByRelocationId(int relocationId)
+        {
+            return await this._context.RelocationRequests.Where(
+                x => x.RelocationId == relocationId).ToListAsync();
+        }
     }
 }
