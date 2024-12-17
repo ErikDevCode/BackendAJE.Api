@@ -119,6 +119,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                             ClientId = orderRequest.ClientId,
                             AssetId = orderRequestChange!.AssetId,
                             CodeAje = orderRequestChange.Asset.CodeAje,
+                            Notes = clientAsset.Notes,
+                            IsActive = clientAsset.IsActive,
                             CreatedAt = DateTime.Now,
                             CreatedBy = request.CreatedBy,
                             UpdatedAt = DateTime.Now,

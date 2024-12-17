@@ -455,7 +455,9 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 UpdatedBy = assignedBy,
             };
 
-            if (orderRequest!.ReasonRequestId == 3)
+            var requestReason = this._context.OrderRequestAssets.AsNoTracking()
+                .FirstOrDefault(x => x.OrderRequestId == orderRequestId);
+            if (orderRequest!.ReasonRequestId == 3 && requestReason != null)
             {
                 orderRequestAsset.IsActive = null;
             }

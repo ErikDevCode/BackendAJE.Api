@@ -27,6 +27,13 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateAsset
             var newAsset = this._mapper.Map<Asset>(request);
             newAsset.CreatedAt = existingAssets.CreatedAt;
             newAsset.CreatedBy = existingAssets.CreatedBy;
+
+            var asset = await this._assetRepository.GetAssetByCodeAje(request.CodeAje);
+            if (asset == null || !asset.Any())
+            {
+                throw new InvalidOperationException($"Activo ya se encuentra registrado.");
+            }
+
             await this._assetRepository.UpdateAssetAsync(newAsset);
             return Unit.Value;
         }
