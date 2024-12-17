@@ -19,5 +19,12 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<CensusAnswer?> GetCensusAnswerById(int censusAnswerId);
         
         Task UpdateCensusAnswer(CensusAnswer censusAnswer);
+
+        Task<int> GetCensusCountAsync(
+            int? regionId,
+            int? zoneId,
+            int? route,
+            int? month,
+            int? year);
     }
 }
