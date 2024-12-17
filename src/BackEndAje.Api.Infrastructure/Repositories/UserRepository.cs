@@ -35,7 +35,12 @@
 
         public async Task<AppUser> GetAppUserByRouteOrEmailAsync(string routeOrEmail)
         {
-            return (await this._context.AppUsers.SingleOrDefaultAsync(u => u.RouteOrEmail == routeOrEmail)) !;
+            return (await this._context.AppUsers.AsNoTracking().SingleOrDefaultAsync(u => u.RouteOrEmail == routeOrEmail)) !;
+        }
+
+        public async Task<AppUser> GetAppUserByUserId(int userId)
+        {
+            return (await this._context.AppUsers.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == userId)) !;
         }
 
         public async Task<IEnumerable<string>> GetRolesByUserIdAsync(int userId)
@@ -154,12 +159,14 @@
 
         public async Task UpdateUserAsync(User user)
         {
+            this._context.Entry(user).State = EntityState.Detached;
             this._context.Users.Update(user);
             await this._context.SaveChangesAsync();
         }
 
         public async Task UpdateAppUserAsync(AppUser appUser)
         {
+            this._context.Entry(appUser).State = EntityState.Detached;
             this._context.AppUsers.Update(appUser);
             await this._context.SaveChangesAsync();
         }

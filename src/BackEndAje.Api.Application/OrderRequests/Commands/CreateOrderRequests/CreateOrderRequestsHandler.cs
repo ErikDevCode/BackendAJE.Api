@@ -74,6 +74,13 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
         {
             // Crear orden
             var orderRequest = await this._orderService.CreateOrderRequestAsync(request);
+            var validReasonRequestIds = new List<int> { 2, 3, 4 };
+
+            if (validReasonRequestIds.Contains(request.ReasonRequestId))
+            {
+                await this._orderService.SaveOrderRequestAssetsAsync(orderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy, orderRequest);
+            }
+
             await this._orderService.SaveOrderRequestStatusHistoryAsync(orderRequest.OrderRequestId, orderRequest.OrderStatusId, request.CreatedBy);
 
             if (request.Documents != null && request.Documents.Any())
