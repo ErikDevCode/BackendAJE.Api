@@ -6,6 +6,8 @@
     {
         Task<User?> GetUserByEmailOrRouteAsync(string codeRouteOrEmail);
         Task<AppUser> GetAppUserByRouteOrEmailAsync(string routeOrEmail);
+        
+        Task<AppUser> GetAppUserByUserId(int userId);
 
         Task<IEnumerable<string>> GetRolesByUserIdAsync(int userId);
 

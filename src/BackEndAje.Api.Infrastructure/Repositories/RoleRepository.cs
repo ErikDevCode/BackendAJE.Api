@@ -97,7 +97,7 @@
 
         public async Task<List<Role>> GetAllRolesAsync()
         {
-            return await this._context.Roles
+            return await this._context.Roles.AsNoTracking()
                 .ToListAsync();
         }
 
@@ -129,6 +129,12 @@
                 .ToListAsync();
 
             return permissionsWithActions;
+        }
+
+        public async Task<List<Position>> GetAllPositionsAsync()
+        {
+            return await this._context.Positions.AsNoTracking()
+                .ToListAsync();
         }
     }
 }

@@ -30,6 +30,7 @@ namespace BackEndAje.Api.Application.Users.Commands.UploadUsers
             var cedis = await this._cediRepository.GetAllCedis();
             var zones = await this._zoneRepository.GetAllZones();
             var roles = await this._roleRepository.GetAllRolesAsync();
+            var positions = await this._roleRepository.GetAllPositionsAsync();
 
             var cediDict = cedis
                 .GroupBy(c => c.CediName.ToUpper())
@@ -42,9 +43,14 @@ namespace BackEndAje.Api.Application.Users.Commands.UploadUsers
                 .ToDictionary(z => z.ZoneCode);
 
             var roleDict = roles
-                .GroupBy(r => r.RoleName.ToUpper())
+                .GroupBy(r => r.RoleName.ToUpper().Trim())
                 .Select(g => g.First())
-                .ToDictionary(r => r.RoleName.ToUpper());
+                .ToDictionary(r => r.RoleName.ToUpper().Trim());
+
+            var positionDict = positions
+                .GroupBy(r => r.PositionName.ToUpper().Trim())
+                .Select(g => g.First())
+                .ToDictionary(r => r.PositionName.ToUpper().Trim());
 
             using var memoryStream = new MemoryStream(request.FileBytes);
             using var package = new ExcelPackage(memoryStream);
@@ -81,10 +87,16 @@ namespace BackEndAje.Api.Application.Users.Commands.UploadUsers
 
                     var zoneId = zone?.ZoneId;
 
-                    var roleName = worksheet.Cells[row, 4].Text.ToUpper();
+                    var roleName = worksheet.Cells[row, 5].Text.ToUpper();
                     if (!roleDict.TryGetValue(roleName, out var role))
                     {
                         throw new KeyNotFoundException($"Rol '{roleName}' no encontrado en la fila {row}.");
+                    }
+
+                    var positionName = worksheet.Cells[row, 4].Text.ToUpper();
+                    if (!positionDict.TryGetValue(positionName, out var position))
+                    {
+                        throw new KeyNotFoundException($"Posicion '{positionName}' no encontrado en la fila {row}.");
                     }
 
                     var routeText = worksheet.Cells[row, 3].Text;
@@ -92,7 +104,7 @@ namespace BackEndAje.Api.Application.Users.Commands.UploadUsers
                         ? int.Parse(routeText)
                         : null;
 
-                    var documentNumber = Regex.Replace(worksheet.Cells[row, 8].Text, @"\D", "");
+                    var documentNumber = Regex.Replace(worksheet.Cells[row, 9].Text, @"\D", "");
                     User existingUser = null;
 
                     if (route.HasValue)
@@ -109,7 +121,7 @@ namespace BackEndAje.Api.Application.Users.Commands.UploadUsers
                         CreatedBy = request.CreatedBy,
                     };
 
-                    this.UpdateUserData(user, worksheet, row, cedi.CediId, zoneId, route, request.UpdatedBy);
+                    this.UpdateUserData(user, worksheet, row, cedi.CediId, position.PositionId, zoneId, route, request.UpdatedBy);
                     if (existingUser == null)
                     {
                         usersToAdd.Add(user);
@@ -142,8 +154,8 @@ namespace BackEndAje.Api.Application.Users.Commands.UploadUsers
             var appUsersToAdd = new List<AppUser>();
             foreach (var (user, roleId) in rolesToAssign)
             {
-                var routeOrEmail = !string.IsNullOrWhiteSpace(user.Email)
-                    ? user.Email : user.Route.ToString();
+                var routeOrEmail = !string.IsNullOrWhiteSpace(user.Route?.ToString())
+                    ? user.Route.ToString() : !string.IsNullOrWhiteSpace(user.Email) ? user.Email : throw new InvalidOperationException($"No se proporcionó Route ni Email para el usuario con ID {user.UserId}.");
 
                 var existingAppUser = await this._userRepository.GetAppUserByRouteOrEmailAsync(routeOrEmail!);
                 if (existingAppUser == null)
@@ -151,7 +163,7 @@ namespace BackEndAje.Api.Application.Users.Commands.UploadUsers
                     var appUser = new AppUser
                     {
                         UserId = user.UserId,
-                        RouteOrEmail = !string.IsNullOrWhiteSpace(user.Email) ? user.Email : user.Route.ToString(),
+                        RouteOrEmail = routeOrEmail!,
                         PasswordHash = this._hashingService.HashPassword("1111"),
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
@@ -181,17 +193,18 @@ namespace BackEndAje.Api.Application.Users.Commands.UploadUsers
             };
         }
 
-        private void UpdateUserData(User user, ExcelWorksheet worksheet, int row, int cediId, int? zoneId, int? route, int updatedBy)
+        private void UpdateUserData(User user, ExcelWorksheet worksheet, int row, int cediId, int positionId, int? zoneId, int? route, int updatedBy)
         {
             user.CediId = cediId;
             user.ZoneId = zoneId;
             user.Route = route;
-            user.Names = worksheet.Cells[row, 7].Text;
-            user.PaternalSurName = worksheet.Cells[row, 5].Text;
-            user.MaternalSurName = worksheet.Cells[row, 6].Text;
-            user.Email = worksheet.Cells[row, 10].Text;
-            user.Phone = worksheet.Cells[row, 9].Text.Replace(" ", "");
-            user.DocumentNumber = Regex.Replace(worksheet.Cells[row, 8].Text, @"\D", "");
+            user.Names = worksheet.Cells[row, 8].Text;
+            user.PositionId = positionId;
+            user.PaternalSurName = worksheet.Cells[row, 6].Text;
+            user.MaternalSurName = worksheet.Cells[row, 7].Text;
+            user.Email = worksheet.Cells[row, 11].Text;
+            user.Phone = worksheet.Cells[row, 10].Text.Replace(" ", "");
+            user.DocumentNumber = Regex.Replace(worksheet.Cells[row, 9].Text, @"\D", "");
             user.IsActive = true;
             user.UpdatedAt = DateTime.Now;
             user.UpdatedBy = updatedBy;
