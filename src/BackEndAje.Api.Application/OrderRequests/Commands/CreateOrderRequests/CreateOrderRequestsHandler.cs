@@ -33,8 +33,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
                 // Crear orden de retiro
                 var withdrawalOrderRequest = await this.CreateOrderAndNotifyAsync(
                     request with { ReasonRequestId = 2 },
-                    cancellationToken
-                );
+                    cancellationToken,
+                    request.ReasonRequestId);
 
                 await this._orderService.SaveOrderRequestAssetsAsync(withdrawalOrderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy, withdrawalOrderRequest);
 
@@ -42,8 +42,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
                 var client = await this._clientRepository.GetClientById(request.DestinationClientId!.Value);
                 var installationOrderRequest = await this.CreateOrderAndNotifyAsync(
                     request with { ReasonRequestId = 1, ClientId = client.ClientId, ClientCode = client.ClientCode },
-                    cancellationToken
-                );
+                    cancellationToken,
+                    request.ReasonRequestId);
 
                 await this._orderService.SaveOrderRequestAssetsAsync(installationOrderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy, installationOrderRequest);
 
@@ -54,7 +54,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
             else
             {
                 // Crear orden normal y enviar notificaciones
-                await this.CreateOrderAndNotifyAsync(request, cancellationToken);
+                await this.CreateOrderAndNotifyAsync(request, cancellationToken, request.ReasonRequestId);
             }
 
             return Unit.Value;
@@ -70,13 +70,14 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
         private async Task<OrderRequest> CreateOrderAndNotifyAsync(
             CreateOrderRequestsCommand request,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            int reasonRequestId)
         {
             // Crear orden
             var orderRequest = await this._orderService.CreateOrderRequestAsync(request);
             var validReasonRequestIds = new List<int> { 2, 3, 4 };
 
-            if (validReasonRequestIds.Contains(request.ReasonRequestId))
+            if (validReasonRequestIds.Contains(request.ReasonRequestId) && reasonRequestId != 5)
             {
                 await this._orderService.SaveOrderRequestAssetsAsync(orderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy, orderRequest);
             }

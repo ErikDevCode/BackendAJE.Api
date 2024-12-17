@@ -106,6 +106,10 @@ namespace BackEndAje.Api.Application.Services
                     CodeAje = asset.CodeAje,
                     Notes = "Activo en proceso de reubicación",
                     IsActive = null,
+                    CreatedBy = createdBy,
+                    CreatedAt = DateTime.Now,
+                    UpdatedBy = createdBy,
+                    UpdatedAt = DateTime.Now,
                 };
 
                 await this._clientAssetRepository.AddClientAsset(clientAssetDto);

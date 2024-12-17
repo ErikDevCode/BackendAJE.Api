@@ -47,9 +47,16 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .Include(o => o.Client)
                 .ThenInclude(t => t.DocumentType)
                 .Include(o => o.OrderRequestDocuments)
-                .Include(oa => oa.OrderRequestAssets.Where(a => a.IsActive))
+                .Include(oa => oa.OrderRequestAssets)
                 .ThenInclude(a => a.Asset)
                 .SingleOrDefaultAsync(o => o.OrderRequestId == id);
+
+            if (orderRequest != null)
+            {
+                orderRequest.OrderRequestAssets = orderRequest.OrderRequestAssets
+                    .Where(a => a.IsActive is true or null)
+                    .ToList();
+            }
 
             return orderRequest;
         }
@@ -434,6 +441,9 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<int> AssignAssetToOrder(int orderRequestId, int assetId, int assignedBy)
         {
+            var orderRequest = this._context.OrderRequests.AsNoTracking()
+                .FirstOrDefault(x => x.OrderRequestId == orderRequestId);
+
             var orderRequestAsset = new OrderRequestAssets
             {
                 OrderRequestId = orderRequestId,
@@ -444,6 +454,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 UpdatedAt = DateTime.Now,
                 UpdatedBy = assignedBy,
             };
+
+            if (orderRequest!.ReasonRequestId == 3)
+            {
+                orderRequestAsset.IsActive = null;
+            }
 
             await this._context.OrderRequestAssets.AddAsync(orderRequestAsset);
             await this._context.SaveChangesAsync();
