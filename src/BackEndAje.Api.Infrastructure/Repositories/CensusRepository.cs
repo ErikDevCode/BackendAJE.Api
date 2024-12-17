@@ -195,5 +195,37 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             return await query.CountAsync();
         }
+
+        public async Task<int> GetCensusCountAsync(
+            int? regionId,
+            int? zoneId,
+            int? route,
+            int? month,
+            int? year)
+        {
+            var query =
+                from ca in this._context.CensusAnswer
+                join cl in this._context.Clients on ca.ClientId equals cl.ClientId
+                join a in this._context.Assets on ca.AssetId equals a.AssetId
+                join clientAsset in this._context.ClientAssets 
+                    on new { ca.ClientId, ca.AssetId } equals new { clientAsset.ClientId, clientAsset.AssetId }
+                join u in this._context.Users on ca.CreatedBy equals u.UserId
+                join cedi in this._context.Cedis on u.CediId equals cedi.CediId into cediGroup
+                from cedi in cediGroup.DefaultIfEmpty()
+                join zone in this._context.Zones on cedi.CediId equals zone.CediId into zoneGroup
+                from zone in zoneGroup.DefaultIfEmpty()
+                where
+                    (!regionId.HasValue || cedi.RegionId == regionId.Value) &&
+                    (!zoneId.HasValue || zone.ZoneId == zoneId.Value) &&
+                    (!route.HasValue || cl.Route == route.Value) &&
+                    (!month.HasValue || EF.Functions.Like(ca.MonthPeriod, $"%{month:D2}")) &&
+                    (!year.HasValue || ca.MonthPeriod.StartsWith(year.Value.ToString()))
+                group ca by new { ca.ClientId, ca.AssetId, ca.MonthPeriod } into groupedCensus
+                select groupedCensus.Key;
+
+            var censusCount = await query.CountAsync();
+
+            return censusCount;
+        }
     }
 }

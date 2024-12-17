@@ -232,10 +232,16 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task UpdateStatusOrderRequestAsync(int orderRequestId, int newStatusId, int createdBy)
         {
-            var orderRequest = new OrderRequest { OrderRequestId = orderRequestId, OrderStatusId = newStatusId, UpdatedBy = createdBy, UpdatedAt = DateTime.Now};
+            this._context.ChangeTracker.Clear();
+            var existingOrderRequest = await this._context.OrderRequests
+                .AsNoTracking()
+                .SingleOrDefaultAsync(o => o.OrderRequestId == orderRequestId);
 
-            this._context.OrderRequests.Attach(orderRequest);
-            this._context.Entry(orderRequest).Property(o => o.OrderStatusId).IsModified = true;
+            existingOrderRequest!.OrderStatusId = newStatusId;
+            existingOrderRequest.UpdatedBy = createdBy;
+            existingOrderRequest.UpdatedAt = DateTime.Now;
+
+            this._context.Entry(existingOrderRequest).State = EntityState.Modified;
 
             await this._context.SaveChangesAsync();
         }

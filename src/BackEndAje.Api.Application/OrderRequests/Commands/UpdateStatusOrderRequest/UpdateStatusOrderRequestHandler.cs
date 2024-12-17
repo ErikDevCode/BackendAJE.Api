@@ -108,25 +108,27 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                         break;
                     case 3 when request.OrderStatusId == (int)OrderStatusConst.Atendido:
                     {
-                        clientAsset.IsActive = false;
-                        clientAsset.Notes = "Cambio de Equipo completado";
-
-                        var orderRequestChange = orderRequest.OrderRequestAssets.FirstOrDefault(x => x.OrderRequestId == orderRequest.OrderRequestId);
-                        var clientAssetCreate = new ClientAssets
+                        if (orderRequestAsset.IsActive == true)
                         {
-                            CediId = orderRequest.CediId,
-                            InstallationDate = DateTime.Now,
-                            ClientId = orderRequest.ClientId,
-                            AssetId = orderRequestChange!.AssetId,
-                            CodeAje = orderRequestChange.Asset.CodeAje,
-                            Notes = clientAsset.Notes,
-                            IsActive = clientAsset.IsActive,
-                            CreatedAt = DateTime.Now,
-                            CreatedBy = request.CreatedBy,
-                            UpdatedAt = DateTime.Now,
-                            UpdatedBy = request.CreatedBy,
-                        };
-                        await this._clientAssetRepository.AddClientAsset(clientAssetCreate);
+                            var orderRequestTemp = orderRequestAsset;
+                            orderRequestTemp.IsActive = false;
+                            orderRequestTemp.UpdatedAt = DateTime.Now;
+                            orderRequestTemp.UpdatedBy = request.CreatedBy;
+                            await this._orderRequestRepository.UpdateAssetToOrderRequest(orderRequestTemp);
+                            clientAsset.IsActive = false;
+                            clientAsset.Notes = "Se ha retirado el Activo por cambio de Equipo";
+                        }
+                        else
+                        {
+                            var orderRequestTemp = orderRequestAsset;
+                            orderRequestTemp.IsActive = true;
+                            orderRequestTemp.UpdatedAt = DateTime.Now;
+                            orderRequestTemp.UpdatedBy = request.CreatedBy;
+                            await this._orderRequestRepository.UpdateAssetToOrderRequest(orderRequestTemp);
+                            clientAsset.IsActive = true;
+                            clientAsset.Notes = "Cambio de Equipo completado";
+                        }
+
                         break;
                     }
 
