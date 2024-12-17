@@ -100,15 +100,38 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 }
 
                 var clientAsset = this.CreateClientAssetFromDto(clientAssetDto, request);
-                if (orderRequest.ReasonRequestId == 2 && request.OrderStatusId == (int)OrderStatusConst.Atendido)
+                switch (orderRequest.ReasonRequestId)
                 {
-                    clientAsset.IsActive = false;
-                    clientAsset.Notes = "Activo con Retiro completado";
-                }
-                else
-                {
-                    clientAsset.IsActive = request.OrderStatusId == (int)OrderStatusConst.Atendido;
-                    clientAsset.Notes = this.GetStatusNotes(request.OrderStatusId);
+                    case 2 when request.OrderStatusId == (int)OrderStatusConst.Atendido:
+                        clientAsset.IsActive = false;
+                        clientAsset.Notes = "Activo con Retiro completado";
+                        break;
+                    case 3 when request.OrderStatusId == (int)OrderStatusConst.Atendido:
+                    {
+                        clientAsset.IsActive = false;
+                        clientAsset.Notes = "Cambio de Equipo completado";
+
+                        var orderRequestChange = orderRequest.OrderRequestAssets.FirstOrDefault(x => x.OrderRequestId == orderRequest.OrderRequestId);
+                        var clientAssetCreate = new ClientAssets
+                        {
+                            CediId = orderRequest.CediId,
+                            InstallationDate = DateTime.Now,
+                            ClientId = orderRequest.ClientId,
+                            AssetId = orderRequestChange!.AssetId,
+                            CodeAje = orderRequestChange.Asset.CodeAje,
+                            CreatedAt = DateTime.Now,
+                            CreatedBy = request.CreatedBy,
+                            UpdatedAt = DateTime.Now,
+                            UpdatedBy = request.CreatedBy,
+                        };
+                        await this._clientAssetRepository.AddClientAsset(clientAssetCreate);
+                        break;
+                    }
+
+                    default:
+                        clientAsset.IsActive = request.OrderStatusId == (int)OrderStatusConst.Atendido;
+                        clientAsset.Notes = this.GetStatusNotes(request.OrderStatusId);
+                        break;
                 }
 
                 await this._clientAssetRepository.UpdateClientAssetsAsync(clientAsset);
