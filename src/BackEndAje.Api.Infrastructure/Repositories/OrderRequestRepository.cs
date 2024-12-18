@@ -1,5 +1,6 @@
 namespace BackEndAje.Api.Infrastructure.Repositories
 {
+    using BackEndAje.Api.Application.Dtos.Const;
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
     using BackEndAje.Api.Infrastructure.Data;
@@ -404,7 +405,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .ThenInclude(s => s!.Zone)
                 .Include(oa => oa.OrderRequest)
                 .ThenInclude(or => or.Supervisor)
-                .Where(oa => oa.OrderRequest.OrderStatusId == 5)
+                .Where(oa => oa.OrderRequest.OrderStatusId == (int)OrderStatusConst.Atendido)
                 .AsQueryable();
 
             if (supervisorId.HasValue)
@@ -463,7 +464,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             var requestReason = this._context.OrderRequestAssets.AsNoTracking()
                 .FirstOrDefault(x => x.OrderRequestId == orderRequestId);
-            if (orderRequest!.ReasonRequestId == 3 && requestReason != null)
+            if (orderRequest!.ReasonRequestId == (int)ReasonRequestConst.CambioDeEquipo && requestReason != null)
             {
                 orderRequestAsset.IsActive = null;
             }

@@ -57,12 +57,12 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.GetAllOrderRequests
                 foreach (var relocation in resultFirst.RelocationRequest)
                 {
                     var listRelocationRequest = await this._orderRequestRepository.GetRelocationRequestByRelocationId(relocation.RelocationId);
-                    var withdraw = listRelocationRequest.Find(x => x.ReasonRequestId == 2);
-                    if (withdraw!.OrderStatusId == 5 && resultFirst.Reason == "Retiro")
+                    var withdraw = listRelocationRequest.Find(x => x.ReasonRequestId == (int)ReasonRequestConst.Retiro);
+                    if (withdraw!.OrderStatusId == (int)ReasonRequestConst.Reubicacion && resultFirst.Reason == nameof(ReasonRequestConst.Retiro))
                     {
                         resultFirst.IsContinue = false;
                     }
-                    else if (withdraw!.OrderStatusId != 5 && resultFirst.Reason == "Instalación")
+                    else if (withdraw!.OrderStatusId != (int)ReasonRequestConst.Reubicacion && resultFirst.Reason == "Instalación")
                     {
                         resultFirst.IsContinue = false;
                     }

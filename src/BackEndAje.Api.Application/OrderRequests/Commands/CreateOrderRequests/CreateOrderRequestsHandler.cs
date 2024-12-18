@@ -1,5 +1,6 @@
 namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 {
+    using BackEndAje.Api.Application.Dtos.Const;
     using BackEndAje.Api.Application.Services;
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
@@ -26,13 +27,13 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
         public async Task<Unit> Handle(CreateOrderRequestsCommand request, CancellationToken cancellationToken)
         {
-            if (request.ReasonRequestId == 5)
+            if (request.ReasonRequestId == (int)ReasonRequestConst.Reubicacion)
             {
                 this.ValidateRelocationRequest(request);
 
                 // Crear orden de retiro
                 var withdrawalOrderRequest = await this.CreateOrderAndNotifyAsync(
-                    request with { ReasonRequestId = 2 },
+                    request with { ReasonRequestId = (int)ReasonRequestConst.Retiro },
                     cancellationToken,
                     request.ReasonRequestId);
 
@@ -41,7 +42,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
                 // Crear orden de instalación
                 var client = await this._clientRepository.GetClientById(request.DestinationClientId!.Value);
                 var installationOrderRequest = await this.CreateOrderAndNotifyAsync(
-                    request with { ReasonRequestId = 1, ClientId = client.ClientId, ClientCode = client.ClientCode },
+                    request with { ReasonRequestId = (int)ReasonRequestConst.Instalacion, ClientId = client!.ClientId, ClientCode = client.ClientCode },
                     cancellationToken,
                     request.ReasonRequestId);
 
@@ -53,7 +54,6 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
             }
             else
             {
-                // Crear orden normal y enviar notificaciones
                 await this.CreateOrderAndNotifyAsync(request, cancellationToken, request.ReasonRequestId);
             }
 
@@ -73,11 +73,10 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
             CancellationToken cancellationToken,
             int reasonRequestId)
         {
-            // Crear orden
             var orderRequest = await this._orderService.CreateOrderRequestAsync(request);
-            var validReasonRequestIds = new List<int> { 2, 3, 4 };
+            var validReasonRequestIds = new List<int> { (int)ReasonRequestConst.Retiro, (int)ReasonRequestConst.CambioDeEquipo, (int)ReasonRequestConst.ServicioTecnico };
 
-            if (validReasonRequestIds.Contains(request.ReasonRequestId) && reasonRequestId != 5)
+            if (validReasonRequestIds.Contains(request.ReasonRequestId) && reasonRequestId != (int)ReasonRequestConst.Reubicacion)
             {
                 await this._orderService.SaveOrderRequestAssetsAsync(orderRequest.OrderRequestId, request.AssetId!.Value, request.CreatedBy, orderRequest);
             }
