@@ -128,12 +128,17 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                         break;
 
                     case (int)ReasonRequestConst.Retiro when request.OrderStatusId == (int)OrderStatusConst.Rechazado:
-                        await this.HandleRetiroRechazado(clientAsset, request);
+                        await this.HandleRetiroRechazado(request);
                         assetDeleted = true;
                         break;
 
                     case (int)ReasonRequestConst.Retiro when request.OrderStatusId == (int)OrderStatusConst.Anulado:
-                        await this.HandleRetiroAnulado(clientAsset, request);
+                        await this.HandleRetiroAnulado(request);
+                        assetDeleted = true;
+                        break;
+
+                    case (int)ReasonRequestConst.Retiro when request.OrderStatusId == (int)OrderStatusConst.FalsoFlete:
+                        await this.HandleRetiroFalsoFlete(request);
                         assetDeleted = true;
                         break;
 
@@ -167,12 +172,14 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
             clientAsset.Notes = "Activo con Retiro completado";
         }
 
-        private async Task HandleRetiroRechazado(ClientAssets clientAsset, UpdateStatusOrderRequestCommand request)
+        private async Task HandleRetiroRechazado(UpdateStatusOrderRequestCommand request)
         {
             var relocationRequest = await this._orderRequestRepository.GetRelocationRequestByOrderRequestId(request.OrderRequestId);
             if (relocationRequest != null)
             {
-                var relocation = await this._orderRequestRepository.GetRelocationRequestByRelocationId(relocationRequest.RelocationId);
+                var relocation =
+                    await this._orderRequestRepository.GetRelocationRequestByRelocationId(
+                        relocationRequest.RelocationId);
                 foreach (var relocationRequestDto in relocation)
                 {
                     await this._orderRequestRepository.UpdateStatusOrderRequestAsync(
@@ -180,13 +187,16 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                         (int)OrderStatusConst.Rechazado,
                         request.CreatedBy);
 
-                    var relocationDto = await this._orderRequestRepository.GetRelocationById(relocationRequestDto.RelocationId);
-                    var clientAssetDto = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(relocationDto.DestinationClientId, relocationDto.TransferredAssetId);
+                    var relocationDto =
+                        await this._orderRequestRepository.GetRelocationById(relocationRequestDto.RelocationId);
+                    var clientAssetDto =
+                        await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(
+                            relocationDto.DestinationClientId, relocationDto.TransferredAssetId);
                     if (relocationRequestDto.ReasonRequestId == (int)ReasonRequestConst.Retiro)
                     {
-                        var clientAssetNewDto = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(relocationDto.OriginClientId, relocationDto.TransferredAssetId);
-                        clientAssetNewDto.IsActive = false;
-                        clientAssetNewDto.Notes = "El Retiro fue Rechazado";
+                        var clientAssetNewDto =
+                            await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(
+                                relocationDto.OriginClientId, relocationDto.TransferredAssetId);
                         clientAssetNewDto.UpdatedAt = DateTime.Now;
                         clientAssetNewDto.UpdatedBy = request.CreatedBy;
                         await this._clientAssetRepository.UpdateClientAssetsAsync(clientAssetNewDto);
@@ -199,7 +209,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
             }
         }
 
-        private async Task HandleRetiroAnulado(ClientAssets clientAsset, UpdateStatusOrderRequestCommand request)
+        private async Task HandleRetiroAnulado(UpdateStatusOrderRequestCommand request)
         {
             var relocationRequest = await this._orderRequestRepository.GetRelocationRequestByOrderRequestId(request.OrderRequestId);
             if (relocationRequest != null)
@@ -217,8 +227,36 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                     if (relocationRequestDto.ReasonRequestId == (int)ReasonRequestConst.Retiro)
                     {
                         var clientAssetNewDto = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(relocationDto.OriginClientId, relocationDto.TransferredAssetId);
-                        clientAssetNewDto.IsActive = false;
-                        clientAssetNewDto.Notes = "El Retiro fue Anulado";
+                        clientAssetNewDto.UpdatedAt = DateTime.Now;
+                        clientAssetNewDto.UpdatedBy = request.CreatedBy;
+                        await this._clientAssetRepository.UpdateClientAssetsAsync(clientAssetNewDto);
+                    }
+                    else
+                    {
+                        await this._clientAssetRepository.DeleteClientAssetAsync(clientAssetDto);
+                    }
+                }
+            }
+        }
+
+        private async Task HandleRetiroFalsoFlete(UpdateStatusOrderRequestCommand request)
+        {
+            var relocationRequest = await this._orderRequestRepository.GetRelocationRequestByOrderRequestId(request.OrderRequestId);
+            if (relocationRequest != null)
+            {
+                var relocation = await this._orderRequestRepository.GetRelocationRequestByRelocationId(relocationRequest.RelocationId);
+                foreach (var relocationRequestDto in relocation)
+                {
+                    await this._orderRequestRepository.UpdateStatusOrderRequestAsync(
+                        relocationRequestDto.OrderRequestId,
+                        (int)OrderStatusConst.FalsoFlete,
+                        request.CreatedBy);
+
+                    var relocationDto = await this._orderRequestRepository.GetRelocationById(relocationRequestDto.RelocationId);
+                    var clientAssetDto = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(relocationDto.DestinationClientId, relocationDto.TransferredAssetId);
+                    if (relocationRequestDto.ReasonRequestId == (int)ReasonRequestConst.Retiro)
+                    {
+                        var clientAssetNewDto = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(relocationDto.OriginClientId, relocationDto.TransferredAssetId);
                         clientAssetNewDto.UpdatedAt = DateTime.Now;
                         clientAssetNewDto.UpdatedBy = request.CreatedBy;
                         await this._clientAssetRepository.UpdateClientAssetsAsync(clientAssetNewDto);
