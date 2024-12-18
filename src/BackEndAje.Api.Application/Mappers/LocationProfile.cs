@@ -26,7 +26,7 @@ namespace BackEndAje.Api.Application.Mappers
             this.CreateMap<Cedi, GetCedisByUserIdResult>();
 
             this.CreateMap<Cedi, GetCedisResult>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CediId))
+                .ForMember(dest => dest.CediId, opt => opt.MapFrom(src => src.CediId))
                 .ForMember(dest => dest.RegionId, opt => opt.MapFrom(src => src.RegionId))
                 .ForMember(dest => dest.CediName, opt => opt.MapFrom(src => src.CediName));
         }
