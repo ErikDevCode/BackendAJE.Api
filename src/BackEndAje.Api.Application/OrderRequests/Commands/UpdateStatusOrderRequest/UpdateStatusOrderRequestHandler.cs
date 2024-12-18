@@ -119,37 +119,27 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 }
 
                 var clientAsset = this.CreateClientAssetFromDto(clientAssetDto, request);
+                var assetDeleted = false;
+
                 switch (orderRequest.ReasonRequestId)
                 {
-                    case 2 when request.OrderStatusId == (int)OrderStatusConst.Atendido:
-                        clientAsset.IsActive = false;
-                        clientAsset.Notes = "Activo con Retiro completado";
+                    case (int)ReasonRequestConst.Retiro when request.OrderStatusId == (int)OrderStatusConst.Atendido:
+                        await this.HandleRetiroAtendido(clientAsset);
                         break;
-                    case 3 when request.OrderStatusId == (int)OrderStatusConst.Atendido:
-                    {
-                        if (orderRequestAsset.IsActive == true)
-                        {
-                            var orderRequestTemp = orderRequestAsset;
-                            orderRequestTemp.IsActive = false;
-                            orderRequestTemp.UpdatedAt = DateTime.Now;
-                            orderRequestTemp.UpdatedBy = request.CreatedBy;
-                            await this._orderRequestRepository.UpdateAssetToOrderRequest(orderRequestTemp);
-                            clientAsset.IsActive = false;
-                            clientAsset.Notes = "Se ha retirado el Activo por cambio de Equipo";
-                        }
-                        else
-                        {
-                            var orderRequestTemp = orderRequestAsset;
-                            orderRequestTemp.IsActive = true;
-                            orderRequestTemp.UpdatedAt = DateTime.Now;
-                            orderRequestTemp.UpdatedBy = request.CreatedBy;
-                            await this._orderRequestRepository.UpdateAssetToOrderRequest(orderRequestTemp);
-                            clientAsset.IsActive = true;
-                            clientAsset.Notes = "Cambio de Equipo completado";
-                        }
 
+                    case (int)ReasonRequestConst.Retiro when request.OrderStatusId == (int)OrderStatusConst.Rechazado:
+                        await this.HandleRetiroRechazado(clientAsset, request);
+                        assetDeleted = true;
                         break;
-                    }
+
+                    case (int)ReasonRequestConst.Retiro when request.OrderStatusId == (int)OrderStatusConst.Anulado:
+                        await this.HandleRetiroAnulado(clientAsset, request);
+                        assetDeleted = true;
+                        break;
+
+                    case (int)ReasonRequestConst.CambioDeEquipo when request.OrderStatusId == (int)OrderStatusConst.Atendido:
+                        await this.HandleCambioDeEquipo(clientAsset, orderRequestAsset, request);
+                        break;
 
                     default:
                         clientAsset.IsActive = request.OrderStatusId == (int)OrderStatusConst.Atendido;
@@ -157,8 +147,109 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                         break;
                 }
 
-                await this._clientAssetRepository.UpdateClientAssetsAsync(clientAsset);
+                if (!assetDeleted)
+                {
+                    if (clientAsset.IsActive.Value == false)
+                    {
+                        await this._clientAssetRepository.DeleteClientAssetAsync(clientAsset);
+                    }
+                    else
+                    {
+                        await this._clientAssetRepository.UpdateClientAssetsAsync(clientAsset);
+                    }
+                }
             }
+        }
+
+        private async Task HandleRetiroAtendido(ClientAssets clientAsset)
+        {
+            clientAsset.IsActive = false;
+            clientAsset.Notes = "Activo con Retiro completado";
+        }
+
+        private async Task HandleRetiroRechazado(ClientAssets clientAsset, UpdateStatusOrderRequestCommand request)
+        {
+            var relocationRequest = await this._orderRequestRepository.GetRelocationRequestByOrderRequestId(request.OrderRequestId);
+            if (relocationRequest != null)
+            {
+                var relocation = await this._orderRequestRepository.GetRelocationRequestByRelocationId(relocationRequest.RelocationId);
+                foreach (var relocationRequestDto in relocation)
+                {
+                    await this._orderRequestRepository.UpdateStatusOrderRequestAsync(
+                        relocationRequestDto.OrderRequestId,
+                        (int)OrderStatusConst.Rechazado,
+                        request.CreatedBy);
+
+                    var relocationDto = await this._orderRequestRepository.GetRelocationById(relocationRequestDto.RelocationId);
+                    var clientAssetDto = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(relocationDto.DestinationClientId, relocationDto.TransferredAssetId);
+                    if (relocationRequestDto.ReasonRequestId == (int)ReasonRequestConst.Retiro)
+                    {
+                        var clientAssetNewDto = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(relocationDto.OriginClientId, relocationDto.TransferredAssetId);
+                        clientAssetNewDto.IsActive = false;
+                        clientAssetNewDto.Notes = "El Retiro fue Rechazado";
+                        clientAssetNewDto.UpdatedAt = DateTime.Now;
+                        clientAssetNewDto.UpdatedBy = request.CreatedBy;
+                        await this._clientAssetRepository.UpdateClientAssetsAsync(clientAssetNewDto);
+                    }
+                    else
+                    {
+                        await this._clientAssetRepository.DeleteClientAssetAsync(clientAssetDto);
+                    }
+                }
+            }
+        }
+
+        private async Task HandleRetiroAnulado(ClientAssets clientAsset, UpdateStatusOrderRequestCommand request)
+        {
+            var relocationRequest = await this._orderRequestRepository.GetRelocationRequestByOrderRequestId(request.OrderRequestId);
+            if (relocationRequest != null)
+            {
+                var relocation = await this._orderRequestRepository.GetRelocationRequestByRelocationId(relocationRequest.RelocationId);
+                foreach (var relocationRequestDto in relocation)
+                {
+                    await this._orderRequestRepository.UpdateStatusOrderRequestAsync(
+                        relocationRequestDto.OrderRequestId,
+                        (int)OrderStatusConst.Anulado,
+                        request.CreatedBy);
+
+                    var relocationDto = await this._orderRequestRepository.GetRelocationById(relocationRequestDto.RelocationId);
+                    var clientAssetDto = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(relocationDto.DestinationClientId, relocationDto.TransferredAssetId);
+                    if (relocationRequestDto.ReasonRequestId == (int)ReasonRequestConst.Retiro)
+                    {
+                        var clientAssetNewDto = await this._clientAssetRepository.GetClientAssetPendingApprovalByClientIdAndAssetIdAsync(relocationDto.OriginClientId, relocationDto.TransferredAssetId);
+                        clientAssetNewDto.IsActive = false;
+                        clientAssetNewDto.Notes = "El Retiro fue Anulado";
+                        clientAssetNewDto.UpdatedAt = DateTime.Now;
+                        clientAssetNewDto.UpdatedBy = request.CreatedBy;
+                        await this._clientAssetRepository.UpdateClientAssetsAsync(clientAssetNewDto);
+                    }
+                    else
+                    {
+                        await this._clientAssetRepository.DeleteClientAssetAsync(clientAssetDto);
+                    }
+                }
+            }
+        }
+
+        private async Task HandleCambioDeEquipo(ClientAssets clientAsset, OrderRequestAssets orderRequestAsset, UpdateStatusOrderRequestCommand request)
+        {
+            var orderRequestTemp = orderRequestAsset;
+            if (orderRequestAsset.IsActive!.Value)
+            {
+                orderRequestTemp.IsActive = false;
+                clientAsset.IsActive = false;
+                clientAsset.Notes = "Se ha retirado el Activo por cambio de Equipo";
+            }
+            else
+            {
+                orderRequestTemp.IsActive = true;
+                clientAsset.IsActive = true;
+                clientAsset.Notes = "Cambio de Equipo completado";
+            }
+
+            orderRequestTemp.UpdatedAt = DateTime.Now;
+            orderRequestTemp.UpdatedBy = request.CreatedBy;
+            await this._orderRequestRepository.UpdateAssetToOrderRequest(orderRequestTemp);
         }
 
         private async Task NotifySupervisor(OrderRequest orderRequest, int orderStatusId, CancellationToken cancellationToken)
