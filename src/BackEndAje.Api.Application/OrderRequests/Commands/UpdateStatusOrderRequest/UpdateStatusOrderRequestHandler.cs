@@ -29,9 +29,28 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
         public async Task<Unit> Handle(UpdateStatusOrderRequestCommand request, CancellationToken cancellationToken)
         {
             var orderRequest = await this._orderRequestRepository.GetOrderRequestById(request.OrderRequestId);
-            if (orderRequest!.OrderStatusId == (int)OrderStatusConst.Generado && request.OrderStatusId == (int)OrderStatusConst.Atendido)
+            switch (orderRequest!.OrderStatusId)
             {
-                throw new InvalidOperationException("La solicitud no se puede atender porque no ha sido aprobada");
+                case (int)OrderStatusConst.Generado when request.OrderStatusId == (int)OrderStatusConst.Atendido:
+                    throw new InvalidOperationException("La solicitud no se puede Atender porque no esta Aprobado");
+                case (int)OrderStatusConst.Generado when request.OrderStatusId == (int)OrderStatusConst.Programado:
+                    throw new InvalidOperationException("La solicitud no se puede Programar porque no esta Aprobado");
+                case (int)OrderStatusConst.Aprobado when request.OrderStatusId == (int)OrderStatusConst.Generado:
+                    throw new InvalidOperationException("La solicitud no se puede volver a Generado porque ya esta Aprobado");
+                case (int)OrderStatusConst.Aprobado when request.OrderStatusId == (int)OrderStatusConst.Rechazado:
+                    throw new InvalidOperationException("La solicitud no se puede Rechazar porque ya esta Aprobado");
+                case (int)OrderStatusConst.Aprobado when request.OrderStatusId == (int)OrderStatusConst.FalsoFlete:
+                    throw new InvalidOperationException("La solicitud no se puede ir a Falso Flete porque ya esta Aprobado");
+                case (int)OrderStatusConst.Aprobado when request.OrderStatusId == (int)OrderStatusConst.Atendido:
+                    throw new InvalidOperationException("La solicitud no se puede ir a Atendido porque aún no fue programada");
+                case (int)OrderStatusConst.Programado when request.OrderStatusId == (int)OrderStatusConst.Generado:
+                    throw new InvalidOperationException("La solicitud no se puede pasar a Generado porque ya esta Programado");
+                case (int)OrderStatusConst.Programado when request.OrderStatusId == (int)OrderStatusConst.Aprobado:
+                    throw new InvalidOperationException("La solicitud no se puede pasar a Aprobado porque ya esta Programado");
+                case (int)OrderStatusConst.Programado when request.OrderStatusId == (int)OrderStatusConst.Rechazado:
+                    throw new InvalidOperationException("La solicitud no se puede pasar a Rechazado porque ya esta Programado");
+                case (int)OrderStatusConst.Programado when request.OrderStatusId == (int)OrderStatusConst.FalsoFlete:
+                    throw new InvalidOperationException("La solicitud no se puede pasar a Falso Flete porque ya esta Programado");
             }
 
             this.ValidateApprovalAsset(orderRequest);
