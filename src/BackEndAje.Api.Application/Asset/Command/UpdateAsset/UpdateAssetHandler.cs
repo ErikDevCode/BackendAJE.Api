@@ -29,7 +29,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UpdateAsset
             newAsset.CreatedBy = existingAssets.CreatedBy;
 
             var asset = await this._assetRepository.GetAssetByCodeAje(request.CodeAje);
-            if (asset == null || !asset.Any())
+            if (asset.Count != 0)
             {
                 throw new InvalidOperationException($"Activo ya se encuentra registrado.");
             }
