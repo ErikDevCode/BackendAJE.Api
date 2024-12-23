@@ -42,7 +42,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
                 // Crear orden de instalación
                 var client = await this._clientRepository.GetClientById(request.DestinationClientId!.Value);
                 var installationOrderRequest = await this.CreateOrderAndNotifyAsync(
-                    request with { ReasonRequestId = (int)ReasonRequestConst.Instalacion, ClientId = client!.ClientId, ClientCode = client.ClientCode },
+                    request with { ReasonRequestId = (int)ReasonRequestConst.Instalacion, ClientId = client!.ClientId, ClientCode = client.ClientCode, CediId = (int)request.DestinationCediId! },
                     cancellationToken,
                     request.ReasonRequestId);
 

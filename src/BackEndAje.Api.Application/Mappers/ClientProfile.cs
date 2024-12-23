@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Clients.Queries.GetListClientByClientCode;
+
 namespace BackEndAje.Api.Application.Mappers
 {
     using AutoMapper;
@@ -56,6 +58,12 @@ namespace BackEndAje.Api.Application.Mappers
 
             this.CreateMap<DisableClientCommand, Client>()
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
+
+            this.CreateMap<Client, GetListClientByClientCodeResult>()
+                .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType))
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
+                .ForMember(dest => dest.Seller, opt => opt.MapFrom(src => src.Seller))
+                .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.District));
         }
     }
 }

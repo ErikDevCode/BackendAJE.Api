@@ -8,6 +8,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.BulkInsertOrderReque
     {
         public byte[] File { get; set; }
 
+        public int ReasonRequest { get; set; }
+
         public int CreatedBy { get; set; }
 
         public int UpdatedBy { get; set; }

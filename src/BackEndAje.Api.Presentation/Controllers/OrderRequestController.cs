@@ -165,7 +165,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [Route("upload")]
-        public async Task<IActionResult> UploadExcel(IFormFile file)
+        public async Task<IActionResult> UploadExcel(IFormFile file, int reasonRequest)
         {
             if (file == null || file.Length == 0)
             {
@@ -177,6 +177,7 @@ namespace BackEndAje.Api.Presentation.Controllers
             var command = new BulkInsertOrderRequestsCommand
             {
                 File = memoryStream.ToArray(),
+                ReasonRequest = reasonRequest,
             };
             await this._mediator.Send(command);
 
