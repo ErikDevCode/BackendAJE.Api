@@ -11,6 +11,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<Client?> GetClientByDocumentNumber(string documentNumber);
         
         Task<Client?> GetClientByClientCode(int clientCode, int cediId);
+        Task<List<Client?>> GetListClientByClientCode(int clientCode);
         
         Task<Client?> GetClientByClientCodeAndRoute(int clientCode, int cediId, int? route);
         

@@ -7,6 +7,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Clients.Commands.UploadClient;
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
     using BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode;
+    using BackEndAje.Api.Application.Clients.Queries.GetListClientByClientCode;
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Dtos.Const;
     using MediatR;
@@ -64,6 +65,17 @@ namespace BackEndAje.Api.Presentation.Controllers
         public async Task<IActionResult> GetClientByClientCode(int clientCode, int cediId, int? route = null, int? reasonRequestId = null)
         {
             var query = new GetClientByClientCodeQuery(clientCode, cediId, route, reasonRequestId);
+            var client = await this._mediator.Send(query);
+            return this.Ok(new Response { Result = client });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<GetClientByClientCodeResult>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [Route("clientCode/{clientCode}")]
+        public async Task<IActionResult> GetListClientByClientCode(int clientCode)
+        {
+            var query = new GetListClientByClientCodeQuery(clientCode);
             var client = await this._mediator.Send(query);
             return this.Ok(new Response { Result = client });
         }

@@ -22,6 +22,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
         public int? DestinationClientId { get; set; }
 
+        public int? DestinationCediId { get; set; }
+
         public int ClientCode { get; set; }
 
         public string Observations { get; set; }
