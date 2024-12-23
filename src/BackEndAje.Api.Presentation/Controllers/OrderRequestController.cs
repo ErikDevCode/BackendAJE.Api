@@ -165,7 +165,7 @@ namespace BackEndAje.Api.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [Route("upload")]
-        public async Task<IActionResult> UploadExcel(IFormFile file, int reasonRequest)
+        public async Task<IActionResult> UploadExcel(IFormFile file, [FromForm] int reasonRequest)
         {
             if (file == null || file.Length == 0)
             {
