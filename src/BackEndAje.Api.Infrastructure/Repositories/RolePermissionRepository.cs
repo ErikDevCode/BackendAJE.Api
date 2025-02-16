@@ -16,7 +16,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<RolePermission>> GetAllRolePermissionsAsync()
         {
-            return await this._context.RolePermissions.ToListAsync();
+            return await this._context.RolePermissions.AsNoTracking().ToListAsync();
         }
 
         public async Task RolePermissionAsync(int roleId, int permissionId, bool status, int createdBy, int updatedBy)

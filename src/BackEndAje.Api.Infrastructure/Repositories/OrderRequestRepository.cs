@@ -64,7 +64,9 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<OrderRequestDocument>> GetOrderRequestDocumentByOrderRequestId(int id)
         {
-            return await this._context.OrderRequestDocuments.Where(x => x.OrderRequestId == id).ToListAsync();
+            return await this._context.OrderRequestDocuments
+                .AsNoTracking()
+                .Where(x => x.OrderRequestId == id).ToListAsync();
         }
 
         public async Task<OrderRequestDocument> GetOrderRequestDocumentById(int id)
@@ -250,6 +252,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<OrderRequestStatusHistory>> GetOrderRequestStatusHistoryByOrderRequestId(int orderRequestId)
         {
             return await this._context.OrderRequestStatusHistory
+                .AsNoTracking()
                 .Include(x => x.OrderRequest)
                 .Include(x => x.OrderStatus)
                 .Include(x => x.CreatedByUser)
@@ -496,6 +499,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<OrderRequestAssetsTrace>> GetOrderRequestAssetsTraceByOrderRequestId(int orderRequestId)
         {
             return await this._context.OrderRequestAssetsTrace
+                .AsNoTracking()
                 .Include(x => x.Asset)
                 .Include(x => x.OrderRequest)
                 .Include(x => x.OrderRequestAssets)
@@ -627,6 +631,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<RelocationRequest>> GetListRelocationRequestByOrderRequestId(int orderRequestId)
         {
             var relocationId = await this._context.RelocationRequests
+                .AsNoTracking()
                 .Where(rr => rr.OrderRequestId == orderRequestId)
                 .Select(rr => rr.RelocationId)
                 .FirstOrDefaultAsync();
@@ -663,8 +668,10 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<RelocationRequest>> GetRelocationRequestByRelocationId(int relocationId)
         {
-            return await this._context.RelocationRequests.Where(
-                x => x.RelocationId == relocationId).ToListAsync();
+            return await this._context.RelocationRequests
+                .AsNoTracking()
+                .Where(x => x.RelocationId == relocationId)
+                .ToListAsync();
         }
     }
 }

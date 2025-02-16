@@ -78,6 +78,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<Asset>> GetAssetsWithOutClient(int pageNumber, int pageSize, string? codeAje)
         {
             var query = this._context.Assets
+                .AsNoTracking()
                 .Where(a => a.IsActive && !this._context.ClientAssets.Any(ca => ca.AssetId == a.AssetId && (ca.IsActive == true || ca.IsActive == null)))
                 .AsQueryable();
 
@@ -95,6 +96,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<int> GetTotalAssetsWithOutClient(string? codeAje)
         {
             var query = this._context.Assets
+                .AsNoTracking()
                 .Where(a => a.IsActive && !this._context.ClientAssets.Any(ca => ca.AssetId == a.AssetId && (ca.IsActive == true || ca.IsActive == null)))
                 .AsQueryable();
 

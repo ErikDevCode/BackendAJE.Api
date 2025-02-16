@@ -16,7 +16,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<Permission>> GetAllPermissionsAsync()
         {
-            return await this._context.Permissions.ToListAsync();
+            return await this._context.Permissions.AsNoTracking().ToListAsync();
         }
 
         public async Task<Permission?> GetPermissionByIdAsync(int permissionId)

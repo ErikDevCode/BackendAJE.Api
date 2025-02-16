@@ -16,7 +16,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<MenuGroup>> GetAllMenuGroupAsync()
         {
-            return await this._context.MenuGroups.ToListAsync();
+            return await this._context.MenuGroups.AsNoTracking().ToListAsync();
         }
 
         public async Task AddMenuGroupAsync(MenuGroup menuGroup)
