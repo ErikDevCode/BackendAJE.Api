@@ -56,6 +56,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.ZoneCode, opt => opt.MapFrom(src => src.Zone!.ZoneCode))
                 .ForMember(dest => dest.Route, opt => opt.MapFrom(src => src.Route))
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.DocumentNumber, opt => opt.MapFrom(src => src.DocumentNumber))
                 .ForMember(dest => dest.PaternalSurName, opt => opt.MapFrom(src => src.PaternalSurName))
                 .ForMember(dest => dest.MaternalSurName, opt => opt.MapFrom(src => src.MaternalSurName))
                 .ForMember(dest => dest.Names, opt => opt.MapFrom(src => src.Names))

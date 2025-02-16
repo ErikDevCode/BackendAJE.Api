@@ -215,9 +215,9 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             if (!string.IsNullOrEmpty(filtro))
             {
                 query = query.Where(c =>
-                    c.ClientCode.ToString().Contains(filtro) ||
-                    c.CompanyName.Contains(filtro) ||
-                    c.DocumentNumber.Contains(filtro));
+                    EF.Functions.Like(c.ClientCode!, $"%{filtro}%") ||
+                    EF.Functions.Like(c.CompanyName, $"%{filtro}%") ||
+                    EF.Functions.Like(c.DocumentNumber!, $"%{filtro}%"));
             }
 
             query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);

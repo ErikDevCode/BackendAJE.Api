@@ -18,7 +18,7 @@ namespace BackEndAje.Api.Application.Users.Queries.GetAllUser
 
         public async Task<PaginatedResult<GetAllUserResult>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
         {
-            var users = await this._userRepository.GetAllUsers(request.PageNumber, request.PageSize);
+            var users = await this._userRepository.GetAllUsers(request.PageNumber, request.PageSize, request.Filtro);
             var result = this._mapper.Map<List<GetAllUserResult>>(users);
             var totalUsers = await this._userRepository.GetTotalUsers();
 

@@ -20,6 +20,8 @@ namespace BackEndAje.Api.Application.Users.Queries.GetAllUser
 
         public int? Code { get; set; }
 
+        public string? DocumentNumber { get; set; }
+
         public string PaternalSurName { get; set; }
 
         public string MaternalSurName { get; set; }
