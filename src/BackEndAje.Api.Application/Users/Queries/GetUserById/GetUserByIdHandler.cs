@@ -1,7 +1,6 @@
 namespace BackEndAje.Api.Application.Users.Queries.GetUserById
 {
     using AutoMapper;
-    using BackEndAje.Api.Application.Exceptions;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 

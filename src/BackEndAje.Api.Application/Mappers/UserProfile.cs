@@ -1,10 +1,9 @@
-using BackEndAje.Api.Application.Users.Queries.GetSupervisorByCedi;
-
 namespace BackEndAje.Api.Application.Mappers
 {
     using AutoMapper;
     using BackEndAje.Api.Application.Dtos.Users;
     using BackEndAje.Api.Application.Users.Queries.GetAllUser;
+    using BackEndAje.Api.Application.Users.Queries.GetSupervisorByCedi;
     using BackEndAje.Api.Application.Users.Queries.GetUserById;
     using BackEndAje.Api.Application.Users.Queries.GetUserByRouteOrEmail;
     using BackEndAje.Api.Domain.Entities;
@@ -32,6 +31,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.ZoneId, opt => opt.MapFrom(src => src.ZoneId))
                 .ForMember(dest => dest.Route, opt => opt.MapFrom(src => src.Route))
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.DocumentNumber, opt => opt.MapFrom(src => src.DocumentNumber))
                 .ForMember(dest => dest.PaternalSurName, opt => opt.MapFrom(src => src.PaternalSurName))
                 .ForMember(dest => dest.MaternalSurName, opt => opt.MapFrom(src => src.MaternalSurName))
                 .ForMember(dest => dest.Names, opt => opt.MapFrom(src => src.Names))
@@ -80,6 +80,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.ZoneCode, opt => opt.MapFrom(src => src.Zone!.ZoneCode))
                 .ForMember(dest => dest.Route, opt => opt.MapFrom(src => src.Route))
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.DocumentNumber, opt => opt.MapFrom(src => src.DocumentNumber))
                 .ForMember(dest => dest.PaternalSurName, opt => opt.MapFrom(src => src.PaternalSurName))
                 .ForMember(dest => dest.MaternalSurName, opt => opt.MapFrom(src => src.MaternalSurName))
                 .ForMember(dest => dest.Names, opt => opt.MapFrom(src => src.Names))
