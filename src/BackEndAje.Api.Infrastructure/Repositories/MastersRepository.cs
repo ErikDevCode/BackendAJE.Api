@@ -16,7 +16,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<ReasonRequest>> GetAllReasonRequest()
         {
-            return await this._context.ReasonRequest.Where(x => x.IsActive).ToListAsync();
+            return await this._context.ReasonRequest.AsNoTracking().Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<ReasonRequest?> GetReasonRequestByDescriptionAsync(string reasonDescription)
@@ -42,7 +42,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<TimeWindow>> GetAllTimeWindows()
         {
-            return await this._context.TimeWindows.Where(x => x.IsActive).ToListAsync();
+            return await this._context.TimeWindows.AsNoTracking().Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<TimeWindow?> GetTimeWindowsByTimeRangeAsync(string timeRange)
@@ -54,17 +54,17 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<ProductType>> GetAllProductTypes()
         {
-            return await this._context.ProductTypes.Where(x => x.IsActive).ToListAsync();
+            return await this._context.ProductTypes.AsNoTracking().Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<List<Logo>> GetAllLogos()
         {
-            return await this._context.Logos.Where(x => x.IsActive).ToListAsync();
+            return await this._context.Logos.AsNoTracking().Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<List<ProductSize>> GetAllProductSize()
         {
-            return await this._context.ProductSize.Where(x => x.IsActive).ToListAsync();
+            return await this._context.ProductSize.AsNoTracking().Where(x => x.IsActive).ToListAsync();
         }
 
         public async Task<ProductSize?> GetProductSizeByDescriptionAsync(string description)
@@ -76,47 +76,47 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<PaymentMethods>> GetAllPaymentMethods()
         {
-            return await this._context.PaymentMethods.ToListAsync();
+            return await this._context.PaymentMethods.AsNoTracking().ToListAsync();
         }
 
         public async Task<PaymentMethods?> GetPaymentMethodById(int paymentMethodId)
         {
-            return await this._context.PaymentMethods.FirstOrDefaultAsync(x => x.PaymentMethodId == paymentMethodId);
+            return await this._context.PaymentMethods.AsNoTracking().FirstOrDefaultAsync(x => x.PaymentMethodId == paymentMethodId);
         }
 
         public async Task<List<DocumentType>> GetAllDocumentType()
         {
-            return await this._context.DocumentType.ToListAsync();
+            return await this._context.DocumentType.AsNoTracking().ToListAsync();
         }
 
         public async Task<DocumentType?> GetDocumentTypeById(int documentTypeId)
         {
-            return await this._context.DocumentType.FirstOrDefaultAsync(x => x.DocumentTypeId == documentTypeId);
+            return await this._context.DocumentType.AsNoTracking().FirstOrDefaultAsync(x => x.DocumentTypeId == documentTypeId);
         }
 
         public async Task<List<OrderStatus>> GetAllOrderStatus(int? userId)
         {
             if (userId == null)
             {
-                return await this._context.OrderStatus
+                return await this._context.OrderStatus.AsNoTracking()
                     .Where(os => os.IsActive)
                     .ToListAsync();
             }
             else
             {
-                var userRoleId = await this._context.UserRoles
+                var userRoleId = await this._context.UserRoles.AsNoTracking()
                     .Where(ur => ur.UserId == userId.Value)
                     .Select(ur => ur.RoleId)
                     .FirstOrDefaultAsync();
 
                 if (userRoleId == 1)
                 {
-                    return await this._context.OrderStatus
+                    return await this._context.OrderStatus.AsNoTracking()
                         .Where(os => os.IsActive)
                         .ToListAsync();
                 }
 
-                return await this._context.OrderStatus
+                return await this._context.OrderStatus.AsNoTracking()
                     .Where(os => os.IsActive && this._context.OrderStatusRoles
                         .Any(osr => osr.OrderStatusId == os.OrderStatusId && osr.RoleId == userRoleId))
                     .ToListAsync();

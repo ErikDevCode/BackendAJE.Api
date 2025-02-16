@@ -24,7 +24,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 return null!;
             }
 
-            return await this._context.CensusQuestions.ToListAsync();
+            return await this._context.CensusQuestions.AsNoTracking().ToListAsync();
         }
 
         public async Task AddCensusAnswer(CensusAnswer censusAnswer)
@@ -38,11 +38,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             var currentMonthPeriod = monthPeriod ?? DateTime.Now.ToString("yyyyMM");
 
             var query =
-                from ca in this._context.CensusAnswer
-                join cq in this._context.CensusQuestions on ca.CensusQuestionsId equals cq.CensusQuestionsId
-                join c in this._context.Clients on ca.ClientId equals c.ClientId
-                join a in this._context.Assets on ca.AssetId equals a.AssetId
-                join u in this._context.Users on ca.CreatedBy equals u.UserId into interviewer
+                from ca in this._context.CensusAnswer.AsNoTracking()
+                join cq in this._context.CensusQuestions.AsNoTracking() on ca.CensusQuestionsId equals cq.CensusQuestionsId
+                join c in this._context.Clients.AsNoTracking() on ca.ClientId equals c.ClientId
+                join a in this._context.Assets.AsNoTracking() on ca.AssetId equals a.AssetId
+                join u in this._context.Users.AsNoTracking() on ca.CreatedBy equals u.UserId into interviewer
                 from intv in interviewer.DefaultIfEmpty()
                 where (!clientId.HasValue || ca.ClientId == clientId.Value) && ca.MonthPeriod == currentMonthPeriod
                 select new CensusAnswerDto
@@ -81,12 +81,12 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             var currentMonthPeriod = monthPeriod ?? DateTime.Now.ToString("yyyyMM");
 
             var query =
-                from ca in this._context.CensusAnswer
-                join cq in this._context.CensusQuestions on ca.CensusQuestionsId equals cq.CensusQuestionsId
-                join cl in this._context.Clients on ca.ClientId equals cl.ClientId
-                join a in this._context.Assets on ca.AssetId equals a.AssetId
-                join clientAsset in this._context.ClientAssets on new { ca.ClientId, ca.AssetId } equals new { clientAsset.ClientId, clientAsset.AssetId }
-                join u in this._context.Users on ca.CreatedBy equals u.UserId into interviewer
+                from ca in this._context.CensusAnswer.AsNoTracking()
+                join cq in this._context.CensusQuestions.AsNoTracking() on ca.CensusQuestionsId equals cq.CensusQuestionsId
+                join cl in this._context.Clients.AsNoTracking() on ca.ClientId equals cl.ClientId
+                join a in this._context.Assets.AsNoTracking() on ca.AssetId equals a.AssetId
+                join clientAsset in this._context.ClientAssets.AsNoTracking() on new { ca.ClientId, ca.AssetId } equals new { clientAsset.ClientId, clientAsset.AssetId }
+                join u in this._context.Users.AsNoTracking() on ca.CreatedBy equals u.UserId into interviewer
                 from intv in interviewer.DefaultIfEmpty()
                 where
                     (!clientId.HasValue || ca.ClientId == clientId.Value) &&
@@ -181,7 +181,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<int> GetTotalCensusAnswers(int? clientId, string? monthPeriod)
         {
-            var query = this._context.CensusAnswer.AsQueryable();
+            var query = this._context.CensusAnswer.AsNoTracking().AsQueryable();
 
             if (clientId.HasValue)
             {

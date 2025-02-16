@@ -17,6 +17,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<Position>> GetAllPaginatePositionsAsync(int pageNumber, int pageSize)
         {
             return await this._context.Positions
+                .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

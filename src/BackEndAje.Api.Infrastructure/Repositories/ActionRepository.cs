@@ -16,7 +16,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<Action>> GetAllActionsAsync()
         {
-            return await this._context.Actions.ToListAsync();
+            return await this._context.Actions.AsNoTracking().ToListAsync();
         }
 
         public async Task<Action?> GetActionByIdAsync(int actionId)

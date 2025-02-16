@@ -17,6 +17,7 @@
         public async Task<List<Role>> GetAllPaginateRolesAsync(int pageNumber, int pageSize)
         {
             return await this._context.Roles
+                .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -76,9 +77,9 @@
         public async Task<List<RolesWithPermissions>> GetRoleWithPermissionsAsync(int? roleId = null)
         {
             var rolesWithPermissions = await (
-                from r in this._context.Roles
-                from p in this._context.Permissions
-                join rp in this._context.RolePermissions
+                from r in this._context.Roles.AsNoTracking()
+                from p in this._context.Permissions.AsNoTracking()
+                join rp in this._context.RolePermissions.AsNoTracking()
                     on new { r.RoleId, p.PermissionId } equals new { rp.RoleId, rp.PermissionId } into rolePermissions
                 from rp in rolePermissions.DefaultIfEmpty()
                 where !roleId.HasValue || r.RoleId == roleId.Value
@@ -104,15 +105,19 @@
         public async Task<List<PermissionsWithActions>> GetPermissionsWithActionByRoleIdAsync(int roleId)
         {
             var permissionsWithActions = await (
-                    from p in this._context.Permissions
-                    from a in this._context.Actions
-                    join mi in this._context.MenuItems on p.Label equals mi.Label into menuItems
+                    from p in this._context.Permissions.AsNoTracking()
+                    from a in this._context.Actions.AsNoTracking()
+                    join mi in this._context.MenuItems.AsNoTracking()
+                        on p.Label equals mi.Label into menuItems
                     from mi in menuItems.DefaultIfEmpty()
-                    join mia in this._context.MenuItemActions on new { mi.MenuItemId, a.ActionId } equals new { mia.MenuItemId, mia.ActionId } into menuItemActions
+                    join mia in this._context.MenuItemActions.AsNoTracking()
+                        on new { mi.MenuItemId, a.ActionId } equals new { mia.MenuItemId, mia.ActionId } into menuItemActions
                     from mia in menuItemActions.DefaultIfEmpty()
-                    join rp in this._context.RolePermissions on new { PermissionId = p.PermissionId, RoleId = roleId } equals new { rp.PermissionId, rp.RoleId } into rolePermissions
+                    join rp in this._context.RolePermissions.AsNoTracking()
+                        on new { PermissionId = p.PermissionId, RoleId = roleId } equals new { rp.PermissionId, rp.RoleId } into rolePermissions
                     from rp in rolePermissions.DefaultIfEmpty()
-                    join rma in this._context.RoleMenuAccess on new { RolePermissionId = rp.RolePermissionId, MenuItemActionId = mia.MenuItemActionId } equals new { rma.RolePermissionId, rma.MenuItemActionId } into roleMenuAccess
+                    join rma in this._context.RoleMenuAccess.AsNoTracking()
+                        on new { RolePermissionId = rp.RolePermissionId, MenuItemActionId = mia.MenuItemActionId } equals new { rma.RolePermissionId, rma.MenuItemActionId } into roleMenuAccess
                     from rma in roleMenuAccess.DefaultIfEmpty()
                     select new PermissionsWithActions
                     {
@@ -133,8 +138,7 @@
 
         public async Task<List<Position>> GetAllPositionsAsync()
         {
-            return await this._context.Positions.AsNoTracking()
-                .ToListAsync();
+            return await this._context.Positions.AsNoTracking().ToListAsync();
         }
     }
 }

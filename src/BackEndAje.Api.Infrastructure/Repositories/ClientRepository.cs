@@ -35,6 +35,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<Client?> GetClientByClientCode(int clientCode, int cediId)
         {
             var client = await this._context.Clients
+                .AsNoTracking()
                 .Where(c => c.ClientCode == clientCode)
                 .Include(c => c.DocumentType)
                 .Include(c => c.PaymentMethod)
@@ -64,6 +65,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<Client?>> GetListClientByClientCode(int clientCode)
         {
             var clients = await this._context.Clients
+                .AsNoTracking()
                 .Where(c => c.ClientCode == clientCode)
                 .Include(c => c.DocumentType)
                 .Include(c => c.PaymentMethod)
@@ -99,6 +101,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<Client?> GetClientByClientCodeAndRoute(int clientCode, int cediId, int? route)
         {
             var client = await this._context.Clients
+                .AsNoTracking()
                 .Where(c => c.ClientCode == clientCode && (!route.HasValue || c.Route == route))
                 .Include(c => c.DocumentType)
                 .Include(c => c.PaymentMethod)
@@ -128,6 +131,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<ClientWithAssetDto?> GetClientByClientCodeAndRouteWithAsset(int clientCode, int cediId, int? route)
         {
             var client = await this._context.Clients
+                .AsNoTracking()
                 .Where(c => c.ClientCode == clientCode && (!route.HasValue || c.Route == route))
                 .Include(c => c.DocumentType)
                 .Include(c => c.PaymentMethod)
@@ -207,6 +211,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro)
         {
             var query = this._context.Clients
+                .AsNoTracking()
                 .Include(c => c.DocumentType)
                 .Include(c => c.PaymentMethod)
                 .Include(c => c.District)
@@ -236,7 +241,9 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<int> GetTotalClients(string? filtro)
         {
-            var query = this._context.Clients.AsQueryable();
+            var query = this._context.Clients
+                .AsNoTracking()
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(filtro))
             {

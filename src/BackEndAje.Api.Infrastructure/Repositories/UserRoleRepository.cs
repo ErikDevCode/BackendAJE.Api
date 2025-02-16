@@ -16,12 +16,13 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<UserRole>> GetAllUserRolesAsync()
         {
-            return await this._context.UserRoles.ToListAsync();
+            return await this._context.UserRoles.AsNoTracking().ToListAsync();
         }
 
         public async Task<List<UserRole>> GetUserRolesAsync(int userId)
         {
             return await this._context.UserRoles
+                .AsNoTracking()
                 .Where(ur => ur.UserId == userId)
                 .ToListAsync();
         }
@@ -29,6 +30,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<UserRole>> GetUserRolesByLogisticsProviderAsync()
         {
             return await this._context.UserRoles
+                .AsNoTracking()
                 .Where(ur => ur.RoleId == 3) // proveedor logistico
                 .ToListAsync();
         }
@@ -36,6 +38,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<UserRole>> GetUserRolesByTradeAsync()
         {
             return await this._context.UserRoles
+                .AsNoTracking()
                 .Where(ur => ur.RoleId == 4) // trade
                 .ToListAsync();
         }

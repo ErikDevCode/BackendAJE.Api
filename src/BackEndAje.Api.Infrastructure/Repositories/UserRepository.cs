@@ -23,11 +23,11 @@
 
             if (codeRouteOrEmail.Contains("@"))
             {
-                return await this._context.Users.SingleOrDefaultAsync(u => u.Email == codeRouteOrEmail);
+                return await this._context.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Email == codeRouteOrEmail);
             }
             else if (int.TryParse(codeRouteOrEmail, out var route))
             {
-                return await this._context.Users.SingleOrDefaultAsync(u => u.Route == route);
+                return await this._context.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Route == route);
             }
 
             return null;
@@ -52,6 +52,7 @@
                     ur => ur.RoleId,
                     r => r.RoleId,
                     (ur, r) => r.RoleName)
+                .AsNoTracking()
                 .ToListAsync();
 
             return roles;
@@ -221,7 +222,7 @@
                 .ThenInclude(c => c!.Region)
                 .Include(u => u.Zone)
                 .Include(u => u.Position)
-                .AsQueryable();
+                .AsNoTracking();
 
             if (!string.IsNullOrEmpty(filtro))
             {

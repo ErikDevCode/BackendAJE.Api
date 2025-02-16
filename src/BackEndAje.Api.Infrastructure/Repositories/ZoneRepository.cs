@@ -26,12 +26,12 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<Zone>> GetZonesByCediIdAsync(int cediId)
         {
-            return await this._context.Zones.Where(c => c.CediId == cediId).ToListAsync();
+            return await this._context.Zones.AsNoTracking().Where(c => c.CediId == cediId).ToListAsync();
         }
 
         public async Task<List<Zone>> GetAllZones()
         {
-            return await this._context.Zones.ToListAsync();
+            return await this._context.Zones.AsNoTracking().ToListAsync();
         }
     }
 }
