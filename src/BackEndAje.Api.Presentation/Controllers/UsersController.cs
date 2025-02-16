@@ -45,9 +45,9 @@
         [ProducesResponseType(typeof(GetAllUserResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
         [Route("all")]
-        public async Task<IActionResult> GetAllUser([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAllUser([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? filtro = null)
         {
-            var query = new GetAllUserQuery(pageNumber, pageSize);
+            var query = new GetAllUserQuery(pageNumber, pageSize, filtro);
             var result = await this._mediator.Send(query);
             return this.Ok(result);
         }

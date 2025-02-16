@@ -37,7 +37,7 @@
         
         Task<User?> GetUserByRouteAsync(int? route);
 
-        Task<List<User>> GetAllUsers(int pageNumber, int pageSize);
+        Task<List<User>> GetAllUsers(int pageNumber, int pageSize, string? Filtro);
         Task<int> GetTotalUsers();
         
         Task<User?> GetUserByIdAsync(int userId);
