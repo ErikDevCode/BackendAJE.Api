@@ -22,6 +22,7 @@ namespace BackEndAje.Api.Domain.Repositories
 
         Task<int> GetCensusCountAsync(
             int? regionId,
+            int? cediId,
             int? zoneId,
             int? route,
             int? month,

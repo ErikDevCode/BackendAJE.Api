@@ -50,6 +50,7 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetOrderRequestStatusByUs
                     await this._orderRequestRepository.GetTotalOrderRequestStatusCount(
                         statusId: statusId,
                         regionId: requestStatus.regionId,
+                        cediId: requestStatus.cediId,
                         zoneId: requestStatus.zoneId,
                         route: requestStatus.route,
                         month: requestStatus.month,

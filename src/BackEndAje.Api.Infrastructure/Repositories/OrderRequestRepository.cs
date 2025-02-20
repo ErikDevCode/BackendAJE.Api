@@ -273,6 +273,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             int? supervisorId = null,
             int? vendedorId = null,
             int? regionId = null,
+            int? cediId = null,
             int? zoneId = null,
             int? route = null,
             int? month = null,
@@ -308,6 +309,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 query = query.Where(x => x.Client.Seller!.Cedi!.Region!.RegionId == regionId.Value);
             }
 
+            if (cediId.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.Cedi!.CediId == cediId.Value);
+            }
+
             if (zoneId.HasValue)
             {
                 query = query.Where(x => x.Client.Seller!.Zone!.ZoneId == zoneId.Value);
@@ -317,6 +323,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             {
                 query = query.Where(x => x.Client.Seller!.Route == route.Value);
             }
+
             if (month.HasValue && year.HasValue)
             {
                 query = query.Where(x => x.CreatedAt.Month == month.Value &&
@@ -335,6 +342,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             int? supervisorId = null,
             int? vendedorId = null,
             int? regionId = null,
+            int? cediId = null,
             int? zoneId = null,
             int? route = null,
             int? month = null,
@@ -370,6 +378,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 query = query.Where(x => x.Client.Seller!.Cedi!.Region!.RegionId == regionId.Value);
             }
 
+            if (cediId.HasValue)
+            {
+                query = query.Where(x => x.Client.Seller!.Cedi!.CediId == cediId.Value);
+            }
+
             if (zoneId.HasValue)
             {
                 query = query.Where(x => x.Client.Seller!.Zone!.ZoneId == zoneId.Value);
@@ -393,8 +406,15 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await query.CountAsync();
         }
 
-        public async Task<int> GetTotalAssetFromOrderRequestStatusAttendedCount(int? supervisorId = null, int? vendedorId = null,
-            int? regionId = null, int? zoneId = null, int? route = null, int? month = null, int? year = null)
+        public async Task<int> GetTotalAssetFromOrderRequestStatusAttendedCount(
+            int? supervisorId = null,
+            int? vendedorId = null,
+            int? regionId = null,
+            int? cediId = null,
+            int? zoneId = null,
+            int? route = null,
+            int? month = null,
+            int? year = null)
         {
             var query = this._context.OrderRequestAssets
                 .Include(oa => oa.OrderRequest)
@@ -424,6 +444,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             if (regionId.HasValue)
             {
                 query = query.Where(oa => oa.OrderRequest.Client.Seller!.Cedi!.Region!.RegionId == regionId.Value);
+            }
+
+            if (cediId.HasValue)
+            {
+                query = query.Where(x => x.OrderRequest.Client.Seller!.Cedi!.CediId == cediId.Value);
             }
 
             if (zoneId.HasValue)

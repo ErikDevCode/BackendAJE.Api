@@ -263,9 +263,24 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task UpdateClientAsync(Client client)
         {
-            this._context.Entry(client).State = EntityState.Detached;
-            this._context.Clients.Update(client);
+            var existingClient = await this._context.Clients.FindAsync(client.ClientId);
+
+            if (existingClient != null)
+            {
+                this._context.Entry(existingClient).CurrentValues.SetValues(client);
+            }
+            else
+            {
+                this._context.Clients.Attach(client);
+                this._context.Entry(client).State = EntityState.Modified;
+            }
+
             await this._context.SaveChangesAsync();
+        }
+
+        public void Detach<TEntity>(TEntity entity) where TEntity : class
+        {
+            this._context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

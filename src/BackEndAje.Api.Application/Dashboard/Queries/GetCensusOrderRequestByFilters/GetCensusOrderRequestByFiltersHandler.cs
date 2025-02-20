@@ -14,7 +14,13 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetCensusOrderRequestByFi
 
         public async Task<GetCensusOrderRequestByFiltersResult> Handle(GetCensusOrderRequestByFiltersQuery request, CancellationToken cancellationToken)
         {
-            var census = await this._censusRepository.GetCensusCountAsync(request.regionId, request.zoneId,request.route, request.month, request.year);
+            var census = await this._censusRepository.GetCensusCountAsync(
+                request.regionId,
+                request.cediId,
+                request.zoneId,
+                request.route,
+                request.month,
+                request.year);
 
             var result = new GetCensusOrderRequestByFiltersResult
             {
