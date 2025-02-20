@@ -53,11 +53,14 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                     throw new InvalidOperationException("La solicitud no se puede pasar a Falso Flete porque ya esta Programado");
             }
 
-            this.ValidateApprovalAsset(orderRequest);
+            if (request.OrderStatusId == (int)OrderStatusConst.Programado && await this.IsLogisticsProvider(request.CreatedBy))
+            {
+                this.ValidateApprovalAsset(orderRequest);
+            }
+
             this.ValidateApproval(orderRequest, request.OrderStatusId);
 
             await this.UpdateClientAssets(request, orderRequest);
-
             await this.UpdateOrderRequestStatus(request);
 
             if (request.OrderStatusId != (int)OrderStatusConst.Aprobado)
@@ -84,6 +87,12 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
         }
 
         #region Private Methods
+
+        private async Task<bool> IsLogisticsProvider(int userId)
+        {
+            var userRoles = await this._userRoleRepository.GetUserRolesByLogisticsProviderAsync();
+            return userRoles.Any(role => role.UserId == userId);
+        }
 
         private void ValidateApprovalAsset(OrderRequest orderRequest)
         {
@@ -117,6 +126,12 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 {
                     continue;
                 }
+
+                if (clientAssetDto == null)
+                {
+                    continue;
+                }
+
 
                 var clientAsset = this.CreateClientAssetFromDto(clientAssetDto, request);
                 var assetDeleted = false;
