@@ -36,6 +36,7 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetAssetsFromOrderRequest
                 RolesConst.Administrador or RolesConst.Jefe or RolesConst.ProveedorLogistico or RolesConst.Trade =>
                     await this._orderRequestRepository.GetTotalAssetFromOrderRequestStatusAttendedCount(
                         regionId: requestStatus.regionId,
+                        cediId: requestStatus.cediId,
                         zoneId: requestStatus.zoneId,
                         route: requestStatus.route,
                         month: requestStatus.month,

@@ -198,6 +198,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<int> GetCensusCountAsync(
             int? regionId,
+            int? cediId,
             int? zoneId,
             int? route,
             int? month,
@@ -207,18 +208,19 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 from ca in this._context.CensusAnswer
                 join cl in this._context.Clients on ca.ClientId equals cl.ClientId
                 join a in this._context.Assets on ca.AssetId equals a.AssetId
-                join clientAsset in this._context.ClientAssets 
+                join clientAsset in this._context.ClientAssets
                     on new { ca.ClientId, ca.AssetId } equals new { clientAsset.ClientId, clientAsset.AssetId }
-                join u in this._context.Users on ca.CreatedBy equals u.UserId
+                join u in this._context.Users on cl.UserId equals u.UserId
                 join cedi in this._context.Cedis on u.CediId equals cedi.CediId into cediGroup
                 from cedi in cediGroup.DefaultIfEmpty()
                 join zone in this._context.Zones on cedi.CediId equals zone.CediId into zoneGroup
                 from zone in zoneGroup.DefaultIfEmpty()
                 where
-                    (!regionId.HasValue || cedi.RegionId == regionId.Value) &&
-                    (!zoneId.HasValue || zone.ZoneId == zoneId.Value) &&
+                    (regionId == null || (cedi != null && cedi.RegionId == regionId.Value)) &&
+                    (cediId == null || (cedi != null && cedi.CediId == cediId.Value)) &&
+                    (zoneId == null || (zone != null && zone.ZoneId == zoneId.Value)) &&
                     (!route.HasValue || cl.Route == route.Value) &&
-                    (!month.HasValue || EF.Functions.Like(ca.MonthPeriod, $"%{month:D2}")) &&
+                    (month == null || (ca.MonthPeriod.Substring(4, 2) == month.Value.ToString("D2"))) &&
                     (!year.HasValue || ca.MonthPeriod.StartsWith(year.Value.ToString()))
                 group ca by new { ca.ClientId, ca.AssetId, ca.MonthPeriod } into groupedCensus
                 select groupedCensus.Key;

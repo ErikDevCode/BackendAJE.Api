@@ -39,6 +39,7 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetOrderRequestReasonByUs
                     supervisorId: supervisorId,
                     vendedorId: vendedorId,
                     regionId: request.regionId,
+                    cediId: request.cediId,
                     zoneId: request.zoneId,
                     route: request.route,
                     month: request.month,

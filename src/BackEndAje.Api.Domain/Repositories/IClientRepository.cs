@@ -24,5 +24,8 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<Client?> GetClientById(int clientId);
         
         Task UpdateClientAsync(Client client);
+        
+        public void Detach<TEntity>(TEntity entity) where TEntity : class;
+
     }
 }
