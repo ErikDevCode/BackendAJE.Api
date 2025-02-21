@@ -25,7 +25,10 @@ namespace BackEndAje.Api.Domain.Repositories
         
         Task UpdateClientAsync(Client client);
         
+        Task<List<Client>> GetClientsByClientCodesAsync(IEnumerable<int> clientCodes);
+        
+        Task UpdateClientsAsync(IEnumerable<Client> clients);
+        
         public void Detach<TEntity>(TEntity entity) where TEntity : class;
-
     }
 }

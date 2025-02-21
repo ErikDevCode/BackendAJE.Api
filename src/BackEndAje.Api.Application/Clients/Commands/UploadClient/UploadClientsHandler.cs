@@ -21,19 +21,18 @@ namespace BackEndAje.Api.Application.Clients.Commands.UploadClient
         public async Task<UploadClientsResult> Handle(UploadClientsCommand request, CancellationToken cancellationToken)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
             var documentTypes = await this._mastersRepository.GetAllDocumentType();
             var paymentMethods = await this._mastersRepository.GetAllPaymentMethods();
-
             var documentTypeDict = documentTypes.ToDictionary(dt => dt.DocumentTypeName.ToUpper());
             var paymentMethodDict = paymentMethods.ToDictionary(pm => pm.PaymentMethod.ToUpper());
+
+            var clientsFromExcel = new List<Client>();
+            var errors = new List<UploadError>();
 
             using var memoryStream = new MemoryStream(request.FileBytes);
             using var package = new ExcelPackage(memoryStream);
             var worksheet = package.Workbook.Worksheets[0];
-
-            var clientsToAdd = new List<Client>();
-            var processedClients = 0;
-            var errors = new List<UploadError>();
 
             for (var row = 2; row <= worksheet.Dimension.End.Row; row++)
             {
@@ -41,95 +40,119 @@ namespace BackEndAje.Api.Application.Clients.Commands.UploadClient
                 {
                     var clientCode = int.Parse(worksheet.Cells[row, 1].Text);
                     var route = int.Parse(worksheet.Cells[row, 8].Text);
-                    var existingUser = await this._userRepository.GetUserByRouteAsync(route);
-                    var existingClient = await this._clientRepository.GetClientByClientCode(clientCode, existingUser!.CediId.Value);
-
-                    if (existingClient != null)
-                    {
-                        this._clientRepository.Detach(existingClient);
-                    }
-
                     var documentTypeName = worksheet.Cells[row, 3].Text.ToUpper();
+                    var paymentMethodName = worksheet.Cells[row, 7].Text.ToUpper();
+
                     if (!documentTypeDict.TryGetValue(documentTypeName, out var documentType))
                     {
                         throw new KeyNotFoundException($"Tipo de documento '{documentTypeName}' no encontrado en la fila {row}.");
                     }
 
-                    var paymentMethodName = worksheet.Cells[row, 7].Text.ToUpper();
                     if (!paymentMethodDict.TryGetValue(paymentMethodName, out var paymentMethod))
                     {
                         throw new KeyNotFoundException($"Método de pago '{paymentMethodName}' no encontrado en la fila {row}.");
                     }
 
-                    if (existingUser is null)
-                    {
-                        throw new KeyNotFoundException($"La ruta '{route}' no encontrado en la fila {row}.");
-                    }
-
-                    var client = existingClient ?? new Client
+                    var client = new Client
                     {
                         ClientCode = clientCode,
+                        CompanyName = worksheet.Cells[row, 2].Text,
+                        DocumentTypeId = documentType.DocumentTypeId,
+                        DocumentNumber = worksheet.Cells[row, 4].Text,
+                        Email = worksheet.Cells[row, 5].Text,
+                        EffectiveDate = DateTime.Parse(worksheet.Cells[row, 6].Text),
+                        PaymentMethodId = paymentMethod.PaymentMethodId,
+                        Phone = worksheet.Cells[row, 9].Text,
+                        Address = worksheet.Cells[row, 10].Text,
+                        DistrictId = worksheet.Cells[row, 11].Text,
+                        CoordX = worksheet.Cells[row, 12].Text,
+                        CoordY = worksheet.Cells[row, 13].Text,
+                        Segmentation = worksheet.Cells[row, 14].Text,
+                        Route = route,
                         IsActive = true,
                         CreatedAt = DateTime.Now,
                         CreatedBy = request.CreatedBy,
+                        UpdatedAt = DateTime.Now,
+                        UpdatedBy = request.UpdatedBy,
                     };
 
-                    client.UserId = existingUser.UserId;
-                    client.Route = existingUser.Route;
-                    this.UpdateClientData(client, worksheet, row, documentType.DocumentTypeId, paymentMethod.PaymentMethodId, request.UpdatedBy);
-
-                    if (existingClient == null)
-                    {
-                        clientsToAdd.Add(client);
-                    }
-                    else
-                    {
-                        await this._clientRepository.UpdateClientAsync(client);
-                    }
-
-                    processedClients++;
+                    clientsFromExcel.Add(client);
                 }
                 catch (Exception ex)
                 {
-                    errors.Add(new UploadError
-                    {
-                        Row = row,
-                        Message = ex.Message,
-                    });
+                    errors.Add(new UploadError { Row = row, Message = ex.Message });
                 }
             }
 
-            if (clientsToAdd.Any())
+            var existingUsers = await this._userRepository.GetUsersByRoutesAsync(
+                clientsFromExcel.Select(c => c.Route).Where(r => r.HasValue).Select(r => r!.Value).Distinct());
+
+            var existingClients = await this._clientRepository.GetClientsByClientCodesAsync(clientsFromExcel.Select(c => c.ClientCode).Distinct());
+
+            var clientsToAdd = new List<Client>();
+            var clientsToUpdate = new List<Client>();
+
+            foreach (var client in clientsFromExcel)
+            {
+                var existingUser = existingUsers.FirstOrDefault(u => u.Route == client.Route);
+                if (existingUser == null)
+                {
+                    errors.Add(new UploadError { Row = client.ClientCode, Message = $"No se encontró usuario con ruta {client.Route}." });
+                    continue;
+                }
+
+                client.UserId = existingUser.UserId;
+
+                var existingClient = existingClients.FirstOrDefault(c => c.ClientCode == client.ClientCode);
+                if (existingClient != null)
+                {
+                    this._clientRepository.Detach(existingClient);
+
+                    if (HasClientChanged(existingClient, client) || existingClient.UserId != client.UserId || existingClient.Route != client.Route)
+                    {
+                        existingClient.UserId = client.UserId;
+                        existingClient.Route = client.Route;
+                        clientsToUpdate.Add(existingClient);
+                    }
+                }
+                else
+                {
+                    clientsToAdd.Add(client);
+                }
+            }
+
+            if (clientsToAdd.Count != 0)
             {
                 await this._clientRepository.AddClientsAsync(clientsToAdd);
+            }
+
+            if (clientsToUpdate.Count != 0)
+            {
+                await this._clientRepository.UpdateClientsAsync(clientsToUpdate);
             }
 
             return new UploadClientsResult
             {
                 Success = !errors.Any(),
-                ProcessedClients = processedClients,
+                ProcessedClients = clientsFromExcel.Count - errors.Count,
                 Errors = errors,
             };
         }
 
-        private void UpdateClientData(Client client, ExcelWorksheet worksheet, int row, int documentTypeId, int paymentMethodId, int updatedBy)
+        private bool HasClientChanged(Client existingClient, Client newClient)
         {
-            client.CompanyName = worksheet.Cells[row, 2].Text;
-            client.DocumentTypeId = documentTypeId;
-            client.DocumentNumber = worksheet.Cells[row, 4].Text;
-            client.Email = worksheet.Cells[row, 5].Text;
-            client.EffectiveDate = DateTime.Parse(worksheet.Cells[row, 6].Text);
-            client.PaymentMethodId = paymentMethodId;
-            client.UserId = client.UserId;
-            client.Route = client.Route;
-            client.Phone = worksheet.Cells[row, 9].Text;
-            client.Address = worksheet.Cells[row, 10].Text;
-            client.DistrictId = worksheet.Cells[row, 11].Text;
-            client.CoordX = worksheet.Cells[row, 12].Text;
-            client.CoordY = worksheet.Cells[row, 13].Text;
-            client.Segmentation = worksheet.Cells[row, 14].Text;
-            client.UpdatedAt = DateTime.Now;
-            client.UpdatedBy = updatedBy;
+            return existingClient.CompanyName != newClient.CompanyName ||
+                   existingClient.DocumentTypeId != newClient.DocumentTypeId ||
+                   existingClient.DocumentNumber != newClient.DocumentNumber ||
+                   existingClient.Email != newClient.Email ||
+                   existingClient.EffectiveDate != newClient.EffectiveDate ||
+                   existingClient.PaymentMethodId != newClient.PaymentMethodId ||
+                   existingClient.Phone != newClient.Phone ||
+                   existingClient.Address != newClient.Address ||
+                   existingClient.DistrictId != newClient.DistrictId ||
+                   existingClient.CoordX != newClient.CoordX ||
+                   existingClient.CoordY != newClient.CoordY ||
+                   existingClient.Segmentation != newClient.Segmentation;
         }
     }
 }
