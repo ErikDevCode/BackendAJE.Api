@@ -278,6 +278,19 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             await this._context.SaveChangesAsync();
         }
 
+        public async Task<List<Client>> GetClientsByClientCodesAsync(IEnumerable<int> clientCodes)
+        {
+            return await this._context.Clients
+                .Where(c => clientCodes.Contains(c.ClientCode))
+                .ToListAsync();
+        }
+
+        public async Task UpdateClientsAsync(IEnumerable<Client> clients)
+        {
+            this._context.Clients.UpdateRange(clients);
+            await this._context.SaveChangesAsync();
+        }
+
         public void Detach<TEntity>(TEntity entity) where TEntity : class
         {
             this._context.Entry(entity).State = EntityState.Detached;

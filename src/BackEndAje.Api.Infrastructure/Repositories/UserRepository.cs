@@ -313,5 +313,14 @@
 
             return supervisors;
         }
+
+        public async Task<List<User>> GetUsersByRoutesAsync(IEnumerable<int> routes)
+        {
+            var routeList = routes.ToList();
+            return await this._context.Users
+                .Where(u => u.Route.HasValue && routeList.Contains(u.Route.Value))
+                .ToListAsync();
+        }
+
     }
 }

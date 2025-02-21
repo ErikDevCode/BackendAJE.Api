@@ -53,5 +53,7 @@
         Task<List<User>> GetUsersByParamAsync(string param);
 
         Task<List<User>> GetSupervisorByCediId(int cediId);
+        
+        Task<List<User>> GetUsersByRoutesAsync(IEnumerable<int> routes);
     }
 }
