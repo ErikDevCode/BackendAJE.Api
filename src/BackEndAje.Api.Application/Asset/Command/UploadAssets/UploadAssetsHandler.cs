@@ -83,7 +83,16 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadAssets
             asset.AssetType = assetType;
             asset.Brand = worksheet.Cells[row, 5].Text;
             asset.Model = worksheet.Cells[row, 6].Text;
-            asset.IsActive = assetType == "EEFF ACTUAL";
+            var isActiveText = worksheet.Cells[row, 7].Text.Trim();
+            if (isActiveText is "1" or "0")
+            {
+                asset.IsActive = isActiveText == "1";
+            }
+            else
+            {
+                throw new FormatException($"Valor inválido para IsActive en la fila {row}: '{isActiveText}'. Se esperaba '1' o '0'.");
+            }
+
             asset.UpdatedAt = DateTime.Now;
             asset.UpdatedBy = updatedBy;
         }
