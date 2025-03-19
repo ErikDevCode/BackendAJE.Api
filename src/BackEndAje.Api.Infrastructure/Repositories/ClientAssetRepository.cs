@@ -37,6 +37,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             int? clientCode)
         {
             var currentMonthPeriod = DateTime.Now.ToString("yyyyMM");
+
+            var userRole = this._context.UserRoles.Where(x => x.UserId == userId)
+                .Include(x => x.Role)
+                .Select( x => new {x.Role.RoleName, x.User.CediId})
+                .FirstOrDefault();
             var query = this._context.ClientAssets
                 .Include(ca => ca.Cedi)
                 .Include(ca => ca.Client)
@@ -57,7 +62,14 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (userId.HasValue)
             {
-                query = query.Where(ca => ca.Client.Seller!.UserId == userId.Value);
+                if (userRole.RoleName.Equals("Supervisor") || userRole.RoleName.Equals("Proveedor Lógistico"))
+                {
+                    query = query.Where(ca => ca.Client.Seller!.CediId == userRole.CediId);
+                }
+                else
+                {
+                    query = query.Where(ca => ca.Client.Seller!.UserId == userId.Value);
+                }
             }
 
             if (cediId.HasValue)
@@ -126,6 +138,10 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<int> GetTotalClientAssets(string? codeAje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode)
         {
+            var userRole = this._context.UserRoles.Where(x => x.UserId == userId)
+                .Include(x => x.Role)
+                .Select(x => new { x.Role.RoleName, x.User.CediId })
+                .FirstOrDefault();
             var query = this._context.ClientAssets.AsQueryable();
 
             if (!string.IsNullOrEmpty(codeAje))
@@ -140,7 +156,14 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (userId.HasValue)
             {
-                query = query.Where(ca => ca.Client.Seller!.UserId == userId.Value);
+                if (userRole.RoleName.Equals("Supervisor") || userRole.RoleName.Equals("Proveedor Lógistico"))
+                {
+                    query = query.Where(ca => ca.Client.Seller!.CediId == userRole.CediId);
+                }
+                else
+                {
+                    query = query.Where(ca => ca.Client.Seller!.UserId == userId.Value);
+                }
             }
 
             if (cediId.HasValue)
