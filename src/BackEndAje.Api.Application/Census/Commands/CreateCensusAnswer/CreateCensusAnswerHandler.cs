@@ -9,16 +9,34 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
     {
         private readonly ICensusRepository _censusRepository;
         private readonly IS3Service _s3Service;
+        private readonly IClientAssetRepository _clientAssetRepository;
+        private readonly IAssetRepository _assetRepository;
 
-        public CreateCensusAnswerHandler(ICensusRepository censusRepository, IS3Service s3Service)
+        public CreateCensusAnswerHandler(ICensusRepository censusRepository, IS3Service s3Service, IClientAssetRepository clientAssetRepository, IAssetRepository assetRepository)
         {
             this._censusRepository = censusRepository;
             this._s3Service = s3Service;
+            this._clientAssetRepository = clientAssetRepository;
+            this._assetRepository = assetRepository;
         }
 
         public async Task<Unit> Handle(CreateCensusAnswerCommand request, CancellationToken cancellationToken)
         {
             var monthPeriod = DateTime.Now.ToString("yyyyMM");
+
+            if (!string.IsNullOrEmpty(request.CodeAje))
+            {
+                var assetByCode = await this._assetRepository.GetAssetByCodeAje(request.CodeAje);
+                if (assetByCode.Count == 0)
+                {
+                    throw new InvalidOperationException($"No se encontró un Activo con el Código Aje '{request.CodeAje}'.");
+                }
+
+                if (assetByCode.FirstOrDefault() !.AssetId != request.AssetId)
+                {
+                    request.AssetId = assetByCode.FirstOrDefault() !.AssetId;
+                }
+            }
 
             var existingAnswer = await this._censusRepository.GetCensusAnswerAsync(
                 request.CensusQuestionsId,
@@ -53,6 +71,13 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
             };
 
             await this._censusRepository.AddCensusAnswer(censusAnswer);
+            var clientAssets = await this._clientAssetRepository.GetClientAssetByIdAsync(request.ClientAssetId);
+            if (clientAssets.CodeAje != request.CodeAje)
+            {
+                clientAssets.CodeAje = request.CodeAje;
+                await this._clientAssetRepository.UpdateClientAssetsAsync(clientAssets);
+            }
+
             return Unit.Value;
         }
     }

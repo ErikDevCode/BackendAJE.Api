@@ -6,6 +6,10 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
 
     public class CreateCensusAnswerCommand : IRequest<Unit>, IHasCreatedByInfo
     {
+        public int ClientAssetId { get; set; }
+
+        public string CodeAje { get; set; }
+
         public int CensusQuestionsId { get; set; }
 
         public string? Answer { get; set; }
