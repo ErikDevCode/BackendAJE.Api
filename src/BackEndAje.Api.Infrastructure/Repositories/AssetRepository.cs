@@ -29,6 +29,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Asset>> GetAssetsList()
+        {
+            return await this._context.Assets.AsNoTracking().ToListAsync();
+        }
+
         public async Task<int> GetTotalAssets(string? codeAje)
         {
             var query = this._context.Assets.AsQueryable();

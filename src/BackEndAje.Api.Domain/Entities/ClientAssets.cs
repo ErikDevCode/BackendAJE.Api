@@ -16,6 +16,8 @@ namespace BackEndAje.Api.Domain.Entities
         public Client Client { get; set; }
 
         public Asset Asset { get; set; }
+        
+        public List<ClientAssetsTrace> Traces { get; set; } = new List<ClientAssetsTrace>();
     }
 }
 

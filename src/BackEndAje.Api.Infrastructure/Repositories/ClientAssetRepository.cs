@@ -20,6 +20,15 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             await this._context.SaveChangesAsync();
         }
 
+        public async Task AddClientListAsset(List<ClientAssets> clientAssetsList)
+        {
+            // Agrega todos los registros de la lista en la base
+            this._context.ClientAssets.AddRange(clientAssetsList);
+
+            // Aplica cambios
+            await this._context.SaveChangesAsync();
+        }
+
         public async Task<List<ClientAssets>> GetClientAssetsByCodeAje(string codeAje)
         {
             return await this._context.ClientAssets.AsNoTracking().Where(x => x.CodeAje == codeAje && x.IsActive == true).ToListAsync();
@@ -206,6 +215,20 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             await this._context.SaveChangesAsync();
         }
 
+        public async Task UpdateClientAssetsListAsync(List<ClientAssets> clientAssetsList)
+        {
+            foreach (var clientAsset in clientAssetsList)
+            {
+                this._context.Entry(clientAsset).State = EntityState.Detached;
+            }
+
+            // Actualiza los registros
+            this._context.ClientAssets.UpdateRange(clientAssetsList);
+
+            // Guarda los cambios en la base de datos
+            await this._context.SaveChangesAsync();
+        }
+
         public async Task DeleteClientAssetAsync(ClientAssets clientAssets)
         {
             this._context.ClientAssets.Remove(clientAssets);
@@ -215,6 +238,12 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task AddTraceabilityRecordAsync(ClientAssetsTrace clientAssetsTrace)
         {
             this._context.ClientAssetsTrace.Add(clientAssetsTrace);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task AddTraceabilityRecordListAsync(List<ClientAssetsTrace> clientAssetsTraceList)
+        {
+            this._context.ClientAssetsTrace.AddRange(clientAssetsTraceList);
             await this._context.SaveChangesAsync();
         }
 

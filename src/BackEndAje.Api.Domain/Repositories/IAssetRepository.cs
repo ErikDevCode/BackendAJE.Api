@@ -4,6 +4,8 @@ namespace BackEndAje.Api.Domain.Repositories
     public interface IAssetRepository
     {
         Task<List<Asset>> GetAssets(int pageNumber, int pageSize, string? codeAje);
+        
+        Task<List<Asset>> GetAssetsList();
         Task<int> GetTotalAssets(string? codeAje);
         Task<Asset> GetAssetById(int assetId);
         

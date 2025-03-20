@@ -283,9 +283,16 @@
                 .ToTable("clientassets")
                 .HasKey(pm => pm.ClientAssetId);
 
-            modelBuilder.Entity<ClientAssetsTrace>()
-                .ToTable("clientassetstrace")
-                .HasKey(pm => pm.ClientAssetTraceId);
+            modelBuilder.Entity<ClientAssetsTrace>(entity =>
+            {
+                entity.ToTable("clientassetstrace");
+                entity.HasKey(e => e.ClientAssetTraceId);
+                entity.HasOne(e => e.ClientAsset)
+                    .WithMany(c => c.Traces) // la colección en ClientAssets
+                    .HasForeignKey(e => e.ClientAssetId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
 
             modelBuilder.Entity<CensusQuestion>()
                 .ToTable("censusquestions")

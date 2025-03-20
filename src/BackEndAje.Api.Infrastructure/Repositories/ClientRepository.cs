@@ -239,6 +239,13 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return clients;
         }
 
+        public async Task<List<Client>> GetClientsList()
+        {
+            return await this._context.Clients
+                .Include(c => c.Seller)
+                .AsNoTracking().ToListAsync();
+        }
+
         public async Task<int> GetTotalClients(string? filtro)
         {
             var query = this._context.Clients
