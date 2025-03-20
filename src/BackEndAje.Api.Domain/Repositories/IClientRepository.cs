@@ -19,6 +19,8 @@ namespace BackEndAje.Api.Domain.Repositories
 
         Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro);
         
+        Task<List<Client>> GetClientsList();
+        
         Task<int> GetTotalClients(string? filtro);
         
         Task<Client?> GetClientById(int clientId);

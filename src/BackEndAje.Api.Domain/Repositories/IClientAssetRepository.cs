@@ -6,6 +6,8 @@ namespace BackEndAje.Api.Domain.Repositories
     {
         Task AddClientAsset(ClientAssets clientAssets);
         
+        Task AddClientListAsset(List<ClientAssets> clientAssetsList);
+        
         Task<List<ClientAssets>> GetClientAssetsByCodeAje(string codeAje);
 
         Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode);
@@ -16,9 +18,13 @@ namespace BackEndAje.Api.Domain.Repositories
         
         Task UpdateClientAssetsAsync(ClientAssets clientAssets);
 
+        Task UpdateClientAssetsListAsync(List<ClientAssets> clientAssetsList);
+
         Task DeleteClientAssetAsync(ClientAssets clientAssets);
 
         Task AddTraceabilityRecordAsync(ClientAssetsTrace clientAssetsTrace);
+
+        Task AddTraceabilityRecordListAsync(List<ClientAssetsTrace> clientAssetsTraceList);
         
         Task<List<ClientAssetsTrace>> GetClientAssetTracesByAssetId(int pageNumber, int pageSize, int? assetId);
 

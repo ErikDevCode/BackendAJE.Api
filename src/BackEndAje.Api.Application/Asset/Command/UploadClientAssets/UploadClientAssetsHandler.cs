@@ -6,7 +6,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
     using MediatR;
     using OfficeOpenXml;
 
-    public class UploadClientAssetsHandler : IRequestHandler<UploadClientAssetsCommand, Unit>
+    public class UploadClientAssetsHandler : IRequestHandler<UploadClientAssetsCommand, UploadClientAssetResult>
     {
         private readonly IAssetRepository _assetRepository;
         private readonly IClientAssetRepository _clientAssetRepository;
@@ -21,7 +21,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
             this._clientRepository = clientRepository;
         }
 
-        public async Task<Unit> Handle(UploadClientAssetsCommand request, CancellationToken cancellationToken)
+        public async Task<UploadClientAssetResult> Handle(UploadClientAssetsCommand request, CancellationToken cancellationToken)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -30,7 +30,17 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
             var worksheet = package.Workbook.Worksheets[0];
 
             var processedAssets = 0;
-            var errors = new List<string>();
+            var errors = new List<UploadError>();
+
+            // Cargar datos en memoria
+            var cedisList = await this._cediRepository.GetAllCedis();
+            var clientsList = await this._clientRepository.GetClientsList();
+            var assetsList = await this._assetRepository.GetAssetsList();
+
+            // Listas temporales para registrar las actualizaciones y creaciones
+            var clientAssetsToUpdate = new List<ClientAssets>();
+            var clientAssetsToAdd = new List<ClientAssets>();
+            var traceabilityRecords = new List<ClientAssetsTrace>();
 
             for (var row = 2; row <= worksheet.Dimension.End.Row; row++)
             {
@@ -44,27 +54,40 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
                     var notes = worksheet.Cells[row, 5].Text;
 
                     // Validar existencia del Cedi
-                    var cedi = await this._cediRepository.GetCediByNameAsync(cediName);
+                    var cedi = cedisList.FirstOrDefault(x => x.CediName.Equals(cediName, StringComparison.CurrentCultureIgnoreCase));
                     if (cedi == null)
                     {
-                        errors.Add($"Fila {row}: Sucursal '{cediName}' no encontrada.");
+                        errors.Add(new UploadError
+                        {
+                            Row = row,
+                            Message = $"Sucursal '{cediName}' no encontrada.",
+                        });
                         continue;
                     }
 
                     // Validar existencia del Cliente
-                    var client = await this._clientRepository.GetClientByClientCode(int.Parse(clientCode), cedi.CediId);
+                    var client = clientsList.FirstOrDefault(x => x.ClientCode == int.Parse(clientCode) && x.Seller.CediId == cedi.CediId);
                     if (client == null)
                     {
-                        errors.Add($"Fila {row}: Cliente con código '{clientCode}' no encontrado.");
+                        errors.Add(new UploadError
+                        {
+                            Row = row,
+                            Message = $"Cliente con código '{clientCode}' no encontrado.",
+                        });
                         continue;
                     }
 
                     // Validar existencia del Activo
-                    var asset = await this._assetRepository.GetAssetByCodeAje(codeAje);
-                    if (asset == null)
+                    var asset = assetsList.Where(x => x.CodeAje == codeAje).ToList();
+                    if (!asset.Any())
                     {
-                        errors.Add($"Fila {row}: Activo con código Aje '{codeAje}' no encontrado.");
+                        errors.Add(new UploadError
+                        {
+                            Row = row,
+                            Message = $"Activo con código Aje '{codeAje}' no encontrado.",
+                        });
                         continue;
+
                     }
 
                     // Validar Fecha de Instalación
@@ -75,21 +98,26 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
                     }
 
                     // Validar si ya existe un registro idéntico
-                    var existingClientAsset = await this._clientAssetRepository.GetClientAssetByAssetId(asset.FirstOrDefault()!.AssetId);
-                    if (existingClientAsset.Count > 0)
+                    var existingClientAsset = await this._clientAssetRepository.GetClientAssetByAssetId(asset.First().AssetId);
+                    if (existingClientAsset.Any())
                     {
                         foreach (var assets in existingClientAsset)
                         {
                             if (assets.ClientId == client.ClientId)
                             {
-                                errors.Add($"Fila {row}: Activo con código Aje '{codeAje}'  registro encontrado.");
+                                errors.Add(new UploadError
+                                {
+                                    Row = row,
+                                    Message = $"Activo con código Aje '{codeAje}' ya asignado a este cliente.",
+                                });
                             }
                             else
                             {
+                                // Actualizar el registro existente
                                 assets.IsActive = false;
                                 assets.UpdatedAt = DateTime.Now;
                                 assets.UpdatedBy = request.UpdatedBy;
-                                await this._clientAssetRepository.UpdateClientAssetsAsync(assets);
+                                clientAssetsToUpdate.Add(assets);
 
                                 // Crear nuevo registro
                                 var newClientAsset = new ClientAssets
@@ -97,7 +125,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
                                     CediId = cedi.CediId,
                                     InstallationDate = installationDate,
                                     ClientId = client.ClientId,
-                                    AssetId = asset.FirstOrDefault()!.AssetId,
+                                    AssetId = asset.First().AssetId,
                                     CodeAje = codeAje,
                                     Notes = notes,
                                     IsActive = true,
@@ -106,7 +134,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
                                     UpdatedAt = DateTime.Now,
                                     UpdatedBy = request.UpdatedBy,
                                 };
-                                await this._clientAssetRepository.AddClientAsset(newClientAsset);
+                                clientAssetsToAdd.Add(newClientAsset);
 
                                 // Guardar trazabilidad
                                 var trace = new ClientAssetsTrace
@@ -121,7 +149,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
                                     CreatedBy = request.UpdatedBy,
                                     CreatedAt = DateTime.Now,
                                 };
-                                await this._clientAssetRepository.AddTraceabilityRecordAsync(trace);
+                                traceabilityRecords.Add(trace);
                             }
                         }
                     }
@@ -133,7 +161,7 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
                             CediId = cedi.CediId,
                             InstallationDate = installationDate,
                             ClientId = client.ClientId,
-                            AssetId = asset.FirstOrDefault()!.AssetId,
+                            AssetId = asset.First().AssetId,
                             CodeAje = codeAje,
                             Notes = notes,
                             IsActive = true,
@@ -142,38 +170,58 @@ namespace BackEndAje.Api.Application.Asset.Command.UploadClientAssets
                             UpdatedAt = DateTime.Now,
                             UpdatedBy = request.UpdatedBy,
                         };
-                        await this._clientAssetRepository.AddClientAsset(newClientAsset);
+                        clientAssetsToAdd.Add(newClientAsset);
 
                         // Guardar trazabilidad para el nuevo registro
                         var newTrace = new ClientAssetsTrace
                         {
-                            ClientAssetId = newClientAsset.ClientAssetId,
+                            ClientAsset = newClientAsset,
                             PreviousClientId = null,
                             NewClientId = client.ClientId,
-                            AssetId = asset.FirstOrDefault()!.AssetId,
+                            AssetId = asset.First().AssetId,
                             CodeAje = codeAje,
                             ChangeReason = "Asignación a nuevo cliente",
                             IsActive = true,
                             CreatedBy = request.CreatedBy,
                             CreatedAt = DateTime.Now,
                         };
-                        await this._clientAssetRepository.AddTraceabilityRecordAsync(newTrace);
+                        traceabilityRecords.Add(newTrace);
 
                         processedAssets++;
                     }
                 }
                 catch (Exception ex)
                 {
-                    errors.Add($"Error en la fila {row}: {ex.Message}");
+                    errors.Add(new UploadError
+                    {
+                        Row = row,
+                        Message = $"Error en la fila {row}: {ex.Message}",
+                    });
                 }
             }
 
-            if (errors.Any())
+            // Realizar todas las actualizaciones y creaciones al final
+            if (clientAssetsToUpdate.Any())
             {
-                throw new Exception($"Errores en la carga:\n{string.Join(Environment.NewLine, errors)}");
+                await this._clientAssetRepository.UpdateClientAssetsListAsync(clientAssetsToUpdate);
             }
 
-            return Unit.Value;
+            if (clientAssetsToAdd.Any())
+            {
+                await this._clientAssetRepository.AddClientListAsset(clientAssetsToAdd);
+            }
+
+            if (traceabilityRecords.Any())
+            {
+                await this._clientAssetRepository.AddTraceabilityRecordListAsync(traceabilityRecords);
+            }
+
+            return new UploadClientAssetResult
+            {
+                Success = !errors.Any(),
+                ProcessedAssets = processedAssets,
+                Errors = errors,
+            };
         }
     }
 }

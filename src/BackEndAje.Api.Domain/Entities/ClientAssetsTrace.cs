@@ -13,6 +13,8 @@ namespace BackEndAje.Api.Domain.Entities
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public int CreatedBy { get; set; }
+        
+        public ClientAssets ClientAsset { get; set; }
     }
 }
 
