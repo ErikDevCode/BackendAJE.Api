@@ -5,8 +5,10 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Clients.Commands.DisableClient;
     using BackEndAje.Api.Application.Clients.Commands.UpdateClient;
     using BackEndAje.Api.Application.Clients.Commands.UploadClient;
+    using BackEndAje.Api.Application.Clients.Commands.UploadCodeAndNameClients;
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
     using BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode;
+    using BackEndAje.Api.Application.Clients.Queries.GetExportClient;
     using BackEndAje.Api.Application.Clients.Queries.GetListClientByClientCode;
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Dtos.Const;
@@ -105,6 +107,47 @@ namespace BackEndAje.Api.Presentation.Controllers
             using var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
             var command = new UploadClientsCommand
+            {
+                FileBytes = memoryStream.ToArray(),
+            };
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        [Route("export")]
+        [ProducesResponseType(typeof(FileContentResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ExportClients()
+        {
+            try
+            {
+                var query = new ExportClientsQuery();
+                var fileContent = await this._mediator.Send(query);
+                var fileName = $"Clientes_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+
+                return this.File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("uploadCodeAndNameClients")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> UploadCodeAndNameClients(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest("No hay Clientes uploaded.");
+            }
+
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            var command = new UploadCodeAndNameClientsCommand()
             {
                 FileBytes = memoryStream.ToArray(),
             };
