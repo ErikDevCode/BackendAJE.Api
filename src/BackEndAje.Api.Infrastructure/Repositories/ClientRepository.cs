@@ -243,6 +243,15 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             return await this._context.Clients
                 .Include(c => c.Seller)
+                .Include(d => d.DocumentType)
+                .Include(p => p.PaymentMethod)
+                .Include(di => di.District)
+                .AsNoTracking().ToListAsync();
+        }
+
+        public async Task<List<Client>> GetClientsOnlyList()
+        {
+            return await this._context.Clients
                 .AsNoTracking().ToListAsync();
         }
 
