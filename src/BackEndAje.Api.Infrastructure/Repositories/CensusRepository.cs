@@ -218,7 +218,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 where
                     (regionId == null || (cedi != null && cedi.RegionId == regionId.Value)) &&
                     (cediId == null || (cedi != null && cedi.CediId == cediId.Value)) &&
-                    (zoneId == null || (zone != null && zone.ZoneId == zoneId.Value)) &&
+                    (zoneId == null || (zone != null && zone.ZoneCode == zoneId.Value)) &&
                     (!route.HasValue || cl.Route == route.Value) &&
                     (month == null || (ca.MonthPeriod.Substring(4, 2) == month.Value.ToString("D2"))) &&
                     (!year.HasValue || ca.MonthPeriod.StartsWith(year.Value.ToString()))
