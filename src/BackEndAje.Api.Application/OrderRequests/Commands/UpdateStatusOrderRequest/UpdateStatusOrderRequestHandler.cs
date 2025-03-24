@@ -58,7 +58,10 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                 this.ValidateApprovalAsset(orderRequest);
             }
 
-            this.ValidateApproval(orderRequest, request.OrderStatusId);
+            if (orderRequest.ReasonRequest.ReasonDescription is "Instalación" or "Reubicación")
+            {
+                this.ValidateApproval(orderRequest, request.OrderStatusId);
+            }
 
             await this.UpdateClientAssets(request, orderRequest);
             await this.UpdateOrderRequestStatus(request);

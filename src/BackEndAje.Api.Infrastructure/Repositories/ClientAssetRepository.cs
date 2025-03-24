@@ -58,6 +58,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .Include(ca => ca.Asset)
                 .AsQueryable();
 
+            if (userRole.RoleName.Equals("Proveedor Lógistico"))
+            {
+                userId = null;
+            }
+
             // Aplicar filtros
             if (!string.IsNullOrEmpty(codeAje))
             {
@@ -71,7 +76,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (userId.HasValue)
             {
-                if (userRole.RoleName.Equals("Supervisor") || userRole.RoleName.Equals("Proveedor Lógistico"))
+                if (userRole.RoleName.Equals("Supervisor"))
                 {
                     query = query.Where(ca => ca.Client.Seller!.CediId == userRole.CediId);
                 }
@@ -153,6 +158,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .FirstOrDefault();
             var query = this._context.ClientAssets.AsQueryable();
 
+            if (userRole.RoleName.Equals("Proveedor Lógistico"))
+            {
+                userId = null;
+            }
+
             if (!string.IsNullOrEmpty(codeAje))
             {
                 query = query.Where(ca => ca.CodeAje == codeAje);
@@ -165,7 +175,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (userId.HasValue)
             {
-                if (userRole.RoleName.Equals("Supervisor") || userRole.RoleName.Equals("Proveedor Lógistico"))
+                if (userRole.RoleName.Equals("Supervisor"))
                 {
                     query = query.Where(ca => ca.Client.Seller!.CediId == userRole.CediId);
                 }

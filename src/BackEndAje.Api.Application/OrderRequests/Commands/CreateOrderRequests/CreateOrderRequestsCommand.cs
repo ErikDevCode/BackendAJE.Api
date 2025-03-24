@@ -26,9 +26,9 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
 
         public int ClientCode { get; set; }
 
-        public string Observations { get; set; }
+        public string? Observations { get; set; }
 
-        public string Reference { get; set; }
+        public string? Reference { get; set; }
 
         public int ProductSizeId { get; set; }
 

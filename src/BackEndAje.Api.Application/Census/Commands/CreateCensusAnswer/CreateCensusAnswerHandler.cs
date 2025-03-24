@@ -24,6 +24,12 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
         {
             var monthPeriod = DateTime.Now.ToString("yyyyMM");
 
+            var clientAssetValidation = await this._clientAssetRepository.GetClientAssetsByCodeAje(request.CodeAje);
+            if (clientAssetValidation.Count != 0)
+            {
+                throw new InvalidOperationException($"Ya existe un Activo con el Código Aje '{request.CodeAje}' asociado a un cliente.");
+            }
+
             if (!string.IsNullOrEmpty(request.CodeAje))
             {
                 var assetByCode = await this._assetRepository.GetAssetByCodeAje(request.CodeAje);
@@ -74,6 +80,7 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
             var clientAssets = await this._clientAssetRepository.GetClientAssetByIdAsync(request.ClientAssetId);
             if (clientAssets.CodeAje != request.CodeAje)
             {
+                clientAssets.AssetId = censusAnswer.AssetId;
                 clientAssets.CodeAje = request.CodeAje;
                 await this._clientAssetRepository.UpdateClientAssetsAsync(clientAssets);
             }
