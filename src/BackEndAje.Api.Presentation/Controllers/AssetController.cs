@@ -1,16 +1,16 @@
-using BackEndAje.Api.Application.Asset.Command.UploadClientAssets;
-
 namespace BackEndAje.Api.Presentation.Controllers
 {
     using System.Net;
     using BackEndAje.Api.Application.Asset.Command.CreateAsset;
     using BackEndAje.Api.Application.Asset.Command.CreateClientAsset;
+    using BackEndAje.Api.Application.Asset.Command.DeleteClientAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateClientAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateClientAssetReassign;
     using BackEndAje.Api.Application.Asset.Command.UpdateDeactivateClientAsset;
     using BackEndAje.Api.Application.Asset.Command.UpdateStatusAsset;
     using BackEndAje.Api.Application.Asset.Command.UploadAssets;
+    using BackEndAje.Api.Application.Asset.Command.UploadClientAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAllAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetAssetsByCodeAje;
     using BackEndAje.Api.Application.Asset.Queries.GetAssetWithOutClient;
@@ -219,6 +219,16 @@ namespace BackEndAje.Api.Presentation.Controllers
             {
                 return this.BadRequest(ex.Message);
             }
+        }
+
+        [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), (int)HttpStatusCode.BadRequest)]
+        [Route("client-asset/delete-clientasset")]
+        public async Task<IActionResult> DeleteClientAsset([FromBody] DeleteClientAssetCommand command)
+        {
+            await this._mediator.Send(command);
+            return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
         }
     }
 }

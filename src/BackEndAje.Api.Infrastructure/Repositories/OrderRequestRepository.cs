@@ -316,7 +316,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (zoneId.HasValue)
             {
-                query = query.Where(x => x.Client.Seller!.Zone!.ZoneId == zoneId.Value);
+                query = query.Where(x => x.Client.Seller!.Zone!.ZoneCode == zoneId.Value);
             }
 
             if (route.HasValue)
@@ -385,7 +385,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (zoneId.HasValue)
             {
-                query = query.Where(x => x.Client.Seller!.Zone!.ZoneId == zoneId.Value);
+                query = query.Where(x => x.Client.Seller!.Zone!.ZoneCode == zoneId.Value);
             }
 
             if (route.HasValue)
@@ -453,7 +453,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (zoneId.HasValue)
             {
-                query = query.Where(oa => oa.OrderRequest.Client.Seller!.Zone!.ZoneId == zoneId.Value);
+                query = query.Where(oa => oa.OrderRequest.Client.Seller!.Zone!.ZoneCode == zoneId.Value);
             }
 
             if (route.HasValue)
