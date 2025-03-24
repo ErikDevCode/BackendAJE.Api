@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Dtos.Users;
+
 namespace BackEndAje.Api.Infrastructure.Repositories
 {
     using BackEndAje.Api.Domain.Entities;
@@ -47,21 +49,26 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             var currentMonthPeriod = DateTime.Now.ToString("yyyyMM");
 
+            
             var userRole = this._context.UserRoles.Where(x => x.UserId == userId)
                 .Include(x => x.Role)
-                .Select( x => new {x.Role.RoleName, x.User.CediId})
+                .Select(x => new { x.Role.RoleName, x.User.CediId })
                 .FirstOrDefault();
+
             var query = this._context.ClientAssets
                 .Include(ca => ca.Cedi)
                 .Include(ca => ca.Client)
                     .ThenInclude(cli => cli.Seller)
                 .Include(ca => ca.Asset)
                 .AsQueryable();
-
-            if (userRole.RoleName.Equals("Proveedor Lógistico"))
+            if(userRole != null)
             {
-                userId = null;
+                if (userRole.RoleName.Equals("Proveedor Lógistico"))
+                {
+                    userId = null;
+                }
             }
+           
 
             // Aplicar filtros
             if (!string.IsNullOrEmpty(codeAje))
@@ -158,9 +165,12 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .FirstOrDefault();
             var query = this._context.ClientAssets.AsQueryable();
 
-            if (userRole.RoleName.Equals("Proveedor Lógistico"))
+            if(userRole != null)
             {
-                userId = null;
+                if (userRole.RoleName.Equals("Proveedor Lógistico"))
+                {
+                    userId = null;
+                }
             }
 
             if (!string.IsNullOrEmpty(codeAje))
