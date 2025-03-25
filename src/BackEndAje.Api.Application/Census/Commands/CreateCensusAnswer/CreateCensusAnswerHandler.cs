@@ -24,8 +24,10 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
         {
             var monthPeriod = DateTime.Now.ToString("yyyyMM");
 
+            var clientAssetById = await this._clientAssetRepository.GetClientAssetByIdAsync(request.ClientAssetId);
+
             var clientAssetValidation = await this._clientAssetRepository.GetClientAssetsByCodeAje(request.CodeAje);
-            if (clientAssetValidation.Count != 0)
+            if (clientAssetValidation.Count != 0 && clientAssetById.CodeAje != request.CodeAje)
             {
                 throw new InvalidOperationException($"Ya existe un Activo con el Código Aje '{request.CodeAje}' asociado a un cliente.");
             }
