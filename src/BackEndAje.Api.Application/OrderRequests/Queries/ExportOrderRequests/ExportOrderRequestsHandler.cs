@@ -73,7 +73,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Queries.ExportOrderRequests
                 worksheet.Cells[row, 7].Value = order.WithDrawalReasonId != null
                     ? order.WithDrawalReason!.WithDrawalReasonDescription
                     : "N/A";
-                worksheet.Cells[row, 8].Value = order.ClientCode;
+                worksheet.Cells[row, 8].Value = order.Client.ClientCode;
                 worksheet.Cells[row, 9].Value = order.Client.CompanyName;
                 worksheet.Cells[row, 10].Value = order.Observations;
                 worksheet.Cells[row, 11].Value = order.Reference;

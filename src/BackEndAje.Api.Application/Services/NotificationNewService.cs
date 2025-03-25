@@ -67,7 +67,7 @@ namespace BackEndAje.Api.Application.Services
                                         .FirstOrDefault(r => r.ReasonRequestId == orderRequest.ReasonRequestId)?.ReasonDescription
                                     ?? "una razón desconocida";
 
-            return $"Se ha generado una solicitud de {reasonDescription} para el cliente con código: {orderRequest.ClientCode}.";
+            return $"Se ha generado una solicitud de {reasonDescription} para el cliente con código: {orderRequest.Client.ClientCode}.";
         }
     }
 }

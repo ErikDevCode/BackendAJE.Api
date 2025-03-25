@@ -41,6 +41,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.AssetDto, opt => opt.MapFrom(src => src.Asset));
 
             this.CreateMap<OrderRequest, GetOrderRequestByIdResult>()
+                .ForMember(dest => dest.ClientCode, opt => opt.MapFrom(src => src.Client.ClientCode))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
                 .ForMember(dest => dest.Supervisor, opt => opt.MapFrom(src => src.Supervisor))
                 .ForMember(dest => dest.OrderRequestDocuments, opt => opt.MapFrom(src => src.OrderRequestDocuments))

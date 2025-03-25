@@ -314,7 +314,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
 
             var orderStatus = await this._mastersRepository.GetAllOrderStatus();
             var orderStatusName = orderStatus.FirstOrDefault(s => s.OrderStatusId == orderStatusId)?.StatusName;
-            var notificationMessage = $"Te informamos que la solicitud Nro. {orderRequest.OrderRequestId}, asociada al cliente con el código {orderRequest.ClientCode}, ha sido actualizada al estado: {orderStatusName}.";
+            var notificationMessage = $"Te informamos que la solicitud Nro. {orderRequest.OrderRequestId}, asociada al cliente con el código {orderRequest.Client.ClientCode}, ha sido actualizada al estado: {orderStatusName}.";
 
             var notification = new Notification
             {
@@ -336,7 +336,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
             var orderStatusName = orderStatus.FirstOrDefault(s => s.OrderStatusId == orderStatusId)?.StatusName;
             foreach (var user in userRoles)
             {
-                var notificationMessage = $"Te informamos que la solicitud Nro. {orderRequest.OrderRequestId}, asociada al cliente con el código {orderRequest.ClientCode}, ha sido actualizada al estado: {orderStatusName}.";
+                var notificationMessage = $"Te informamos que la solicitud Nro. {orderRequest.OrderRequestId}, asociada al cliente con el código {orderRequest.Client.ClientCode}, ha sido actualizada al estado: {orderStatusName}.";
                 var notification = new Notification
                 {
                     UserId = user.UserId,
