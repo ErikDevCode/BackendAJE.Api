@@ -11,7 +11,6 @@ namespace BackEndAje.Api.Domain.Entities
         public int? WithDrawalReasonId { get; set; }
 
         public int ClientId { get; set; }
-        public int ClientCode { get; set; }
         public string? Observations { get; set; }
         public string? Reference { get; set; }
         public int ProductSizeId { get; set; }

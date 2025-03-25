@@ -123,7 +123,7 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.DeleteOrderRequest
 
         private Task<string> GenerateNotificationMessage(OrderRequest orderRequest)
         {
-            return Task.FromResult($"Se ha eliminado una solicitud para el cliente con código: {orderRequest.ClientCode}.");
+            return Task.FromResult($"Se ha eliminado una solicitud para el cliente con código: {orderRequest.Client.ClientCode}.");
         }
     }
 }
