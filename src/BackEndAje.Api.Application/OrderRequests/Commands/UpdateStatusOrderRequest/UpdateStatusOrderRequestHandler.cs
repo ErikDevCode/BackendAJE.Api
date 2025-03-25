@@ -49,8 +49,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
                     throw new InvalidOperationException("La solicitud no se puede pasar a Aprobado porque ya esta Programado");
                 case (int)OrderStatusConst.Programado when request.OrderStatusId == (int)OrderStatusConst.Rechazado:
                     throw new InvalidOperationException("La solicitud no se puede pasar a Rechazado porque ya esta Programado");
-                case (int)OrderStatusConst.Programado when request.OrderStatusId == (int)OrderStatusConst.FalsoFlete:
-                    throw new InvalidOperationException("La solicitud no se puede pasar a Falso Flete porque ya esta Programado");
+                case (int)OrderStatusConst.Programado when request.OrderStatusId == (int)OrderStatusConst.Anulado:
+                    throw new InvalidOperationException("La solicitud no se puede pasar a Anular porque ya esta Programado");
             }
 
             if (request.OrderStatusId == (int)OrderStatusConst.Programado && await this.IsLogisticsProvider(request.CreatedBy))

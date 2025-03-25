@@ -49,7 +49,6 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         {
             var currentMonthPeriod = DateTime.Now.ToString("yyyyMM");
 
-            
             var userRole = this._context.UserRoles.Where(x => x.UserId == userId)
                 .Include(x => x.Role)
                 .Select(x => new { x.Role.RoleName, x.User.CediId })
@@ -63,12 +62,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .AsQueryable();
             if(userRole != null)
             {
-                if (userRole.RoleName.Equals("Proveedor Lógistico"))
+                if (userRole.RoleName.Equals("Proveedor Logístico"))
                 {
                     userId = null;
                 }
             }
-           
 
             // Aplicar filtros
             if (!string.IsNullOrEmpty(codeAje))
@@ -167,7 +165,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if(userRole != null)
             {
-                if (userRole.RoleName.Equals("Proveedor Lógistico"))
+                if (userRole.RoleName.Equals("Proveedor Logístico"))
                 {
                     userId = null;
                 }
