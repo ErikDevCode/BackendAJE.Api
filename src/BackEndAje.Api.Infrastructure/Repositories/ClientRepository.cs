@@ -1,3 +1,5 @@
+using BackEndAje.Api.Application.Dtos.Const;
+
 namespace BackEndAje.Api.Infrastructure.Repositories
 {
     using BackEndAje.Api.Domain.Entities;
@@ -208,14 +210,27 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return clientWithAssetDto;
         }
 
-        public async Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro)
+        public async Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro, int userId)
         {
+            var userRole = await this._context.UserRoles
+                .Where(x => x.UserId == userId)
+                .Include(x => x.Role)
+                .Select(x => x.Role.RoleName)
+                .FirstOrDefaultAsync();
+
             var query = this._context.Clients
                 .AsNoTracking()
                 .Include(c => c.DocumentType)
                 .Include(c => c.PaymentMethod)
                 .Include(c => c.District)
+                .Include(c => c.ClientAssets)
+                .ThenInclude(a => a.Asset)
                 .AsQueryable();
+
+            if (userRole != null && userRole.Equals(RolesConst.Vendedor, StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(c => c.UserId == userId);
+            }
 
             if (!string.IsNullOrEmpty(filtro))
             {
@@ -255,11 +270,22 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .AsNoTracking().ToListAsync();
         }
 
-        public async Task<int> GetTotalClients(string? filtro)
+        public async Task<int> GetTotalClients(string? filtro, int userId)
         {
+            var userRole = await this._context.UserRoles
+                .Where(x => x.UserId == userId)
+                .Include(x => x.Role)
+                .Select(x => x.Role.RoleName)
+                .FirstOrDefaultAsync();
+
             var query = this._context.Clients
                 .AsNoTracking()
                 .AsQueryable();
+
+            if (userRole != null && userRole.Equals(RolesConst.Vendedor, StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(c => c.UserId == userId);
+            }
 
             if (!string.IsNullOrEmpty(filtro))
             {

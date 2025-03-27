@@ -1,5 +1,6 @@
 namespace BackEndAje.Api.Domain.Entities
 {
+    using System.Text.Json.Serialization;
     public class ClientAssets : AuditableEntity
     {
         public int ClientAssetId { get; set; }
@@ -13,6 +14,8 @@ namespace BackEndAje.Api.Domain.Entities
         public bool? IsActive { get; set; }
 
         public Cedi Cedi { get; set; }
+        
+        [JsonIgnore]
         public Client Client { get; set; }
 
         public Asset Asset { get; set; }

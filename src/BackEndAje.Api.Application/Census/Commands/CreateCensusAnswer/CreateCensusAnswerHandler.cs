@@ -24,67 +24,127 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
         {
             var monthPeriod = DateTime.Now.ToString("yyyyMM");
 
-            var clientAssetById = await this._clientAssetRepository.GetClientAssetByIdAsync(request.ClientAssetId);
+            var censusForm = await this._censusRepository.GetCensusFormAsync(request.ClientId, monthPeriod)
+                        ?? await this._censusRepository.CreateCensusFormAsync(request.ClientId, monthPeriod);
 
-            var clientAssetValidation = await this._clientAssetRepository.GetClientAssetsByCodeAje(request.CodeAje);
-            if (clientAssetValidation.Count != 0 && clientAssetById.CodeAje != request.CodeAje)
+            foreach (var item in request.Answers)
             {
-                throw new InvalidOperationException($"Ya existe un Activo con el Código Aje '{request.CodeAje}' asociado a un cliente.");
-            }
-
-            if (!string.IsNullOrEmpty(request.CodeAje))
-            {
-                var assetByCode = await this._assetRepository.GetAssetByCodeAje(request.CodeAje);
-                if (assetByCode.Count == 0)
+                if (item.CensusQuestionsId == 1 && string.Equals(item.Answer, "No", StringComparison.OrdinalIgnoreCase))
                 {
-                    throw new InvalidOperationException($"No se encontró un Activo con el Código Aje '{request.CodeAje}'.");
+                    if (request.Answers.Count > 1)
+                    {
+                        throw new InvalidOperationException("Si la respuesta es 'No', no debes enviar más de una respuesta.");
+                    }
+
+                    var alreadyExists = await this._censusRepository.GetCensusAnswerAsync(
+                        item.CensusQuestionsId,
+                        censusForm.CensusFormId,
+                        null);
+
+                    if (alreadyExists == null)
+                    {
+                        var census = new CensusAnswer
+                        {
+                            CensusQuestionsId = item.CensusQuestionsId,
+                            Answer = item.Answer,
+                            ClientAssetId = null,
+                            CensusFormId = censusForm.CensusFormId,
+                            CreatedAt = DateTime.Now,
+                            CreatedBy = request.CreatedBy,
+                        };
+
+                        await this._censusRepository.AddCensusAnswer(census);
+                    }
+
+                    // Eliminar todos los ClientAssets del cliente
+                    var clientAssets = await this._clientAssetRepository.GetClientAssetsByClientId(request.ClientId);
+
+                    foreach (var ca in clientAssets)
+                    {
+                        var relatedAnswers = await this._censusRepository.GetCensusAnswersByClientAssetIdAsync(ca.ClientAssetId);
+
+                        foreach (var ans in relatedAnswers)
+                        {
+                            await this._censusRepository.DeleteCensusAnswerAsync(ans);
+                        }
+
+                        await this._clientAssetRepository.DeleteClientAssetAsync(ca);
+                    }
+
+                    return Unit.Value;
                 }
 
-                if (assetByCode.FirstOrDefault() !.AssetId != request.AssetId)
+                var clientAsset = await this._clientAssetRepository.GetClientAssetByIdAsync(item.ClientAssetId);
+
+                if (item.CensusQuestionsId == 7)
                 {
-                    request.AssetId = assetByCode.FirstOrDefault() !.AssetId;
+                    var asset = await this._assetRepository.GetAssetById(clientAsset.AssetId!);
+
+                    if (!string.Equals(asset.Logo?.Trim(), item.Answer?.Trim(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        asset.Logo = item.Answer!;
+                        await this._assetRepository.UpdateAssetAsync(asset);
+                    }
                 }
-            }
 
-            var existingAnswer = await this._censusRepository.GetCensusAnswerAsync(
-                request.CensusQuestionsId,
-                request.ClientId,
-                request.AssetId,
-                monthPeriod);
+                // Validar duplicado de CodeAJE en otro asset
+                var existingByCode = await this._clientAssetRepository.GetClientAssetsByCodeAje(item.CodeAje);
+                if (existingByCode.Any() && clientAsset.CodeAje != item.CodeAje)
+                {
+                    throw new InvalidOperationException($"Ya existe un activo con el código AJE '{item.CodeAje}' asociado a otro cliente.");
+                }
 
-            if (existingAnswer != null)
-            {
-                throw new InvalidOperationException("Ya se ha registrado una respuesta para esta pregunta en este período.");
-            }
+                // Verificar activo por código
+                if (!string.IsNullOrEmpty(item.CodeAje))
+                {
+                    var assets = await this._assetRepository.GetAssetByCodeAje(item.CodeAje);
+                    if (!assets.Any())
+                        throw new InvalidOperationException($"No se encontró un activo con el código AJE '{item.CodeAje}'.");
 
-            var answer = request.Answer;
+                    var actualAssetId = assets.First().AssetId;
+                    if (clientAsset.AssetId != actualAssetId)
+                    {
+                        clientAsset.AssetId = actualAssetId;
+                    }
+                }
 
-            if (request.ImageFile != null)
-            {
-                await using var stream = request.ImageFile.OpenReadStream();
-                var documentName = request.ImageFile.FileName;
-                var fileName = $"{documentName}";
-                answer = await this._s3Service.UploadFileAsync(stream, "census-images", request.ClientId.ToString(), monthPeriod, fileName);
-            }
+                // Validar duplicado de censo
+                var existingAnswer = await this._censusRepository.GetCensusAnswerAsync(
+                    item.CensusQuestionsId,
+                    censusForm.CensusFormId,
+                    item.ClientAssetId);
 
-            var censusAnswer = new CensusAnswer
-            {
-                CensusQuestionsId = request.CensusQuestionsId,
-                Answer = answer,
-                ClientId = request.ClientId,
-                AssetId = request.AssetId,
-                MonthPeriod = monthPeriod,
-                CreatedAt = DateTime.Now,
-                CreatedBy = request.CreatedBy,
-            };
+                if (existingAnswer != null)
+                    continue;
 
-            await this._censusRepository.AddCensusAnswer(censusAnswer);
-            var clientAssets = await this._clientAssetRepository.GetClientAssetByIdAsync(request.ClientAssetId);
-            if (clientAssets.CodeAje != request.CodeAje)
-            {
-                clientAssets.AssetId = censusAnswer.AssetId;
-                clientAssets.CodeAje = request.CodeAje;
-                await this._clientAssetRepository.UpdateClientAssetsAsync(clientAssets);
+                // Subida de imagen si aplica
+                var answer = item.Answer;
+                if (item.ImageFile != null)
+                {
+                    await using var stream = item.ImageFile.OpenReadStream();
+                    var fileName = item.ImageFile.FileName;
+                    answer = await this._s3Service.UploadFileAsync(stream, "census-images", request.ClientId.ToString(), monthPeriod, fileName);
+                }
+
+                // Crear respuesta
+                var censusAnswer = new CensusAnswer
+                {
+                    CensusQuestionsId = item.CensusQuestionsId,
+                    Answer = answer,
+                    ClientAssetId = item.ClientAssetId,
+                    CensusFormId = censusForm.CensusFormId,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = request.CreatedBy,
+                };
+
+                await this._censusRepository.AddCensusAnswer(censusAnswer);
+
+                // Actualizar clientAsset si el CodeAJE cambió
+                if (clientAsset.CodeAje != item.CodeAje)
+                {
+                    clientAsset.CodeAje = item.CodeAje;
+                    await this._clientAssetRepository.UpdateClientAssetsAsync(clientAsset);
+                }
             }
 
             return Unit.Value;

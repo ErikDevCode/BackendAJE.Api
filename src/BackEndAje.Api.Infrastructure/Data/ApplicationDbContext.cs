@@ -94,6 +94,8 @@
 
         public DbSet<RelocationRequest> RelocationRequests { get; set; }
 
+        public DbSet<CensusForm> CensusForm { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -181,6 +183,8 @@
             modelBuilder.Entity<Relocation>().ToTable("relocation");
 
             modelBuilder.Entity<RelocationRequest>().ToTable("relocationrequests");
+
+            modelBuilder.Entity<CensusForm>().ToTable("censusform");
 
             modelBuilder.Entity<MenuGroup>()
                 .HasMany(mg => mg.MenuItems)

@@ -17,13 +17,13 @@ namespace BackEndAje.Api.Domain.Repositories
         
         Task<ClientWithAssetDto?> GetClientByClientCodeAndRouteWithAsset(int clientCode, int cediId, int? route);
 
-        Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro);
+        Task<List<Client>> GetClients(int pageNumber, int pageSize, string? filtro, int userId);
         
         Task<List<Client>> GetClientsList();
         
         Task<List<Client>> GetClientsOnlyList();
         
-        Task<int> GetTotalClients(string? filtro);
+        Task<int> GetTotalClients(string? filtro, int userId);
         
         Task<Client?> GetClientById(int clientId);
         

@@ -20,7 +20,8 @@ namespace BackEndAje.Api.Application.Dashboard.Queries.GetCensusOrderRequestByFi
                 request.zoneId,
                 request.route,
                 request.month,
-                request.year);
+                request.year,
+                request.UserId);
 
             var result = new GetCensusOrderRequestByFiltersResult
             {

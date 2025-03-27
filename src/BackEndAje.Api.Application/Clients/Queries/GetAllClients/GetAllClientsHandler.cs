@@ -18,10 +18,10 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetAllClients
 
         public async Task<PaginatedResult<GetAllClientsResult>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
         {
-            var clients = await this._clientRepository.GetClients(request.PageNumber, request.PageSize, request.Filtro);
+            var clients = await this._clientRepository.GetClients(request.PageNumber, request.PageSize, request.Filtro, request.UserId);
             var result = this._mapper.Map<List<GetAllClientsResult>>(clients);
  
-            var totalClients = await this._clientRepository.GetTotalClients(request.Filtro);
+            var totalClients = await this._clientRepository.GetTotalClients(request.Filtro, request.UserId);
             var paginatedResult = new PaginatedResult<GetAllClientsResult>
             {
                 TotalCount = totalClients,
