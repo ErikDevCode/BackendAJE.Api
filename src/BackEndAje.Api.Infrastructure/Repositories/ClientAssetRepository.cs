@@ -60,7 +60,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     .ThenInclude(cli => cli.Seller)
                 .Include(ca => ca.Asset)
                 .AsQueryable();
-            if(userRole != null)
+            if (userRole != null)
             {
                 if (userRole.RoleName.Equals("Proveedor Logístico"))
                 {
@@ -135,9 +135,13 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 ClientName = ca.Client.CompanyName,
                 Notes = ca.Notes,
                 IsCensus = this._context.CensusAnswer
-                    .Any(cs => cs.ClientId == ca.ClientId
-                               && cs.AssetId == ca.AssetId
-                               && cs.MonthPeriod == currentMonthPeriod),
+                    .Any(cs =>
+                        cs.CensusFormId != null &&
+                        cs.ClientAssetId == ca.ClientAssetId &&
+                        this._context.CensusForm
+                            .Any(cf => cf.CensusFormId == cs.CensusFormId &&
+                                       cf.ClientId == ca.ClientId &&
+                                       cf.MonthPeriod == currentMonthPeriod)),
                 CreatedAt = ca.CreatedAt,
                 UpdatedAt = ca.UpdatedAt,
             });
@@ -216,7 +220,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await query.CountAsync();
         }
 
-        public async Task<ClientAssets> GetClientAssetByIdAsync(int Id)
+        public async Task<ClientAssets> GetClientAssetByIdAsync(int? Id)
         {
             return (await this._context.ClientAssets.AsNoTracking().FirstOrDefaultAsync(x => x.ClientAssetId == Id))!;
         }
@@ -312,6 +316,11 @@ namespace BackEndAje.Api.Infrastructure.Repositories
         public async Task<List<ClientAssets>> GetClientAssetByAssetId(int assetId)
         {
             return await this._context.ClientAssets.Where(x => x.AssetId == assetId).AsNoTracking().ToListAsync();
+        }
+
+        public async Task<List<ClientAssets>> GetClientAssetsByClientId(int clientId)
+        {
+            return await this._context.ClientAssets.Where(x => x.ClientId == clientId).AsNoTracking().ToListAsync();
         }
     }
 }

@@ -20,6 +20,12 @@ namespace BackEndAje.Api.Application.Census.Commands.UpdateCensusAnswer
         {
             var censusAnswerDto = await this._censusRepository.GetCensusAnswerById(request.censusAnswerId);
 
+            var censusForm = await this._censusRepository.GetCensusFormByIdAsync(censusAnswerDto.CensusFormId);
+            if (censusForm == null)
+            {
+                throw new InvalidOperationException("No se encontró el formulario asociado a la respuesta de censo.");
+            }
+
             var answer = request.answer;
 
             if (request.ImageFile != null)
@@ -27,7 +33,7 @@ namespace BackEndAje.Api.Application.Census.Commands.UpdateCensusAnswer
                 await using var stream = request.ImageFile.OpenReadStream();
                 var documentName = request.ImageFile.FileName;
                 var fileName = $"{documentName}";
-                answer = await this._s3Service.UploadFileAsync(stream, "census-images", censusAnswerDto!.ClientId.ToString(), censusAnswerDto.MonthPeriod, fileName);
+                answer = await this._s3Service.UploadFileAsync(stream, "census-images", censusForm.ClientId.ToString(), censusForm.MonthPeriod, fileName);
             }
 
             var censusAnswer = new CensusAnswer
@@ -35,9 +41,8 @@ namespace BackEndAje.Api.Application.Census.Commands.UpdateCensusAnswer
                 CensusAnswerId = censusAnswerDto.CensusAnswerId,
                 CensusQuestionsId = censusAnswerDto.CensusQuestionsId,
                 Answer = answer,
-                ClientId = censusAnswerDto.ClientId,
-                AssetId = censusAnswerDto.AssetId,
-                MonthPeriod = censusAnswerDto.MonthPeriod,
+                ClientAssetId = censusAnswerDto.ClientAssetId,
+                CensusFormId = censusAnswerDto.CensusFormId,
                 CreatedAt = DateTime.Now,
                 CreatedBy = request.CreatedBy,
             };

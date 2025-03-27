@@ -46,6 +46,8 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetAllClients
 
         public DateTime UpdatedAt { get; set; }
 
+        public List<ClientAssets> ClientAssets { get; set; }
+
         public int CreatedBy { get; set; }
 
         public int UpdatedBy { get; set; }

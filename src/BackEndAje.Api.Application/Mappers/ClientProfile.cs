@@ -28,6 +28,7 @@ namespace BackEndAje.Api.Application.Mappers
                 .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentType))
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
                 .ForMember(dest => dest.Seller, opt => opt.MapFrom(src => src.Seller))
+                .ForMember(dest => dest.ClientAssets, opt => opt.MapFrom(src => src.ClientAssets))
                 .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.District));
 
             this.CreateMap<DocumentType, DocumentTypeDto>();

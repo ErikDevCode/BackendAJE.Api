@@ -12,7 +12,7 @@ namespace BackEndAje.Api.Domain.Repositories
 
         Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode);
         Task<int> GetTotalClientAssets(string? codeaje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode);
-        Task<ClientAssets> GetClientAssetByIdAsync(int Id);
+        Task<ClientAssets> GetClientAssetByIdAsync(int? Id);
         
         Task<ClientAssets> GetClientAssetByClientIdAndAssetIdAndIsNotActivateAsync(int clientId, int assetId);
         
@@ -35,5 +35,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<ClientAssets> GetClientAssetByClientIdAndAssetId(int clientId, int assetId);
         
         Task<List<ClientAssets>> GetClientAssetByAssetId(int assetId);
+        
+        Task<List<ClientAssets>> GetClientAssetsByClientId(int clientId);
     }
 }
