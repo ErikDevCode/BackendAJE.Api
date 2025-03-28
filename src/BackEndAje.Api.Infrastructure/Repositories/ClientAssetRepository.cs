@@ -257,6 +257,22 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             await this._context.SaveChangesAsync();
         }
 
+        public async Task DeleteRangeAsync(List<ClientAssets> clientAssets)
+        {
+            var currentTime = DateTime.Now;
+
+            foreach (var asset in clientAssets)
+            {
+                this._context.ClientAssets.Attach(asset);
+                asset.Notes = "Eliminado por carga de clientes";
+                asset.IsActive = false;
+                asset.UpdatedAt = currentTime;
+                asset.UpdatedBy = 1;
+            }
+
+            await this._context.SaveChangesAsync();
+        }
+
         public async Task AddTraceabilityRecordAsync(ClientAssetsTrace clientAssetsTrace)
         {
             this._context.ClientAssetsTrace.Add(clientAssetsTrace);

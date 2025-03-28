@@ -108,10 +108,32 @@ namespace BackEndAje.Api.Application.Clients.Commands.UploadClient
                 {
                     this._clientRepository.Detach(existingClient);
 
-                    if (HasClientChanged(existingClient, client) || existingClient.UserId != client.UserId || existingClient.Route != client.Route)
+                    var clientHasChanged = this.HasClientChanged(existingClient, client);
+                    var userOrRouteChanged = existingClient.UserId != client.UserId || existingClient.Route != client.Route;
+                    var wasInactive = !existingClient.IsActive;
+
+                    if (clientHasChanged || userOrRouteChanged || wasInactive)
                     {
+                        existingClient.CompanyName = client.CompanyName;
+                        existingClient.DocumentTypeId = client.DocumentTypeId;
+                        existingClient.DocumentNumber = client.DocumentNumber;
+                        existingClient.Email = client.Email;
+                        existingClient.EffectiveDate = client.EffectiveDate;
+                        existingClient.PaymentMethodId = client.PaymentMethodId;
+                        existingClient.Phone = client.Phone;
+                        existingClient.Address = client.Address;
+                        existingClient.DistrictId = client.DistrictId;
+                        existingClient.CoordX = client.CoordX;
+                        existingClient.CoordY = client.CoordY;
+                        existingClient.Segmentation = client.Segmentation;
+
                         existingClient.UserId = client.UserId;
                         existingClient.Route = client.Route;
+
+                        existingClient.IsActive = true;
+                        existingClient.UpdatedAt = DateTime.Now;
+                        existingClient.UpdatedBy = request.UpdatedBy;
+
                         clientsToUpdate.Add(existingClient);
                     }
                 }

@@ -21,6 +21,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task UpdateClientAssetsListAsync(List<ClientAssets> clientAssetsList);
 
         Task DeleteClientAssetAsync(ClientAssets clientAssets);
+        Task DeleteRangeAsync(List<ClientAssets> clientAssets);
 
         Task AddTraceabilityRecordAsync(ClientAssetsTrace clientAssetsTrace);
 
