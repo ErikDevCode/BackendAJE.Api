@@ -123,7 +123,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 AssetIsActive = ca.Asset.IsActive,
                 InstallationDate = ca.InstallationDate,
                 IsActive = ca.IsActive,
-                CediId = ca.CediId,
+                CediId = ca.CediId.Value,
                 CediName = ca.Cedi != null ? ca.Cedi.CediName : null,
                 ClientId = ca.ClientId,
                 UserId = ca.Client.UserId,
