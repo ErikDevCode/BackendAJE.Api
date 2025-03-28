@@ -6,6 +6,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Clients.Commands.UpdateClient;
     using BackEndAje.Api.Application.Clients.Commands.UploadClient;
     using BackEndAje.Api.Application.Clients.Commands.UploadCodeAndNameClients;
+    using BackEndAje.Api.Application.Clients.Commands.UploadDeleteClients;
     using BackEndAje.Api.Application.Clients.Queries.GetAllClients;
     using BackEndAje.Api.Application.Clients.Queries.GetClientByClientCode;
     using BackEndAje.Api.Application.Clients.Queries.GetExportClient;
@@ -148,6 +149,27 @@ namespace BackEndAje.Api.Presentation.Controllers
             using var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
             var command = new UploadCodeAndNameClientsCommand()
+            {
+                FileBytes = memoryStream.ToArray(),
+            };
+            var result = await this._mediator.Send(command);
+            return this.Ok(result);
+        }
+
+        [HttpPost]
+        [Route("deleteClients")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> UploadDeleteClients(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest("No hay Clientes uploaded.");
+            }
+
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            var command = new UploadDeleteClientsCommand()
             {
                 FileBytes = memoryStream.ToArray(),
             };
