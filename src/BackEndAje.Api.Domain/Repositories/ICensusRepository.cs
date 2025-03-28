@@ -38,5 +38,8 @@ namespace BackEndAje.Api.Domain.Repositories
 
         Task<List<CensusAnswer>> GetCensusAnswersByClientAssetIdAsync(int clientAssetId);
         Task DeleteCensusAnswerAsync(CensusAnswer entity);
+        
+        Task<List<int>> GetCensusClientIdsByPeriodAsync(string period, List<int> clientIds);
+
     }
 }

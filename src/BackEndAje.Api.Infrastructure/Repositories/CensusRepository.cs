@@ -319,5 +319,14 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             this._context.CensusAnswer.Remove(entity);
             await this._context.SaveChangesAsync();
         }
+
+        public async Task<List<int>> GetCensusClientIdsByPeriodAsync(string period, List<int> clientIds)
+        {
+            return await this._context.CensusForm
+                .Where(cf => cf.MonthPeriod == period && clientIds.Contains(cf.ClientId))
+                .Select(cf => cf.ClientId)
+                .Distinct()
+                .ToListAsync();
+        }
     }
 }

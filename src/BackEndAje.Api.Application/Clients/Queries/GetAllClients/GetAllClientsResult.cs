@@ -42,6 +42,8 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetAllClients
 
         public bool IsActive { get; set; }
 
+        public bool IsCensus { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
