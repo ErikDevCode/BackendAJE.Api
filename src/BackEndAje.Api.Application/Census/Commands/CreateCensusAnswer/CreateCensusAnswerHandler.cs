@@ -11,13 +11,17 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
         private readonly IS3Service _s3Service;
         private readonly IClientAssetRepository _clientAssetRepository;
         private readonly IAssetRepository _assetRepository;
+        private readonly IClientRepository _clientRepository;
+        private readonly IUserRepository _userRepository;
 
-        public CreateCensusAnswerHandler(ICensusRepository censusRepository, IS3Service s3Service, IClientAssetRepository clientAssetRepository, IAssetRepository assetRepository)
+        public CreateCensusAnswerHandler(ICensusRepository censusRepository, IS3Service s3Service, IClientAssetRepository clientAssetRepository, IAssetRepository assetRepository, IClientRepository clientRepository, IUserRepository userRepository)
         {
             this._censusRepository = censusRepository;
             this._s3Service = s3Service;
             this._clientAssetRepository = clientAssetRepository;
             this._assetRepository = assetRepository;
+            this._clientRepository = clientRepository;
+            this._userRepository = userRepository;
         }
 
         public async Task<Unit> Handle(CreateCensusAnswerCommand request, CancellationToken cancellationToken)
@@ -74,7 +78,57 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
                     return Unit.Value;
                 }
 
+                if (item.ClientAssetId == null && item.CensusQuestionsId == 4)
+                {
+                    if (string.IsNullOrEmpty(item.CodeAje))
+                        throw new InvalidOperationException("El código AJE es obligatorio para registrar un activo.");
+
+                    var matchingAssets = await this._assetRepository.GetAssetByCodeAje(item.CodeAje);
+                    if (!matchingAssets.Any())
+                        throw new InvalidOperationException($"No se encontró un activo con el código AJE '{item.CodeAje}'.");
+
+                    var asset = matchingAssets.FirstOrDefault();
+
+                    // ❌ Validar si el mismo AssetId ya está en ClientAssets
+                    var existingClientAssetsByAssetId = await this._clientAssetRepository.GetClientAssetByAssetId(asset.AssetId);
+                    if (existingClientAssetsByAssetId != null && existingClientAssetsByAssetId.Any())
+                    {
+                        throw new InvalidOperationException($"El activo con código AJE '{item.CodeAje}' ya está asociado a otro cliente.");
+                    }
+
+                    // ❌ Validar si ya existe un ClientAsset con el mismo CodeAJE
+                    var existingClientAssetsByCodeAje = await this._clientAssetRepository.GetClientAssetsByCodeAje(item.CodeAje);
+                    if (existingClientAssetsByCodeAje.Any())
+                    {
+                        throw new InvalidOperationException($"Ya existe un activo registrado con el código AJE '{item.CodeAje}'.");
+                    }
+
+                    var client = await this._clientRepository.GetClientById(request.ClientId);
+                    var user = await this._userRepository.GetUserByRouteAsync(client.Route);
+
+                    var newClientAsset = new ClientAssets
+                    {
+                        ClientId = request.ClientId,
+                        AssetId = asset.AssetId,
+                        CodeAje = item.CodeAje,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.Now,
+                        CreatedBy = request.CreatedBy,
+                        UpdatedBy = request.CreatedBy,
+                        IsActive = true,
+                        Notes = "Registro automático por censo",
+                        CediId = user.CediId,
+                        InstallationDate = DateTime.Now,
+                    };
+
+                    await this._clientAssetRepository.AddClientAsset(newClientAsset);
+
+                    item.ClientAssetId = newClientAsset.ClientAssetId;
+                }
+
+                // Obtener el clientAsset actualizado (nuevo o existente)
                 var clientAsset = await this._clientAssetRepository.GetClientAssetByIdAsync(item.ClientAssetId);
+
 
                 if (item.CensusQuestionsId == 7)
                 {

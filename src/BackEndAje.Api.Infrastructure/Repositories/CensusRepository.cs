@@ -149,7 +149,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                     ClientAssetId = g.Key.ClientAssetId,
                     ClientId = g.Key.ClientId,
                     AssetId = g.Key.AssetId,
-                    CediId = g.Key.CediId,
+                    CediId = g.Key.CediId!.Value,
                     IsActive = g.Key.IsActive,
                     CodeAje = g.Key.CodeAje,
                     Notes = g.Key.Notes,

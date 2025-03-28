@@ -4,7 +4,7 @@ namespace BackEndAje.Api.Domain.Entities
     public class ClientAssets : AuditableEntity
     {
         public int ClientAssetId { get; set; }
-        public int CediId { get; set; }
+        public int? CediId { get; set; }
         public DateTime? InstallationDate { get; set; }
         public int ClientId { get; set; }
 
