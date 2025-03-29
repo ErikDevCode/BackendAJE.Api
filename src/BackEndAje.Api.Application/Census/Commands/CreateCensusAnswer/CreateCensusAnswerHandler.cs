@@ -28,17 +28,27 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
         {
             var monthPeriod = DateTime.Now.ToString("yyyyMM");
 
-            var censusForm = await this._censusRepository.GetCensusFormAsync(request.ClientId, monthPeriod)
-                        ?? await this._censusRepository.CreateCensusFormAsync(request.ClientId, monthPeriod);
+            var censusForm = await this._censusRepository.GetCensusFormAsync(request.ClientId, monthPeriod);
+
+            if (censusForm == null)
+            {
+                try
+                {
+                    censusForm = await this._censusRepository.CreateCensusFormAsync(request.ClientId, monthPeriod);
+                }
+                catch (Exception)
+                {
+                    censusForm = await this._censusRepository.GetCensusFormAsync(request.ClientId, monthPeriod);
+                }
+            }
 
             foreach (var item in request.Answers)
             {
+                // Si la primera pregunta es "No", eliminar clientAssets y censusAnswers relacionados
                 if (item.CensusQuestionsId == 1 && string.Equals(item.Answer, "No", StringComparison.OrdinalIgnoreCase))
                 {
                     if (request.Answers.Count > 1)
-                    {
                         throw new InvalidOperationException("Si la respuesta es 'No', no debes enviar más de una respuesta.");
-                    }
 
                     var alreadyExists = await this._censusRepository.GetCensusAnswerAsync(
                         item.CensusQuestionsId,
@@ -60,16 +70,17 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
                         await this._censusRepository.AddCensusAnswer(census);
                     }
 
-                    // Eliminar todos los ClientAssets del cliente
                     var clientAssets = await this._clientAssetRepository.GetClientAssetsByClientId(request.ClientId);
 
                     foreach (var ca in clientAssets)
                     {
-                        var relatedAnswers = await this._censusRepository.GetCensusAnswersByClientAssetIdAsync(ca.ClientAssetId);
-
-                        foreach (var ans in relatedAnswers)
+                        if (ca.ClientAssetId > 0)
                         {
-                            await this._censusRepository.DeleteCensusAnswerAsync(ans);
+                            var relatedAnswers = await this._censusRepository.GetCensusAnswersByClientAssetIdAsync(ca.ClientAssetId);
+                            foreach (var ans in relatedAnswers)
+                            {
+                                await this._censusRepository.DeleteCensusAnswerAsync(ans);
+                            }
                         }
 
                         await this._clientAssetRepository.DeleteClientAssetAsync(ca);
@@ -78,62 +89,55 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
                     return Unit.Value;
                 }
 
-                if (item.ClientAssetId == null && item.CensusQuestionsId == 4)
+                // Validación y creación de clientAsset si solo se envía codeAje
+                if (item.ClientAssetId == null && !string.IsNullOrEmpty(item.CodeAje))
                 {
-                    if (string.IsNullOrEmpty(item.CodeAje))
-                        throw new InvalidOperationException("El código AJE es obligatorio para registrar un activo.");
-
-                    var matchingAssets = await this._assetRepository.GetAssetByCodeAje(item.CodeAje);
-                    if (!matchingAssets.Any())
-                        throw new InvalidOperationException($"No se encontró un activo con el código AJE '{item.CodeAje}'.");
-
-                    var asset = matchingAssets.FirstOrDefault();
-
-                    // ❌ Validar si el mismo AssetId ya está en ClientAssets
-                    var existingClientAssetsByAssetId = await this._clientAssetRepository.GetClientAssetByAssetId(asset.AssetId);
-                    if (existingClientAssetsByAssetId != null && existingClientAssetsByAssetId.Any())
-                    {
-                        throw new InvalidOperationException($"El activo con código AJE '{item.CodeAje}' ya está asociado a otro cliente.");
-                    }
-
-                    // ❌ Validar si ya existe un ClientAsset con el mismo CodeAJE
                     var existingClientAssetsByCodeAje = await this._clientAssetRepository.GetClientAssetsByCodeAje(item.CodeAje);
                     if (existingClientAssetsByCodeAje.Any())
                     {
-                        throw new InvalidOperationException($"Ya existe un activo registrado con el código AJE '{item.CodeAje}'.");
+                        item.ClientAssetId = existingClientAssetsByCodeAje.First().ClientAssetId;
                     }
-
-                    var client = await this._clientRepository.GetClientById(request.ClientId);
-                    var user = await this._userRepository.GetUserByRouteAsync(client.Route);
-
-                    var newClientAsset = new ClientAssets
+                    else
                     {
-                        ClientId = request.ClientId,
-                        AssetId = asset.AssetId,
-                        CodeAje = item.CodeAje,
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.Now,
-                        CreatedBy = request.CreatedBy,
-                        UpdatedBy = request.CreatedBy,
-                        IsActive = true,
-                        Notes = "Registro automático por censo",
-                        CediId = user.CediId,
-                        InstallationDate = DateTime.Now,
-                    };
+                        var matchingAssets = await this._assetRepository.GetAssetByCodeAje(item.CodeAje);
+                        if (!matchingAssets.Any())
+                            throw new InvalidOperationException($"No se encontró un activo con el código AJE '{item.CodeAje}'.");
 
-                    await this._clientAssetRepository.AddClientAsset(newClientAsset);
+                        var asset = matchingAssets.First();
+                        var client = await this._clientRepository.GetClientById(request.ClientId);
+                        var user = await this._userRepository.GetUserByRouteAsync(client.Route);
 
-                    item.ClientAssetId = newClientAsset.ClientAssetId;
+                        var newClientAsset = new ClientAssets
+                        {
+                            ClientId = request.ClientId,
+                            AssetId = asset.AssetId,
+                            CodeAje = item.CodeAje,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.Now,
+                            CreatedBy = request.CreatedBy,
+                            UpdatedBy = request.CreatedBy,
+                            IsActive = true,
+                            Notes = "Registro automático por censo",
+                            CediId = user.CediId,
+                            InstallationDate = DateTime.Now,
+                        };
+
+                        await this._clientAssetRepository.AddClientAsset(newClientAsset);
+                        item.ClientAssetId = newClientAsset.ClientAssetId;
+                    }
                 }
 
-                // Obtener el clientAsset actualizado (nuevo o existente)
-                var clientAsset = await this._clientAssetRepository.GetClientAssetByIdAsync(item.ClientAssetId);
+                // Obtener ClientAsset si existe
+                ClientAssets? clientAsset = null;
+                if (item.ClientAssetId.HasValue)
+                {
+                    clientAsset = await this._clientAssetRepository.GetClientAssetByIdAsync(item.ClientAssetId.Value);
+                }
 
-
-                if (item.CensusQuestionsId == 7)
+                // Actualización del logo si aplica
+                if (clientAsset != null && item.CensusQuestionsId == 7)
                 {
                     var asset = await this._assetRepository.GetAssetById(clientAsset.AssetId!);
-
                     if (!string.Equals(asset.Logo?.Trim(), item.Answer?.Trim(), StringComparison.OrdinalIgnoreCase))
                     {
                         asset.Logo = item.Answer!;
@@ -141,28 +145,7 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
                     }
                 }
 
-                // Validar duplicado de CodeAJE en otro asset
-                var existingByCode = await this._clientAssetRepository.GetClientAssetsByCodeAje(item.CodeAje);
-                if (existingByCode.Any() && clientAsset.CodeAje != item.CodeAje)
-                {
-                    throw new InvalidOperationException($"Ya existe un activo con el código AJE '{item.CodeAje}' asociado a otro cliente.");
-                }
-
-                // Verificar activo por código
-                if (!string.IsNullOrEmpty(item.CodeAje))
-                {
-                    var assets = await this._assetRepository.GetAssetByCodeAje(item.CodeAje);
-                    if (!assets.Any())
-                        throw new InvalidOperationException($"No se encontró un activo con el código AJE '{item.CodeAje}'.");
-
-                    var actualAssetId = assets.First().AssetId;
-                    if (clientAsset.AssetId != actualAssetId)
-                    {
-                        clientAsset.AssetId = actualAssetId;
-                    }
-                }
-
-                // Validar duplicado de censo
+                // Validar si ya existe la respuesta
                 var existingAnswer = await this._censusRepository.GetCensusAnswerAsync(
                     item.CensusQuestionsId,
                     censusForm.CensusFormId,
@@ -171,7 +154,6 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
                 if (existingAnswer != null)
                     continue;
 
-                // Subida de imagen si aplica
                 var answer = item.Answer;
                 if (item.ImageFile != null)
                 {
@@ -180,7 +162,6 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
                     answer = await this._s3Service.UploadFileAsync(stream, "census-images", request.ClientId.ToString(), monthPeriod, fileName);
                 }
 
-                // Crear respuesta
                 var censusAnswer = new CensusAnswer
                 {
                     CensusQuestionsId = item.CensusQuestionsId,
@@ -192,13 +173,6 @@ namespace BackEndAje.Api.Application.Census.Commands.CreateCensusAnswer
                 };
 
                 await this._censusRepository.AddCensusAnswer(censusAnswer);
-
-                // Actualizar clientAsset si el CodeAJE cambió
-                if (clientAsset.CodeAje != item.CodeAje)
-                {
-                    clientAsset.CodeAje = item.CodeAje;
-                    await this._clientAssetRepository.UpdateClientAssetsAsync(clientAsset);
-                }
             }
 
             return Unit.Value;
