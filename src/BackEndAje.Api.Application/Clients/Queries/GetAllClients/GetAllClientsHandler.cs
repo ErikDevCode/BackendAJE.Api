@@ -36,7 +36,7 @@ namespace BackEndAje.Api.Application.Clients.Queries.GetAllClients
                 var hasAssets = client?.ClientAssets.Any() ?? false;
                 var hasCensus = censusClientIds.Contains(item.ClientId);
 
-                item.IsCensus = hasAssets && hasCensus;
+                item.IsCensus = hasCensus;
             }
 
             // Obtener total de clientes para paginación
