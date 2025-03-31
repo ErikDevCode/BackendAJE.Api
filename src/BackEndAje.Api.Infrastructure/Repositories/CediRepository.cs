@@ -1,5 +1,6 @@
 namespace BackEndAje.Api.Infrastructure.Repositories
 {
+    using BackEndAje.Api.Application.Dtos.Const;
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
     using BackEndAje.Api.Infrastructure.Data;
@@ -36,9 +37,16 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
         public async Task<List<Cedi>> GetCedisByUserIdAsync(int userId)
         {
+            var adminRoles = new[]
+            {
+                RolesConst.Administrador,
+                RolesConst.Jefe,
+                RolesConst.Trade,
+            };
+
             var isAdmin = await this._context.UserRoles
                 .AsNoTracking()
-                .AnyAsync(ur => ur.UserId == userId && ur.Role.RoleName == "Administrador");
+                .AnyAsync(ur => ur.UserId == userId && adminRoles.Contains(ur.Role.RoleName));
 
             if (isAdmin)
             {

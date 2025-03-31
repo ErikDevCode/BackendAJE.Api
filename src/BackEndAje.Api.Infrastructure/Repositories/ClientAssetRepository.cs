@@ -1,7 +1,6 @@
-using BackEndAje.Api.Application.Dtos.Users;
-
 namespace BackEndAje.Api.Infrastructure.Repositories
 {
+    using BackEndAje.Api.Application.Dtos.Const;
     using BackEndAje.Api.Domain.Entities;
     using BackEndAje.Api.Domain.Repositories;
     using BackEndAje.Api.Infrastructure.Data;
@@ -62,7 +61,14 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .AsQueryable();
             if (userRole != null)
             {
-                if (userRole.RoleName.Equals("Proveedor Logístico"))
+                var openAccessRoles = new[]
+                {
+                    RolesConst.ProveedorLogistico,
+                    RolesConst.Jefe,
+                    RolesConst.Trade,
+                };
+
+                if (openAccessRoles.Contains(userRole.RoleName))
                 {
                     userId = null;
                 }
@@ -81,7 +87,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (userId.HasValue)
             {
-                if (userRole.RoleName.Equals("Supervisor"))
+                if (userRole.RoleName.Equals(RolesConst.Supervisor))
                 {
                     query = query.Where(ca => ca.Client.Seller!.CediId == userRole.CediId);
                 }
@@ -167,9 +173,16 @@ namespace BackEndAje.Api.Infrastructure.Repositories
                 .FirstOrDefault();
             var query = this._context.ClientAssets.AsQueryable();
 
-            if(userRole != null)
+            if (userRole != null)
             {
-                if (userRole.RoleName.Equals("Proveedor Logístico"))
+                var openAccessRoles = new[]
+                {
+                    RolesConst.ProveedorLogistico,
+                    RolesConst.Jefe,
+                    RolesConst.Trade
+                };
+
+                if (openAccessRoles.Contains(userRole.RoleName))
                 {
                     userId = null;
                 }
@@ -187,7 +200,7 @@ namespace BackEndAje.Api.Infrastructure.Repositories
 
             if (userId.HasValue)
             {
-                if (userRole.RoleName.Equals("Supervisor"))
+                if (userRole.RoleName.Equals(RolesConst.Supervisor))
                 {
                     query = query.Where(ca => ca.Client.Seller!.CediId == userRole.CediId);
                 }
