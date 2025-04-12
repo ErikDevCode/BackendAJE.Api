@@ -16,6 +16,7 @@ namespace BackEndAje.Api.Presentation.Controllers
     using BackEndAje.Api.Application.Asset.Queries.GetAssetWithOutClient;
     using BackEndAje.Api.Application.Asset.Queries.GetClientAssets;
     using BackEndAje.Api.Application.Asset.Queries.GetClientAssetsTrace;
+    using BackEndAje.Api.Application.Asset.Queries.GetExportClientAssets;
     using BackEndAje.Api.Application.Dtos;
     using BackEndAje.Api.Application.Dtos.Const;
     using MediatR;
@@ -229,6 +230,26 @@ namespace BackEndAje.Api.Presentation.Controllers
         {
             await this._mediator.Send(command);
             return this.Ok(new { Message = ConstName.MessageOkUpdatedResult });
+        }
+
+        [HttpGet]
+        [Route("client-asset/export")]
+        [ProducesResponseType(typeof(FileContentResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ExportClientAssets()
+        {
+            try
+            {
+                var query = new ExportClientAssetQuery();
+                var fileContent = await this._mediator.Send(query);
+                var fileName = $"Clientes_Y_Activos_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+
+                return this.File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { Message = ex.Message });
+            }
         }
     }
 }
