@@ -66,6 +66,36 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.UpdateStatusOrderReq
             await this.UpdateClientAssets(request, orderRequest);
             await this.UpdateOrderRequestStatus(request);
 
+            if (orderRequest.ReasonRequestId == (int)ReasonRequestConst.Reubicacion &&
+                request.OrderStatusId == (int)OrderStatusConst.Aprobado)
+            {
+                var relocationRequests = await this._orderRequestRepository.GetRelocationRequestByOrderRequestId(orderRequest.OrderRequestId);
+                if (relocationRequests != null)
+                {
+                    var relatedRequests = await this._orderRequestRepository.GetRelocationRequestByRelocationId(relocationRequests.RelocationId);
+
+                    foreach (var relatedRequest in relatedRequests.Where(relatedRequest => relatedRequest.OrderRequestId != request.OrderRequestId &&
+                                 relatedRequest.OrderStatusId == (int)OrderStatusConst.Generado))
+                    {
+                        await this._orderRequestRepository.UpdateStatusOrderRequestAsync(
+                            relatedRequest.OrderRequestId,
+                            (int)OrderStatusConst.Aprobado,
+                            request.CreatedBy);
+
+                        var statusHistory = new OrderRequestStatusHistory
+                        {
+                            OrderRequestId = relatedRequest.OrderRequestId,
+                            OrderStatusId = (int)OrderStatusConst.Aprobado,
+                            ChangeReason = "Aprobado automáticamente por vínculo de reubicación",
+                            CreatedAt = DateTime.Now,
+                            CreatedBy = request.CreatedBy,
+                        };
+
+                        await this._orderRequestRepository.AddOrderRequestStatusHistoryAsync(statusHistory);
+                    }
+                }
+            }
+
             if (request.OrderStatusId != (int)OrderStatusConst.Aprobado)
             {
                 await this.NotifySupervisor(orderRequest, request.OrderStatusId, cancellationToken);

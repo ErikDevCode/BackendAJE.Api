@@ -164,6 +164,44 @@ namespace BackEndAje.Api.Infrastructure.Repositories
             return await clientAssets.ToListAsync();
         }
 
+        public async Task<List<ClientAssetsDto>> GetClientAssetsListAsync()
+        {
+            var currentMonthPeriod = DateTime.Now.ToString("yyyyMM");
+
+            var query = this._context.ClientAssets
+                .Include(ca => ca.Cedi)
+                .Include(ca => ca.Client)
+                .ThenInclude(cli => cli.Seller)
+                .Include(ca => ca.Asset)
+                .Select(ca => new ClientAssetsDto
+                {
+                    ClientAssetId = ca.ClientAssetId,
+                    AssetId = ca.AssetId,
+                    CodeAje = ca.CodeAje,
+                    Logo = ca.Asset.Logo,
+                    Brand = ca.Asset.Brand,
+                    Model = ca.Asset.Model,
+                    AssetIsActive = ca.Asset.IsActive,
+                    InstallationDate = ca.InstallationDate,
+                    IsActive = ca.IsActive,
+                    CediId = ca.CediId.Value,
+                    CediName = ca.Cedi != null ? ca.Cedi.CediName : null,
+                    ClientId = ca.ClientId,
+                    UserId = ca.Client.UserId,
+                    Seller = (ca.Client.Seller != null
+                        ? $"{ca.Client.Seller.Names} {ca.Client.Seller.PaternalSurName} {ca.Client.Seller.MaternalSurName}"
+                        : null)!,
+                    Route = ca.Client.Route,
+                    ClientCode = ca.Client.ClientCode,
+                    ClientName = ca.Client.CompanyName,
+                    Notes = ca.Notes,
+                    CreatedAt = ca.CreatedAt,
+                    UpdatedAt = ca.UpdatedAt,
+                });
+
+            return await query.ToListAsync();
+        }
+
 
         public async Task<int> GetTotalClientAssets(string? codeAje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode)
         {

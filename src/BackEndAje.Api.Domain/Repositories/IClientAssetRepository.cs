@@ -11,6 +11,7 @@ namespace BackEndAje.Api.Domain.Repositories
         Task<List<ClientAssets>> GetClientAssetsByCodeAje(string codeAje);
 
         Task<List<ClientAssetsDto>> GetClientAssetsAsync(int? pageNumber, int? pageSize, string? codeAje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode);
+        Task<List<ClientAssetsDto>> GetClientAssetsListAsync();
         Task<int> GetTotalClientAssets(string? codeaje, int? clientId, int? userId, int? cediId, int? regionId, int? route, int? clientCode);
         Task<ClientAssets> GetClientAssetByIdAsync(int? Id);
         
