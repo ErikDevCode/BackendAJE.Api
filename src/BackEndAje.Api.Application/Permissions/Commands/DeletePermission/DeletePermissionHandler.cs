@@ -1,6 +1,5 @@
 namespace BackEndAje.Api.Application.Permissions.Commands.DeletePermission
 {
-    using AutoMapper;
     using BackEndAje.Api.Domain.Repositories;
     using MediatR;
 
