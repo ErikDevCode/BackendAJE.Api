@@ -74,6 +74,8 @@ namespace BackEndAje.Api.Application.OrderRequests.Commands.CreateOrderRequests
             int reasonRequestId)
         {
             var orderRequest = await this._orderService.CreateOrderRequestAsync(request);
+            var client = await this._clientRepository.GetClientById(orderRequest.ClientId);
+            orderRequest.Client = client;
             var validReasonRequestIds = new List<int> { (int)ReasonRequestConst.Retiro, (int)ReasonRequestConst.CambioDeEquipo, (int)ReasonRequestConst.ServicioTecnico };
 
             if (validReasonRequestIds.Contains(request.ReasonRequestId) && reasonRequestId != (int)ReasonRequestConst.Reubicacion)
